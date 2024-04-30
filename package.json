@@ -22,6 +22,7 @@
     "@nextui-org/react": "^2.2.10",
     "@prisma/client": "^5.13.0",
     "@prisma/extension-pulse": "^1.0.1",
+    "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.6.7",
     "date-fns": "^3.4.0",
     "jspdf": "^2.5.1",
