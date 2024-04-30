@@ -3,7 +3,8 @@ import NextAuth from "next-auth";
 import process from "process";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Console } from "console";
-import prisma from "@/lib/prisma"
+import prisma from "@/app/lib/prisma";
+
 import { strategy } from "sharp";
 
 
