@@ -9,7 +9,7 @@ import { MdClose } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
 
 
-const Modalapplications = ({buttonName,
+const modalapplications = ({buttonName,
     buttonIcon,
     modalHeader,
     formTypeModal,
@@ -120,4 +120,4 @@ modalEdit
         </>
     );
 };
-export default Modalapplications;
+export default modalapplications;

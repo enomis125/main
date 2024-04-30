@@ -98,7 +98,7 @@ const RolesPage = () => {
                     })
                 })
                 .catch(err => console.log(err))
-        }, [valuesRole])
+        }, [])
 
     const handleUpdateRole = () => {
         e.preventDefault()

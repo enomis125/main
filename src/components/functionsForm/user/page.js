@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-export default function UserInsert(){
+export default function userInsert(){
 
     //inserção na tabela user
     const [user, setUser] = useState({
@@ -53,7 +53,7 @@ export default function UserInsert(){
     };
 }
 
-export function UserEdit(idUser){
+export function userEdit(idUser){
     //edição na tabela USER
     const [valuesUser, setValuesUser] = useState({
         Name: '',
@@ -111,7 +111,7 @@ export function UserEdit(idUser){
                 })
             })
             .catch(err => console.log(err))
-    }, [idUser, valuesUser])
+    }, [])
 
     function handleUpdateUser(e) {
         e.preventDefault()

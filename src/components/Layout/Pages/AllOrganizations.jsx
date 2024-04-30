@@ -158,6 +158,9 @@ export default function Contact() {
                             <TableColumn className="bg-primary-600 text-white font-bold">
                                 PROPRIEDADES
                             </TableColumn>
+                            <TableColumn className="bg-primary-600 text-white font-bold">
+                                USERS
+                            </TableColumn>
                             <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                 <GoGear size={20} />
                             </TableColumn>
@@ -170,10 +173,18 @@ export default function Contact() {
                                     <TableCell>{organization.address1}</TableCell>
                                     <TableCell>{organization.country}</TableCell>
                                     <TableCell><FormModals
-                                        buttonName={organization.properties }
+                                        buttonName={organization.properties}
                                         buttonColor={"transparent"}
                                         modalEdit={`ID: ${organization.organizationID}`}
                                         formTypeModal={13}
+                                        idOrganization={organization.organizationID}
+                                    ></FormModals>
+                                    </TableCell>
+                                    <TableCell><FormModals
+                                        buttonName={organization.users}
+                                        buttonColor={"transparent"}
+                                        modalEdit={`ID: ${organization.userID}`}
+                                        formTypeModal={14}
                                         idOrganization={organization.organizationID}
                                     ></FormModals>
                                     </TableCell>

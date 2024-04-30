@@ -23,10 +23,10 @@ import FormModals from "@/components/Modal/modals/modalApplications";
 import FormModalsLicence from "@/components/Modal/modals/modalLicences"
 import FormModalsFeature from "@/components/Modal/modals/modalFeatures"
 
-import PropertyInsert, { PropertyEdit } from "../functionsForm/property/page";
+import propertyInsert, { propertyEdit } from "../functionsForm/property/page";
 
 
-const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit }) => {
+const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit }) => {
 
     const variants = ["underlined"];
 
@@ -34,8 +34,8 @@ const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const [isExpanded, setIsExpanded] = useState(false);
     const [isInvisible, setIsInvisible] = React.useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const { handleInputProperty, handleSubmitProperty } = PropertyInsert();
-    const { handleUpdateProperty, setValuesProperty, valuesProperty } = PropertyEdit(idProperty);
+    const { handleInputProperty, handleSubmitProperty } = propertyInsert();
+    const { handleUpdateProperty, setValuesProperty, valuesProperty } = propertyEdit(idProperty);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isSelected, setIsSelected] = useState(true);
 
@@ -147,7 +147,7 @@ const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             }
         }
         fetchUserCount();
-    }, [idProperty]);
+    }, []);
 
 
     const handleSwitchChange = async (applicationID, checked) => {
@@ -995,4 +995,4 @@ const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     );
 };
 
-export default Modalpropertie;
+export default modalpropertie;

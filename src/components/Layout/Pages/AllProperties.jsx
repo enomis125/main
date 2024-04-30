@@ -34,7 +34,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
 
-export default function Allproperties() {
+export default function allproperties() {
 
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
@@ -80,7 +80,7 @@ export default function Allproperties() {
             };
         }
         fetchData();
-    }, [status]);
+    }, []);
 
     const handleSearchChange = (value) => {
         setSearchValue(value);

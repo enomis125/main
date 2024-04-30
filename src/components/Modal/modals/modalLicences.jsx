@@ -9,7 +9,7 @@ import { MdClose } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
 
 
-const Modallicence = ({buttonName,
+const modallicence = ({buttonName,
     buttonIcon,
     modalHeader,
     formTypeModal,
@@ -131,4 +131,4 @@ const Modallicence = ({buttonName,
         </>
     );
 };
-export default Modallicence;
+export default modallicence;

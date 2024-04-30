@@ -35,7 +35,7 @@ import Modaluser from "@/components/Modal/modalUser";
 import properties from "@/app/homepage/properties/page";
 import organization from "@/app/homepage/organization/page";
 
-export default function AllUsers() {
+export default function allUsers() {
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     const [searchValue, setSearchValue] = React.useState("");
@@ -68,7 +68,7 @@ export default function AllUsers() {
             }
         };
         getData();
-    }, [status]);
+    }, []);
 
 
     const items = React.useMemo(() => {

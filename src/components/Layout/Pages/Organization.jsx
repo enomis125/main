@@ -69,7 +69,7 @@ const Contact = () => {
                 }
             }
         }; getData();
-    }, [session.user.organization, status]);
+    }, []);
 
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-import prisma from "@/app/lib/prisma";
-
+import prisma from "@/lib/prisma"
 
 export async function GET(request, context) {
 
@@ -56,9 +55,11 @@ export async function GET(request, context) {
         return userData;
     }));
 
+    
 
 
     prisma.$disconnect()
 
     return new NextResponse(JSON.stringify({ response, status: 200 }));
 }
+

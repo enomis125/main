@@ -34,7 +34,7 @@ import { CSVLink } from "react-csv";
 import Modaluser from "@/components/Modal/modalUser";
 import properties from "@/app/homepage/properties/page";
 
-export default function Users() {
+export default function users() {
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     const [searchValue, setSearchValue] = React.useState("");
@@ -67,7 +67,7 @@ export default function Users() {
             }
         };
         getData();
-    }, [session.user.organization, status]);
+    }, []);
 
 
     const items = React.useMemo(() => {

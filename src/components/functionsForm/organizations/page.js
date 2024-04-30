@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
-export default function OrganizationInsert() {
+export default function organizationInsert() {
 
     const [organization, setOrganization] = useState({
         Name: '',
@@ -48,7 +48,7 @@ export default function OrganizationInsert() {
     };
 }
 
-export function OrganizationEdit(idOrganization) {
+export function organizationEdit(idOrganization) {
 
     const [valuesOrganization, setValuesOrganization] = useState({
         Name: '',
@@ -81,7 +81,7 @@ export function OrganizationEdit(idOrganization) {
                 })
             })
             .catch(err => console.log(err))
-    }, [idOrganization, valuesOrganization])
+    }, [])
 
     function handleUpdateOrganization(e) {
         e.preventDefault()
