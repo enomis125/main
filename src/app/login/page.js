@@ -1,0 +1,13 @@
+import React from "react";
+import Login from "@/components/Layout/Auth/Login";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
+
+export default async function login() {
+    const session = await getServerSession()
+    if (session) {
+        redirect("/")
+    }
+    return <Login />
+}

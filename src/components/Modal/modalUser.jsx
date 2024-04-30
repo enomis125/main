@@ -9,7 +9,7 @@ import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
-import userInsert, { userEdit } from "../functionsForm/user/page";
+import UserInsert, { UserEdit } from "../functionsForm/user/page";
 
 
 const Modaluser = ({
@@ -37,8 +37,8 @@ const Modaluser = ({
     };
     console.log("aaa", idUser)
 
-    const { handleInputUser, handleSubmitUser } = userInsert();
-    const { handleUpdateUser, setValuesUser, valuesUser } = userEdit(idUser);
+    const { handleInputUser, handleSubmitUser } = UserInsert();
+    const { handleUpdateUser, setValuesUser, valuesUser } = UserEdit(idUser);
 
     return (
         <>

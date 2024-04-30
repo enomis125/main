@@ -23,7 +23,7 @@ import FormModals from "@/components/Modal/modals/modalApplications";
 import FormModalsLicence from "@/components/Modal/modals/modalLicences"
 import FormModalsFeature from "@/components/Modal/modals/modalFeatures"
 
-import propertyInsert, { propertyEdit } from "../functionsForm/property/page";
+import PropertyInsert, { PropertyEdit } from "../functionsForm/property/page";
 
 
 const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit }) => {
@@ -34,8 +34,8 @@ const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const [isExpanded, setIsExpanded] = useState(false);
     const [isInvisible, setIsInvisible] = React.useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const { handleInputProperty, handleSubmitProperty } = propertyInsert();
-    const { handleUpdateProperty, setValuesProperty, valuesProperty } = propertyEdit(idProperty);
+    const { handleInputProperty, handleSubmitProperty } = PropertyInsert();
+    const { handleUpdateProperty, setValuesProperty, valuesProperty } = PropertyEdit(idProperty);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isSelected, setIsSelected] = useState(true);
 

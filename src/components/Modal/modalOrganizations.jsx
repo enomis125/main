@@ -20,7 +20,7 @@ import { IoMdDownload } from "react-icons/io";
 import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
-import organizationInsert, { organizationEdit } from "../functionsForm/organizations/page";
+import OrganizationInsert, { OrganizationEdit } from "../functionsForm/organizations/page";
 import { GoGear } from "react-icons/go";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiEdit3 } from "react-icons/fi";
@@ -87,8 +87,8 @@ const Modaluser = ({
         }
     };
 
-    const { handleInputOrganization, handleSubmitOrganization } = organizationInsert();
-    const { handleUpdateOrganization, setValuesOrganization, valuesOrganization } = organizationEdit(idOrganization);
+    const { handleInputOrganization, handleSubmitOrganization } = OrganizationInsert();
+    const { handleUpdateOrganization, setValuesOrganization, valuesOrganization } = OrganizationEdit(idOrganization);
 
     const toggleOrganization = async (organizationID, active) => {
         try {
