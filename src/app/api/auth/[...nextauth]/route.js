@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/app/lib/prisma";
 
-export default NextAuth({
+export default (req, res) => NextAuth(req, res, {
     pages: {
         signIn: "/login",
         signOut: "/login",
@@ -34,7 +34,7 @@ export default NextAuth({
                         name: response.name,
                         lastname: response.lastName,
                         admin: response.admin
-                    }
+                    };
                 }
 
                 return null;
