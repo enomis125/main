@@ -1,29 +1,19 @@
 import NextAuth from "next-auth";
-
-import process from "process";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Console } from "console";
 import prisma from "@/app/lib/prisma";
-import { strategy } from "sharp";
 
-
-export const authOptions = {
-
+export default NextAuth({
     pages: {
         signIn: "/login",
         signOut: "/login",
         error: "/login",
     },
-
     session: {
         strategy: "jwt"
     },
-
     providers: [
         CredentialsProvider({
-
             name: 'Credentials',
-
             credentials: {
                 email: {},
                 password: {}
@@ -33,9 +23,9 @@ export const authOptions = {
                     where: {
                         email: credentials?.email
                     }
-                })
+                });
 
-                if (credentials?.password == response.password) {
+                if (credentials?.password === response.password) {
                     return {
                         id: response.userID,
                         email: response.email,
@@ -47,31 +37,23 @@ export const authOptions = {
                     }
                 }
 
-                return null
+                return null;
             }
         })
     ],
-    // debug: true,
     callbacks: {
         async jwt({ token, user }) {
-
             return { ...token, ...user };
         },
-
         async session({ session, token }) {
-
-            session.user.id = token.id
-            session.user.organization = token.organization
-            session.user.role = token.role
-            session.user.name = token.name
-            session.user.lastname = token.lastname
-            session.user.admin = token.admin
+            session.user.id = token.id;
+            session.user.organization = token.organization;
+            session.user.role = token.role;
+            session.user.name = token.name;
+            session.user.lastname = token.lastname;
+            session.user.admin = token.admin;
 
             return session;
         },
     }
-}
-
-const handler = NextAuth(authOptions)
-
-export { handler as GET, handler as POST }
+});
