@@ -34,7 +34,7 @@ export default function OrgEdit(idOrg){
                 })
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [idOrg, valuesOrg])
 
 
     function handleUpdateOrg(e) {

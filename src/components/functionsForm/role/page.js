@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
-export default function roleEdit(id){
+export default function RoleEdit(id){
     //edição na tabela role
     const [valuesRole, setValuesRole] = useState({
         name: '',
@@ -19,7 +19,7 @@ export default function roleEdit(id){
                 })
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [id, valuesRole])
 
 
     function handleUpdateRole(e) {

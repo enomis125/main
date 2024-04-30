@@ -77,7 +77,7 @@ export default function Contact() {
             };
         }
         getData();
-    }, []);
+    }, [session.user.organization, status]);
 
     const handleSearchChange = (value) => {
         setSearchValue(value);

@@ -12,7 +12,7 @@ import { FaRegUser } from "react-icons/fa";
 import userInsert, { userEdit } from "../functionsForm/user/page";
 
 
-const modaluser = ({
+const Modaluser = ({
     idUser,
     buttonName,
     buttonIcon,
@@ -297,4 +297,4 @@ const modaluser = ({
     );
 };
 
-export default modaluser;
+export default Modaluser;

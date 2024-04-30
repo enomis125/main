@@ -34,7 +34,7 @@ import FormModals from "@/components/Modal/modalProperty";
 import FormOrganizationApplication from "@/components/Modal/modals/modalOrganizationApplication";
 
 
-const modaluser = ({
+const Modaluser = ({
     idOrganization,
     buttonName,
     buttonIcon,
@@ -445,4 +445,4 @@ const modaluser = ({
     );
 };
 
-export default modaluser;
+export default Modaluser;

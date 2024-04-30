@@ -16,8 +16,7 @@ import { MdClose } from "react-icons/md";
 
 
 
-const modalchooseproperty = ({
-    
+const Modalchooseproperty = ({
     buttonName,
     buttonIcon,
     modalHeader,
@@ -44,7 +43,7 @@ const modalchooseproperty = ({
         }
     };
         getData();
-    }, [session]);
+    }, [session, idProperty, status]);
 
 
     return (
@@ -73,12 +72,13 @@ const modalchooseproperty = ({
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-10 my-5">
                                 {apps.map((application, index) => (
-                                    <a href="/homepage">
+                                    <a key={index} href="/homepage">
                                     <Card className="w-44 h-44 flex flex-col justify-center items-center border-4 border-green-600 ml-auto mr-auto mt-16">
                                     <CardHeader className="flex flex-col items-center justify-center">
                                         <p>{application.name}</p> 
                                         <Image className="w-20 h-20 mt-2"
                                             src="/images/Logo-Login.png"
+                                            alt="login"
                                         />
                                     </CardHeader>
                                 </Card>
@@ -96,4 +96,4 @@ const modalchooseproperty = ({
     );
 };
 
-export default modalchooseproperty;
+export default Modalchooseproperty;

@@ -9,7 +9,7 @@ import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 
 
-const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor }) => {
+const Modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const toggleExpand = () => {
@@ -90,4 +90,4 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
     );
 };
 
-export default modelprofile;
+export default Modelprofile;

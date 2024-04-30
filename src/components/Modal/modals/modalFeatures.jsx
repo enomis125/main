@@ -24,7 +24,7 @@ import { LiaExpandSolid } from "react-icons/lia";
 import { GoGear } from "react-icons/go";
 import { FiEdit3, FiCheck } from "react-icons/fi";
 
-const modalfeatures = ({
+const Modalfeatures = ({
     buttonName,
     buttonIcon,
     modalHeader,
@@ -232,4 +232,4 @@ const modalfeatures = ({
         </>
     );
 };
-export default modalfeatures;
+export default Modalfeatures;

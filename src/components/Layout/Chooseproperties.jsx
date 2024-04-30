@@ -31,7 +31,7 @@ const ChooseOrganization = () => {
             }
         };
         getData()
-    }, [session])
+    }, [session, status])
 
     // Redirecionar o usuário administrador para /homepage
     useEffect(() => {
@@ -64,7 +64,7 @@ const ChooseOrganization = () => {
                                                     formTypeModal={10}
                                                     idProperty={property.id}
                                                 ></FormModals>
-                                                <Image className="w-20 h-20" src="/images/hotel.png" />
+                                                <Image className="w-20 h-20" src="/images/hotel.png" alt='hotel'/>
                                             </CardHeader>
                                         </Card>
                                     </div>

@@ -14,7 +14,7 @@ import OrgEdit from "../functionsForm/organization/page";
 import organization from "@/app/homepage/organization/page";
 
 
-const modalorg = ({
+const Modalorg = ({
     idOrg,
     buttonName,
     buttonIcon,
@@ -61,7 +61,7 @@ const modalorg = ({
         };
         }
         getData();
-    }, []);
+    }, [dataFetched, idOrg]);
 
     return (
         <>
@@ -232,4 +232,4 @@ const modalorg = ({
     );
 };
 
-export default modalorg;
+export default Modalorg;

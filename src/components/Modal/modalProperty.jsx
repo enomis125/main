@@ -26,7 +26,7 @@ import FormModalsFeature from "@/components/Modal/modals/modalFeatures"
 import propertyInsert, { propertyEdit } from "../functionsForm/property/page";
 
 
-const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit }) => {
+const Modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit }) => {
 
     const variants = ["underlined"];
 
@@ -147,7 +147,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             }
         }
         fetchUserCount();
-    }, []);
+    }, [idProperty]);
 
 
     const handleSwitchChange = async (applicationID, checked) => {
@@ -995,4 +995,4 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     );
 };
 
-export default modalpropertie;
+export default Modalpropertie;

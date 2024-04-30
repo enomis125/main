@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react"
 import axios from 'axios';
 
-export default function propertyInsert(){
+export default function PropertyInsert(){
 
     //inserção na tabela property
     const [property, setProperty] = useState({
@@ -54,7 +54,7 @@ export default function propertyInsert(){
     };
 }
 
-export function propertyEdit(idProperty){
+export function PropertyEdit(idProperty){
     
     //edição na tabela USER
     const [valuesProperty, setValuesProperty] = useState({
@@ -91,7 +91,7 @@ export function propertyEdit(idProperty){
                 })
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [idProperty, valuesProperty])
 
 
     function handleUpdateProperty(e) {
