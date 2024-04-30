@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/app/lib/prisma";
 
-export default NextAuth({
+const authOptions = {
   // Your NextAuth configuration here
   pages: {
     signIn: "/login",
@@ -57,4 +57,6 @@ export default NextAuth({
       return session;
     },
   }
-});
+};
+
+export { authOptions };
