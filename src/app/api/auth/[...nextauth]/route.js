@@ -1,62 +1,52 @@
-import NextAuth from "next-auth";
+import NextAuth from "next-auth/next";
+
+import process from "process";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "@/app/lib/prisma";
+import { Console } from "console";
 
-const authOptions = {
-  // Your NextAuth configuration here
-  pages: {
-    signIn: "/login",
-    signOut: "/login",
-    error: "/login",
-  },
-  session: {
-    strategy: "jwt"
-  },
-  providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: {},
-        password: {}
-      },
-      async authorize(credentials, req) {
-        const response = await prisma.users.findUnique({
-          where: {
-            email: credentials?.email
-          }
-        });
 
-        if (credentials?.password === response.password) {
-          return {
-            id: response.userID,
-            email: response.email,
-            organization: response.organizationID,
-            role: response.roleID,
-            name: response.name,
-            lastname: response.lastName,
-            admin: response.admin
-          };
-        }
+export const authOptions = {
 
-        return null;
-      }
-    })
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      return {...token,...user };
+    pages: {
+        signIn: "/login",
+        signOut: "/login",
+        error: "/login",
     },
-    async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.organization = token.organization;
-      session.user.role = token.role;
-      session.user.name = token.name;
-      session.user.lastname = token.lastname;
-      session.user.admin = token.admin;
+    providers: [
+        CredentialsProvider({
 
-      return session;
+            name: 'Credentials',
+
+            credentials: {
+                username: { label: "Username", type: "text", placeholder: "jsmith" },
+                password: { label: "Password", type: "password" }
+            },
+            async authorize(credentials, req) {
+
+                
+
+                return { id: 0, name: "Diogo" }
+            }
+        })
+    ],
+    debug: true,
+    callbacks: {
+        async jwt({ token, user }) {
+
+            return { ...token, ...user };
+        },
+
+        async session({ session, token }) {
+
+            session.user.id = token.id
+            session.user.name = token.name;
+            return session;
+        },
+
     },
-  }
-};
+    session: { strategy: "jwt" }//, maxAge: 10*60*60
+}
 
-export { authOptions };
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST }
