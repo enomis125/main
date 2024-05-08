@@ -14,7 +14,7 @@ export async function GET(request) {
     return new NextResponse(JSON.stringify({ response, status: 200 }));
 }
 
- export async function PUT(request) {
+export async function PUT(request) {
 
      try {
         const { data } = await request.json();

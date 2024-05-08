@@ -17,9 +17,9 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [OrganizationApplications, setOrganizationApplications] = useState([]);
-    const [OrganizationApplicationsFetched, setOrganizationApplicationsFetched] = useState(false);
+    const [OrganizationApplicationsFetched, setOrganizationApplicationsFetched] = useState([]);
 
-    const [propertiesCount, setpropertiesCount] = useState(null);
+    const [propertiesCount, setpropertiesCount] = useState([]);
 
     const { data: session, status } = useSession()
 
@@ -52,8 +52,10 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
     useEffect(() => {
         async function fetchpropertiesCount() {
             try {
-                const response = await axios.get('/api/hotel/applications/' + 1 + '/count');
+                //const response = await axios.get('/api/hotel/applications/' + 1 + '/count');
+                const response = await axios.get('/api/hotel/organizations/' + idOrganization + '/applications/count');
                 setpropertiesCount(response.data.response);
+                console.log(response.data.response)
             } catch (error) {
                 console.error("Error fetching properties Count:", error);
             }
