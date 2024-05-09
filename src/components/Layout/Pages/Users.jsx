@@ -191,9 +191,9 @@ export default function users() {
                                                         buttonColor={"transparent"}
                                                         modalHeader={"Editar Utilizador"}
                                                         modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${user.userID}`}
+                                                        modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
-                                                        idUser={user.userID}
+                                                        idUser={user.id}
                                                     ></Modaluser>
                                                 </DropdownItem>
                                                 <DropdownItem><button onClick={() => handleDelete(user.id)}>Remover</button></DropdownItem>
@@ -203,9 +203,9 @@ export default function users() {
                                                         buttonColor={"transparent"}
                                                         modalHeader={"Ver Utilizador"}
                                                         modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${user.userID}`}
+                                                        modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
-                                                        idUser={user.userID}
+                                                        idUser={user.id}
                                                     ></Modaluser>
                                                 </DropdownItem>
                                             </DropdownMenu>

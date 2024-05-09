@@ -153,18 +153,18 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     
 
 //     const [propertyApplications, setPropertyApplications] = useState([]);
-useEffect(() => {
+// useEffect(() => {
 
-const fetchApplications = async () => {
-    const response = await fetch("/api/hotel/properties-applications/");
-    const data = await response.json();
-    setPropertyApplications(
-    data.map((app) => ({ ...app, enabled: app.enabled || false }))
-    );
-};
-fetchApplications();
+// const fetchApplications = async () => {
+//     const response = await fetch("/api/hotel/properties-applications/");
+//     const data = await response.json();
+//     // setPropertyApplications(
+//     // data.map((app) => ({ ...app, enabled: app.enabled || false }))
+//     // );
+// };
+// fetchApplications();
 
-}, []);
+// }, []);
 
 const handleSwitchChange = async (applicationID, checked) => {
     setIsLoading(true);

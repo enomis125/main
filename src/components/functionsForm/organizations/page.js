@@ -28,15 +28,15 @@ export default function organizationInsert() {
         }
         axios.put('/api/hotel/organizations', {
             data: {
-                Name: organization.Name,
-                Email: organization.Email,
-                FiscalNumber: organization.FiscalNumber,
-                Address1: organization.Address1,
-                Address2: organization.Address2,
-                Country: organization.Country,
-                District: organization.District,
-                ZipCode: organization.ZipCode,
-                PhoneNumber: organization.PhoneNumber
+                name: organization.Name,
+                email: organization.Email,
+                fiscalNumber: organization.FiscalNumber,
+                address1: organization.Address1,
+                address2: organization.Address2,
+                country: organization.Country,
+                district: organization.District,
+                zipCode: organization.ZipCode,
+                phoneNumber: organization.PhoneNumber
             }
         })
             .then(response => console.log(response))
@@ -87,15 +87,15 @@ export function organizationEdit(idOrganization) {
         e.preventDefault()
         axios.patch('/api/hotel/organizations/' + idOrganization, {
             data: {
-                Name: valuesOrganization.Name,
-                Email: valuesOrganization.Email,
-                FiscalNumber: valuesOrganization.FiscalNumber,
-                Address1: valuesOrganization.Address1,
-                Address2: valuesOrganization.Address2,
-                Country: valuesOrganization.Country,
-                District: valuesOrganization.District,
-                ZipCode: valuesOrganization.ZipCode,
-                PhoneNumber: valuesOrganization.PhoneNumber
+                name: valuesOrganization.Name,
+                email: valuesOrganization.Email,
+                fiscalNumber: valuesOrganization.FiscalNumber,
+                address1: valuesOrganization.Address1,
+                address2: valuesOrganization.Address2,
+                country: valuesOrganization.Country,
+                district: valuesOrganization.District,
+                zipCode: valuesOrganization.ZipCode,
+                phoneNumber: valuesOrganization.PhoneNumber
             }
         })
             .catch(err => console.log(err))

@@ -19,7 +19,7 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
     const [OrganizationApplications, setOrganizationApplications] = useState([]);
     const [OrganizationApplicationsFetched, setOrganizationApplicationsFetched] = useState([]);
 
-    const [propertiesCount, setpropertiesCount] = useState([]);
+    const [propertiesCount, setpropertiesCount] = useState({});
 
     const { data: session, status } = useSession()
 
@@ -51,13 +51,20 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
 
     useEffect(() => {
         async function fetchpropertiesCount() {
+            setIsLoading(true);
             try {
-                //const response = await axios.get('/api/hotel/applications/' + 1 + '/count');
                 const response = await axios.get('/api/hotel/organizations/' + idOrganization + '/applications/count');
-                setpropertiesCount(response.data.response);
-                console.log(response.data.response)
+                const responseData = response.data.response;
+                const updatedPropertiesCount = {};
+                for (const [key, value] of Object.entries(responseData)) {
+                    updatedPropertiesCount[key] = value;
+                }
+                setpropertiesCount(updatedPropertiesCount);
+                console.log(updatedPropertiesCount);
             } catch (error) {
                 console.error("Error fetching properties Count:", error);
+            } finally {
+                setIsLoading(false);
             }
         }
         fetchpropertiesCount();
@@ -123,7 +130,7 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                     <TableBody>
                                                         {OrganizationApplications.map((organization, index) => (
                                                             <TableRow key={index}>
-                                                                <TableCell>{organization.applications.description}</TableCell>
+                                                                <TableCell>{organization.applications.description} </TableCell>
                                                                 <TableCell>
                                                                     {isAdmin() ? (
                                                                         <FormConnectionString
@@ -131,7 +138,6 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                                             buttonColor={"transparent"}
                                                                             formTypeModal={1}
                                                                             modalHeader={"Details"}
-                                                                            // modalEdit={`ID: ${organizationProperties.propertyID}`}
                                                                             idOrganization={idOrganization}
                                                                             idApplication={organization.applicationID}
                                                                         />
@@ -140,7 +146,7 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                                     )}
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Badge content={propertiesCount} isInvisible={isInvisible} />
+                                                                {propertiesCount[organization.applicationID] || 0}
                                                                 </TableCell>
                                                             </TableRow>
                                                         ))}

@@ -136,7 +136,6 @@ const modaluser = ({
                             base: "max-h-screen",
                             wrapper: isExpanded ? "w-full h-screen" : "lg:pl-72 h-screen w-full",
                             body: "h-full ",
-
                         }}
                         size="full"
                         hideCloseButton="true"
@@ -145,36 +144,15 @@ const modaluser = ({
                             {(onClose) => (
                                 <>
                                     <form onSubmit={handleSubmitOrganization}>
-                                        <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">{modalHeader}
-                                            <div className='flex flex-row items-center mr-5'>
-                                                <Modal
-                                                    classNames={{
-                                                        base: "max-h-screen",
-                                                        wrapper: isExpanded
-                                                            ? "w-full h-screen"
-                                                            : "lg:pl-72 h-screen w-full",
-                                                        body: "h-full",
-                                                    }}
-                                                    size="full"
-                                                    hideCloseButton="true"
-                                                    isOpen={isSecondModalOpen}
-                                                    onClose={toggleSecondModal}
-                                                    isDismissable={false}
-                                                    isKeyboardDismissDisabled={true}
-                                                >
-                                                    <ModalContent>
-                                                        <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">{modalHeader}
-                                                            <div className='flex flex-row items-center mr-5'>
-                                                                <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
-                                                                <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
-                                                            </div>
-                                                        </ModalHeader>
-                                                    </ModalContent>
-                                                </Modal>
+                                        <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
+                                        <div className="flex flex-row justify-start gap-4">
+                                            {modalHeader} {modalEdit}
+                                        </div>
+                                        <div className='flex flex-row items-center mr-5'>
                                                 <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
                                                 <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
-                                            </div>
+                                                </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                             <div className="w-full flex flex-col gap-4">
@@ -373,7 +351,9 @@ const modaluser = ({
                             {(onClose) => (
                                 <>
                                     <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
-                                        {modalHeader}
+                                    <div className="flex flex-row justify-start gap-4">
+                                            {modalHeader} {modalEdit}
+                                        </div>
                                         <div className='flex flex-row items-center mr-5'>
                                             <Button color="transparent" onPress={onClose}><MdClose size={30} /></Button>
                                         </div>
@@ -483,7 +463,9 @@ const modaluser = ({
                             {(onClose) => (
                                 <>
                                     <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
-                                        {modalHeader}
+                                    <div className="flex flex-row justify-start gap-4">
+                                            {modalHeader} {modalEdit}
+                                        </div>
                                         <div className='flex flex-row items-center mr-5'>
                                             <Button color="transparent" onPress={onClose}><MdClose size={30} /></Button>
                                         </div>
