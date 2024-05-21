@@ -1,58 +1,52 @@
-"use client"
-import React, { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, Button, useDisclosure , Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
-import axios from 'axios';
+"use client";
+import React from "react";
 
-//icons
+//import de axios para BD
+import axios from "axios";
+import { useSession } from "next-auth/react"
+import { useState, useEffect } from "react";
+
+
+import { Modal, ModalContent, ModalHeader, ModalBody, Avatar, ModalFooter, Checkbox } from "@nextui-org/react";
+
+import {
+    Input,
+    Button,
+    useDisclosure,
+
+    //imports de tabelas
+    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination,
+
+} from "@nextui-org/react"
+
+//imports de icons
 
 import { MdClose } from "react-icons/md";
+import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 
 
-const modallicence = ({buttonName,
+const users_applications = ({idProperty, idApplication, formTypeModal, buttonName,
     buttonIcon,
     modalHeader,
-    formTypeModal,
     buttonColor,
-    idProperty,
-    modalEdit,
-    }) => {
-
+    editIcon,
+    modalEditArrow,
+    modalEdit}) => {
+    
     const [isExpanded, setIsExpanded] = useState(false);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [isLoading, setIsLoading] = useState(true);
-    const [dataFetched, setDataFetched] = useState(false);
-    const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
-    const [propertyLicense, setPropertyLicense] = useState([]);
-    const [licencesFetched, setLicencesFetched] = useState(false);
-
-
+    const [isLoading, setIsLoading] = useState(false);
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
-    
-    const toggleFirstModal = async () => {
-        setIsFirstModalOpen(!isFirstModalOpen);
-        if (!licencesFetched) {
-            setIsLoading(true);
-            try {
-                    const res = await axios.get(`/api/hotel/properties/` + idProperty + `/licenses/`);
-                    setPropertyLicense(res.data.response);
-                    setLicencesFetched(true);
-                } catch (error) {
-                    console.error("Erro ao encontrar as licenças associadas à propriedade:", error.message);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-    }
-    
+
     return (
         <>
-            {formTypeModal === 2 && (
+            {formTypeModal === 10 && (
                 <>
-                    <Button onPress={toggleFirstModal} color={buttonColor} className="w-fit">
+                    <Button onPress={onOpen} color={buttonColor} className="w-fit">
                         {buttonName} {buttonIcon}
                     </Button>
                     <Modal
@@ -60,14 +54,11 @@ const modallicence = ({buttonName,
                             base: "max-h-screen",
                             wrapper: isExpanded ? "w-full h-screen" : "lg:pl-72 h-screen w-full",
                             body: "h-full ",
+
                         }}
                         size="full"
                         hideCloseButton="true"
-                        isOpen={isFirstModalOpen}
-                        onOpenChange={toggleFirstModal}
-                        isDismissable={false}
-                        isKeyboardDismissDisabled={true}
-                    >
+                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>
@@ -76,6 +67,7 @@ const modallicence = ({buttonName,
                                         {modalHeader}{modalEdit}
                                         </div>
                                         <div className='flex flex-row items-center mr-5'>
+                                            <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
                                             <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                             <Button color="transparent" onPress={onClose}><MdClose size={30} /></Button>
                                         </div>
@@ -96,27 +88,22 @@ const modallicence = ({buttonName,
                                                 >
                                                     <TableHeader>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ID
+                                                                USER ID
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ABV
+                                                                NAME
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                BEDROOMS
-                                                            </TableColumn>
-                                                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                WORKSTATIONS
+                                                                ADD
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>
-                                                            {propertyLicense.map((licenses, index) => (
-                                                                <TableRow key={index}>
-                                                                    <TableCell>{licenses.pmsh}</TableCell>
-                                                                    <TableCell>{licenses.abbreviation}</TableCell>
-                                                                    <TableCell>{licenses.numOfRooms}</TableCell>
-                                                                    <TableCell>{licenses.workstationId}</TableCell>
+                                                                <TableRow >
+                                                                    <TableCell>Teste</TableCell>
+                                                                    <TableCell>Teste</TableCell>
+                                                                    <TableCell><Checkbox/></TableCell>
                                                                 </TableRow>
-                                                            ))}
+                                                            
                                                         </TableBody>
                                                 </Table>
                                             </div>
@@ -131,4 +118,4 @@ const modallicence = ({buttonName,
         </>
     );
 };
-export default modallicence;
+export default users_applications;

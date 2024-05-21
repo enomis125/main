@@ -25,7 +25,7 @@ const modalorg = ({
     modalEditArrow,
     modalEdit
 }) => {
-    console.log("organização:", idOrg)
+
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -85,7 +85,9 @@ const modalorg = ({
                                 <>
                                     <form onSubmit={(e) => handleUpdateOrg(e)}>
                                         <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
+                                        <div className="flex flex-row justify-start gap-4">
                                         {editIcon} {modalHeader} {modalEditArrow} {modalEdit}
+                                        </div>
                                             <div className='flex flex-row items-center mr-5'>
                                                 <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
                                                 <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>

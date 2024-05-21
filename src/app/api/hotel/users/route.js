@@ -1,8 +1,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-import prisma from "@/app/lib/prisma";
-
+import prisma from "@/lib/prisma"
 
 
 export async function GET(request) {
@@ -14,7 +13,7 @@ export async function GET(request) {
                     name: true
                 }
             },
-            users_properties_applications: true
+            properties_users: true
         }
     });
 
@@ -35,17 +34,9 @@ export async function GET(request) {
             properties: []
         };
 
-        const propertyApplicationIDs = user.users_properties_applications.map(userPropertyApplication => userPropertyApplication.propertyApplicationID);
+        const propertyIDs = user.properties_users.map(property => property.propertyID);
 
-        const properties_applications = await prisma.properties_applications.findMany({
-            where: {
-                propertyApplicationID: {
-                    in: propertyApplicationIDs
-                }
-            }
-        });
-
-        const propertyIDs = properties_applications.map(propertyApplication => propertyApplication.propertyID);
+        console.log(propertyIDs)
 
         const properties = await prisma.properties.findMany({
             where: {
@@ -59,7 +50,7 @@ export async function GET(request) {
         });
 
         if (properties.length > 0) {
-            userData.properties = properties.map(property => property.name);
+            userData.properties = properties.map(property => property.name).join(', ');
         }
 
         return userData;

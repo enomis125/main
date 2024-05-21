@@ -40,11 +40,8 @@ module.exports = {
             DEFAULT: '#2eb7a6',
             foreground: "#f5f5f5",
           },
-          focus: "#0D9488",
-          tableFooter: "#F8F8F8",
-          tableFooterBorder: "#DADADA",
-          lightBlue: "#E6EDF4",
-          green: '#159F46'
+          focus: "#0D9488"
+
         },
 
       }

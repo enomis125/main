@@ -196,6 +196,9 @@ export default function allUsers() {
                                                         modalEdit={`ID: ${user.userID}`}
                                                         formTypeModal={11}
                                                         idUser={user.userID}
+                                                        NameUser={user.name}
+                                                        OrganizationUserName={user.organization}
+                                                        PropertiesUserName={user.properties}
                                                     ></Modaluser>
                                                 </DropdownItem>
                                                 <DropdownItem><button onClick={() => handleDelete(user.id)}>Remover</button></DropdownItem>
@@ -209,6 +212,9 @@ export default function allUsers() {
                                                         modalEdit={`ID: ${user.userID}`}
                                                         formTypeModal={11}
                                                         idUser={user.userID}
+                                                        NameUser={user.name}
+                                                        OrganizationUserName={user.organization}
+                                                        PropertiesUserName={user.properties}
                                                     ></Modaluser>
                                                 </DropdownItem>
                                             </DropdownMenu>

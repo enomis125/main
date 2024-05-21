@@ -27,6 +27,7 @@ import { BsArrowRight } from "react-icons/bs";
 import { IoMdDownload } from "react-icons/io";  
 
 import FormModals from "@/components/Modal/modalProperty";
+import LoadingBackdrop from "@/components/Loader/LoaderV2";
 
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -39,6 +40,7 @@ export default function Contact() {
     const [searchValue, setSearchValue] = React.useState("");
     const [property, setProperty] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const { data: session, status } = useSession()
 
     // const filteredItems = property.filter(
@@ -73,6 +75,8 @@ export default function Contact() {
                     setProperty(res.data.response);
                 } catch (error) {
                     console.error("Erro ao obter as propriedades:", error.message);
+                }finally{
+                    setIsLoading(false);
                 }
             };
         }
@@ -144,6 +148,8 @@ export default function Contact() {
                     </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
+                <LoadingBackdrop open={isLoading} />
+                        {!isLoading && (
                     <Table
                         id="TableToPDF"
                         isHeaderSticky={"true"}
@@ -238,6 +244,7 @@ export default function Contact() {
                             ))}
                         </TableBody>
                     </Table>
+                        )}
                 </div>
                 <div className="bg-tableFooter border border-tableFooterBorder flex justify-end items-center lg:pl-72 w-full min-h-10vh fixed bottom-0 right-0 z-20 text-sm text-default-400 py-3">
                     <div className="space-x-4">

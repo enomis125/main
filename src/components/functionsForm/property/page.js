@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react"
 import axios from 'axios';
 
-export default function propertyInsert(){
+export default function propertyInsert() {
 
     //inserção na tabela property
     const [property, setProperty] = useState({
@@ -49,13 +49,13 @@ export default function propertyInsert(){
             .catch(err => console.log(err))
     }
     //final da inserção na tabela property
-    return { 
-        handleInputProperty , handleSubmitProperty
+    return {
+        handleInputProperty, handleSubmitProperty
     };
 }
 
-export function propertyEdit(idProperty){
-    
+export function propertyEdit(idProperty) {
+
     //edição na tabela USER
     const [valuesProperty, setValuesProperty] = useState({
         Name: '',
@@ -68,15 +68,17 @@ export function propertyEdit(idProperty){
         PhoneNumber: '',
         Description: '',
         Abbreviation: '',
-        Designation: ''
+        Designation: '',
+        active: 0
     })
 
     useEffect(() => {
         axios.get('/api/hotel/properties/' + idProperty)
             .then(res => {
                 const property = res.data.response
-                setValuesProperty({ ...valuesProperty,
-                    idProperty : property.propertyID,
+                setValuesProperty({
+                    ...valuesProperty,
+                    idProperty: property.propertyID,
                     Name: property.name,
                     Email: property.email,
                     FiscalNumber: property.fiscalNumber,
@@ -87,7 +89,8 @@ export function propertyEdit(idProperty){
                     PhoneNumber: property.phoneNumber,
                     Description: property.description,
                     Abbreviation: property.abbreviation,
-                    Designation: property.designation
+                    Designation: property.designation,
+                    active: property.del
                 })
             })
             .catch(err => console.log(err))
@@ -96,6 +99,8 @@ export function propertyEdit(idProperty){
 
     function handleUpdateProperty(e) {
         e.preventDefault()
+
+
         axios.patch('/api/hotel/properties/' + idProperty, {
             data: {
                 Name: valuesProperty.Name,
@@ -108,13 +113,14 @@ export function propertyEdit(idProperty){
                 PhoneNumber: valuesProperty.PhoneNumber,
                 Description: valuesProperty.Description,
                 Abbreviation: valuesProperty.Abbreviation,
-                Designation: valuesProperty.Designation
+                Designation: valuesProperty.Designation,
+                active: valuesProperty.active ? 1 : 0
             }
         })
-        .catch(err => console.log(err))
+            .catch(err => console.log(err))
     }
 
-    return { 
+    return {
         handleUpdateProperty, setValuesProperty, valuesProperty
     };
 }

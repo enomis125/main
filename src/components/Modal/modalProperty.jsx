@@ -19,15 +19,20 @@ import { IoApps } from "react-icons/io5";
 import { BiSpreadsheet } from "react-icons/bi";
 import { FaLock } from "react-icons/fa";
 import { Checkbox } from "@nextui-org/react";
+import { FiEdit3 } from "react-icons/fi";
+import { BsArrowRight } from "react-icons/bs";
+import { GrUserSettings } from "react-icons/gr";
 
 import FormModals from "@/components/Modal/modals/modalApplications";
 import FormModalsLicence from "@/components/Modal/modals/modalLicences"
 import FormModalsFeature from "@/components/Modal/modals/modalFeatures"
+import FormModalPropertiesUsers from "@/components/Modal/modals/modalPropertiesUsers"
+import FormUsersApplications from "@/components/Modal/modals/UsersApplications"
 
 import propertyInsert, { propertyEdit } from "../functionsForm/property/page";
 
 
-const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit }) => {
+const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit, OrganizationName }) => {
 
     const variants = ["underlined"];
 
@@ -82,22 +87,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         }
     };
 
-    // const toggleThirdModal = async () => {
-    //     setIsThirdModalOpen(!isThirdModalOpen);
-    //     if (!applicationFetched) {
-    //         setIsLoading(true);
-    //         try {
-    //             const response = await axios.get(`/api/hotel/properties/` + idProperty + `/applications`);
-    //             setPropertyApplications(response.data.response);
-    //             setApplicationFetched(true);
-    //         } catch (error) {
-    //             console.error("Erro ao encontrar as aplicações associadas à propriedade:", error.message);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-    // };
-
     const [allApplications, setAllApplications] = useState([]);
 
     useEffect(() => {
@@ -129,12 +118,44 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                     response = await axios.get(`/api/hotel/properties/${idProperty}/applications`);
                 }
                 setPropertyApplications(response.data.response);
+                console.log(response.data.response)
                 setApplicationFetched(true);
             } catch (error) {
                 console.error("Erro ao encontrar as aplicações:", error.message);
             } finally {
                 setIsLoading(false);
             }
+        }
+    };
+
+    const [switchState, setSwitchState] = useState(false);
+
+    const handleSwitchToggle = async (applicationID, active) => {
+        try {
+            const requestData = {
+                propertyID: parseInt(idProperty),
+                applicationID: parseInt(applicationID)
+            };
+
+            var response
+
+            console.log(active)
+
+            if (active) {
+                response = await axios.put("/api/hotel/properties-applications", { data: requestData });
+            } else {
+                const propertyApplication = await axios.get("/api/hotel/properties-applications?propertyID=" + idProperty + "&applicationID=" + applicationID);
+                // console.log(id)
+                response = await axios.delete("/api/hotel/properties-applications/" + propertyApplication.data.response.propertyApplicationID)
+            }
+
+            if (response.status === 200) {
+                console.log("Aplicação ativada com sucesso na propriedade.");
+            } else {
+                console.error("Falha ao ativar a aplicação na propriedade.");
+            }
+        } catch (error) {
+            console.error("Erro ao enviar solicitação PUT:", error);
         }
     };
 
@@ -150,59 +171,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         fetchUserCount();
     }, []);
 
-    
 
-//     const [propertyApplications, setPropertyApplications] = useState([]);
-// useEffect(() => {
-
-// const fetchApplications = async () => {
-//     const response = await fetch("/api/hotel/properties-applications/");
-//     const data = await response.json();
-//     // setPropertyApplications(
-//     // data.map((app) => ({ ...app, enabled: app.enabled || false }))
-//     // );
-// };
-// fetchApplications();
-
-// }, []);
-
-const handleSwitchChange = async (applicationID, checked) => {
-    setIsLoading(true);
-    try {
-        const response = await axios.put(`/api/hotel/properties-applications/`, {
-        data: {
-            propertyID: idProperty,
-            applicationID: applicationID,
-            enabled: checked,
-        },
-    });
-        const updatedApplication = response.data;
-        setPropertyApplications((prevApplications) =>
-        prevApplications.map((app) =>
-        applicationID === updatedApplication.id ? { ...app, enabled: checked } : app
-        )
-    );
-    } catch (error) {
-        console.error("Error updating the application:", error.message);
-    } finally {
-        setIsLoading(false);
-    }
-};
-
-    const toggleProperty = async (propertyID, active) => {
-        try {
-            await axios.patch('/api/hotel/properties/' + idProperty, {
-                active: active,
-            });
-
-            // Atualizar a lista de propriedades após alterar o estado
-            const res = await axios.get("/api/hotel/properties");
-            return res.data.response;
-        } catch (error) {
-            console.error("Erro ao desativar/ativar a Propriedade:", error.message);
-            throw error;
-        }
-    };
 
     return (
         <>
@@ -314,7 +283,6 @@ const handleSwitchChange = async (applicationID, checked) => {
                     </Modal>
                 </>
             )}
-
 
             {formTypeModal === 11 && ( //Properties view
                 <>
@@ -489,12 +457,10 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                                 ></FormModals>
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                                <Checkbox
-                                                                                                    checked={application.enabled} // Use the application.enabled property here
-                                                                                                    onChange={(event) => handleSwitchChange(application.id, event.target.checked)}
-                                                                                                    disabled={!isAdmin}
-                                                                                                    size="small"
-                                                                                                    color="success"
+                                                                                                <Switch
+                                                                                                    className="mr-auto"
+                                                                                                    size="sm"
+                                                                                                    onChange={(e) => handleSwitchToggle(application.id, e.target.checked)}
                                                                                                 />
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
@@ -542,7 +508,7 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                                 ></FormModals>
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                                <Switch defaultSelected size="sm" color="success" />
+                                                                                            <Checkbox defaultSelected color="success"></Checkbox>
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
                                                                                                 {application.description === "OnPremPMS" ? (
@@ -700,11 +666,15 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                 <Switch
                                                     className="mr-auto"
                                                     size="sm"
-                                                    isSelected={isSelected}
-                                                    onValueChange={toggleProperty}
+                                                    defaultSelected={!valuesProperty.active}
+                                                    onChange={e => setValuesProperty({ ...valuesProperty, active: !e.target.checked })}
                                                 >
-                                                    {isSelected ? "Propriedade Ativada" : "Propriedade Desativada"}
+                                                    {valuesProperty.active ? "Propriedade Inativa" : "Propriedade Ativa"}
+
+                                                    <p>Organização: {OrganizationName}</p>
+
                                                 </Switch>
+
                                                 <div className="bg-gray-100 p-1 rounded border border-gray-300 mr-2">
                                                     <Badge color="success" content={userCount} isInvisible={isInvisible} shape="circle">
                                                         <Button color="transparent" onPress={toggleSecondModal}>
@@ -730,11 +700,26 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                     {editIcon} {modalHeader} {modalEditArrow} {modalEdit} <p>Utilizadores</p>
                                                                 </div>
                                                                 <div className='flex flex-row items-center mr-5'>
+                                                                
                                                                     <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                                     <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
+                                                                    
                                                                 </div>
+                                                                
                                                             </ModalHeader>
                                                             <ModalBody>
+                                                                <div>
+                                                                <FormModalPropertiesUsers
+                                                                            buttonName={"Inserir Utilizador"}
+                                                                            editIcon={<FiEdit3 size={25} />}
+                                                                            buttonColor={"gray"}
+                                                                            modalHeader={"Inserir Novo Utilizador"}
+                                                                            modalEditArrow={<BsArrowRight size={25} />}
+                                                                            modalEdit={`ID: ${idProperty}`}
+                                                                            formTypeModal={10}
+                                                                            idProperty={idProperty}
+                                                                        />
+                                                                </div>
                                                                 {isLoading ? (<p>A Carregar...</p>
                                                                 ) : (
                                                                     <div className="mx-5 h-[65vh] min-h-full">
@@ -831,6 +816,9 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
                                                                                     FEATURES
                                                                                 </TableColumn>
+                                                                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                                                                    USERS
+                                                                                </TableColumn>
                                                                             </TableHeader>
                                                                             <TableBody>
                                                                                 {isAdmin() ? ( // Se o utilizador for admin
@@ -848,12 +836,10 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                                 ></FormModals>
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                                <Checkbox
-                                                                                                    checked={application.enabled} // Use the application.enabled property here
-                                                                                                    onChange={(event) => handleSwitchChange(application.id, event.target.checked)}
-                                                                                                    disabled={!isAdmin}
-                                                                                                    size="small"
-                                                                                                    color="success"
+                                                                                                <Switch
+                                                                                                    className="mr-auto"
+                                                                                                    size="sm"
+                                                                                                    onChange={(e) => handleSwitchToggle(application.id, e.target.checked)}
                                                                                                 />
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
@@ -886,6 +872,17 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                                     <Button className={"bg-transparent hover:bg-transparent"}><FaLock size={20} /></Button>
                                                                                                 )}
                                                                                             </TableCell>
+                                                                                            <TableCell>
+                                                                                            <FormUsersApplications
+                                                                                                    buttonName={<GrUserSettings size={25}/>}
+                                                                                                    buttonColor={"transparent"}
+                                                                                                    modalHeader={"Associar Utilizador à Aplicação -"}
+                                                                                                    formTypeModal={10}
+                                                                                                    modalEdit={` ID: ${idProperty}`}
+                                                                                                    idApplication={application.id}
+                                                                                                    idProperty={idProperty}
+                                                                                                ></FormUsersApplications>
+                                                                                            </TableCell>
                                                                                         </TableRow>
                                                                                     ))
                                                                                 ) : ( // Se o utilizador nao for admin
@@ -901,7 +898,7 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                                 ></FormModals>
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                                <Switch defaultSelected size="sm" color="success" />
+                                                                                                <Checkbox defaultSelected color="success"></Checkbox>
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
                                                                                                 {application.description === "OnPremPMS" ? (
@@ -929,6 +926,17 @@ const handleSwitchChange = async (applicationID, checked) => {
                                                                                                 ) : (
                                                                                                     <Button className={"bg-transparent hover:bg-transparent"}><FaLock size={20} /></Button>
                                                                                                 )}
+                                                                                            </TableCell>
+                                                                                            <TableCell>
+                                                                                            <FormUsersApplications
+                                                                                                    buttonName={<GrUserSettings />}
+                                                                                                    buttonColor={"transparent"}
+                                                                                                    modalHeader={"Associar Utilizador à Aplicação -"}
+                                                                                                    formTypeModal={10}
+                                                                                                    modalEdit={` ID: ${idProperty}`}
+                                                                                                    idApplication={application.id}
+                                                                                                    idProperty={idProperty}
+                                                                                                ></FormUsersApplications>
                                                                                             </TableCell>
                                                                                         </TableRow>
                                                                                     ))

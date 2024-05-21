@@ -32,7 +32,7 @@ import { CSVLink } from "react-csv";
 
 
 import Modaluser from "@/components/Modal/modalUser";
-import properties from "@/app/homepage/properties/page";
+
 
 export default function users() {
     const [page, setPage] = React.useState(1);
@@ -194,6 +194,8 @@ export default function users() {
                                                         modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
                                                         idUser={user.id}
+                                                        PropertiesUserName={user.properties}
+                                                        NameUser={user.name}
                                                     ></Modaluser>
                                                 </DropdownItem>
                                                 <DropdownItem><button onClick={() => handleDelete(user.id)}>Remover</button></DropdownItem>
@@ -206,6 +208,8 @@ export default function users() {
                                                         modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
                                                         idUser={user.id}
+                                                        PropertiesUserName={user.properties}
+                                                        NameUser={user.name}
                                                     ></Modaluser>
                                                 </DropdownItem>
                                             </DropdownMenu>

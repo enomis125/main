@@ -2,15 +2,10 @@ generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-}
-
-model pmsgroup {
-  pmsg         Int    @id @default(autoincrement())
-  name         String @default("") @db.VarChar(50)
-  abbreviature String @default("") @db.VarChar(20)
 }
 
 model applications {
@@ -20,46 +15,6 @@ model applications {
   organizations_applications organizations_applications[]
   plugins                    plugins[]
   properties_applications    properties_applications[]
-}
-
-model licenses_onprempms {
-  pmsh          Int        @id @default(autoincrement())
-  pmsg          Int        @default(-1)
-  pmsLic        Int        @default(-1)
-  pmsHq         Int        @default(-1)
-  pmsHqcl       Int        @default(-1)
-  pmsPool       Int        @default(-1)
-  demoID        Int        @default(-1)
-  smartLicid    Int        @default(-1)
-  smartOption   String     @default("") @db.VarChar(250)
-  customerId    Int        @default(-1)
-  lang          Int        @default(-1)
-  license       Int        @default(-1)
-  hotel         String     @default("") @db.VarChar(100)
-  abbreviation  String     @default("") @db.VarChar(100)
-  homepage      String     @default("") @db.VarChar(200)
-  dealerName    String     @default("") @db.VarChar(50)
-  hotelnum      String     @default("") @db.VarChar(100)
-  hotelnum2     String     @default("") @db.VarChar(100)
-  startDate     String     @default("") @db.VarChar(30)
-  expiryDate    String     @default("") @db.VarChar(30)
-  numOfRooms    Int        @default(-1)
-  workstationId Int        @default(-1)
-  code          Int        @default(-1)
-  locationRef   Int        @default(-1)
-  roomTypeColor Int        @default(-1)
-  hotelTypeRef  Int        @default(-1)
-  class0Ref     Int        @default(-1)
-  class1Ref     Int        @default(-1)
-  class2Ref     Int        @default(-1)
-  class3Ref     Int        @default(-1)
-  class4Ref     Int        @default(-1)
-  inet          Int        @default(-1)
-  deletionMark  Int        @default(-1)
-  propertyID    Int
-  properties    properties @relation(fields: [propertyID], references: [propertyID], onDelete: NoAction, onUpdate: NoAction, map: "licenses_properties")
-
-  @@index([propertyID], map: "licenses_properties")
 }
 
 model organizations {
@@ -80,28 +35,6 @@ model organizations {
   users                      users[]
 }
 
-model organizations_applications {
-  organizationApplicationID Int           @id @default(autoincrement())
-  organizationID            Int           @default(0)
-  applicationID             Int           @default(0)
-  connectionString          String        @default("") @db.VarChar(150)
-  applications              applications  @relation(fields: [applicationID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "organizationsApplications_applications")
-  organizations             organizations @relation(fields: [organizationID], references: [organizationID], onDelete: NoAction, onUpdate: NoAction, map: "organizationsApplications_organizations")
-
-  @@unique([organizationID, applicationID], map: "organizationID_applicationID")
-  @@index([applicationID], map: "organizationsApplications_applications")
-}
-
-model plugins {
-  pluginID                        Int                               @id @default(autoincrement())
-  label                           Int
-  applicationID                   Int
-  applications                    applications                      @relation(fields: [applicationID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "applications_plugins")
-  properties_applications_plugins properties_applications_plugins[]
-
-  @@index([applicationID], map: "applications_plugins")
-}
-
 model properties {
   propertyID              Int                       @id @default(autoincrement())
   name                    String                    @db.VarChar(250)
@@ -116,7 +49,7 @@ model properties {
   abbreviation            String                    @db.VarChar(10)
   designation             String                    @db.VarChar(50)
   organizationID          Int
-  del                     Boolean                   @default(dbgenerated("b'0'")) @db.Bit(1)
+  del                     Int                       @default(0)
   licenses_onprempms      licenses_onprempms[]
   organizations           organizations             @relation(fields: [organizationID], references: [organizationID], onDelete: NoAction, onUpdate: NoAction, map: "properties_organizations")
   properties_applications properties_applications[]
@@ -139,32 +72,6 @@ model properties_applications {
 
   @@unique([propertyID, applicationID], map: "propertyID_applicationID")
   @@index([applicationID], map: "properties_applications_applications")
-}
-
-model properties_applications_plugins {
-  propertyApplicationPluginID Int                     @id @default(autoincrement())
-  propertyApplicationID       Int                     @default(0)
-  pluginID                    Int                     @default(0)
-  connectionString            String                  @default("") @db.VarChar(50)
-  username                    String                  @default("") @db.VarChar(50)
-  password                    String                  @default("") @db.VarChar(50)
-  token                       String                  @default("") @db.VarChar(50)
-  plugins                     plugins                 @relation(fields: [pluginID], references: [pluginID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesApplicationsPlugins_plugins")
-  properties_applications     properties_applications @relation(fields: [propertyApplicationID], references: [propertyApplicationID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesApplicationsPlugins_propertiesApplications")
-
-  @@index([pluginID], map: "propertiesApplicationsPlugins_plugins")
-  @@index([propertyApplicationID], map: "propertiesApplicationsPlugins_propertiesApplications")
-}
-
-model properties_users {
-  propertyUserID Int        @id @default(autoincrement())
-  propertyID     Int        @default(0)
-  userID         Int        @default(0)
-  properties     properties @relation(fields: [propertyID], references: [propertyID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesUsers_properties")
-  users          users      @relation(fields: [userID], references: [userID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesUsers_users")
-
-  @@unique([propertyID, userID], map: "propertyID_userID")
-  @@index([userID], map: "propertiesUsers_users")
 }
 
 model roles {
@@ -207,11 +114,53 @@ model users_properties_applications {
   userPropertyApplicationID Int                     @id @default(autoincrement())
   propertyApplicationID     Int
   userID                    Int
-  properties_applications   properties_applications @relation(fields: [propertyApplicationID], references: [propertyApplicationID], onDelete: NoAction, onUpdate: NoAction, map: "usersPropertiesApplications_propertiesApplications")
-  users                     users                   @relation(fields: [userID], references: [userID], onDelete: NoAction, onUpdate: NoAction, map: "usersPropertiesApplications_users")
+  properties_applications   properties_applications @relation(fields: [propertyApplicationID], references: [propertyApplicationID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesApplications_usersPropertiesApplications")
+  users                     users                   @relation(fields: [userID], references: [userID], onDelete: NoAction, onUpdate: NoAction, map: "users_usersPropertiesApplications")
 
   @@unique([propertyApplicationID, userID], map: "propertyApplicationID_userID")
   @@index([userID], map: "usersPropertiesApplications_users")
+}
+
+model properties_users {
+  propertyUserID Int        @id @default(autoincrement())
+  propertyID     Int        @default(0)
+  userID         Int        @default(0)
+  properties     properties @relation(fields: [propertyID], references: [propertyID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesUsers_properties")
+  users          users      @relation(fields: [userID], references: [userID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesUsers_users")
+
+  @@unique([propertyID, userID], map: "propertyID_userID")
+  @@index([userID], map: "propertiesUsers_users")
+}
+
+model plugins {
+  pluginID                        Int                               @id @default(autoincrement())
+  label                           Int
+  applicationID                   Int
+  applications                    applications                      @relation(fields: [applicationID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "applications_plugins")
+  properties_applications_plugins properties_applications_plugins[]
+
+  @@index([applicationID], map: "applications_plugins")
+}
+
+model properties_applications_plugins {
+  propertyApplicationPluginID Int                     @id @default(autoincrement())
+  propertyApplicationID       Int                     @default(0)
+  pluginID                    Int                     @default(0)
+  connectionString            String                  @default("") @db.VarChar(50)
+  username                    String                  @default("") @db.VarChar(50)
+  password                    String                  @default("") @db.VarChar(50)
+  token                       String                  @default("") @db.VarChar(50)
+  plugins                     plugins                 @relation(fields: [pluginID], references: [pluginID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesApplicationsPlugins_plugins")
+  properties_applications     properties_applications @relation(fields: [propertyApplicationID], references: [propertyApplicationID], onDelete: NoAction, onUpdate: NoAction, map: "propertiesApplicationsPlugins_propertiesApplications")
+
+  @@index([pluginID], map: "propertiesApplicationsPlugins_plugins")
+  @@index([propertyApplicationID], map: "propertiesApplicationsPlugins_propertiesApplications")
+}
+
+model pmsgroup {
+  pmsg         Int    @id @default(autoincrement())
+  name         String @default("") @db.VarChar(50)
+  abbreviature String @default("") @db.VarChar(20)
 }
 
 model xmodules {
@@ -229,4 +178,56 @@ model xmodules {
   startDate String  @default("") @db.VarChar(50)
   expDate   String  @default("") @db.VarChar(50)
   del       Boolean @default(dbgenerated("b'0'")) @db.Bit(1)
+}
+
+model licenses_onprempms {
+  pmsh          Int        @id @default(autoincrement())
+  pmsg          Int        @default(-1)
+  pmsLic        Int        @default(-1)
+  pmsHq         Int        @default(-1)
+  pmsHqcl       Int        @default(-1)
+  pmsPool       Int        @default(-1)
+  demoID        Int        @default(-1)
+  smartLicid    Int        @default(-1)
+  smartOption   String     @default("") @db.VarChar(250)
+  customerId    Int        @default(-1)
+  lang          Int        @default(-1)
+  license       Int        @default(-1)
+  hotel         String     @default("") @db.VarChar(100)
+  abbreviation  String     @default("") @db.VarChar(100)
+  homepage      String     @default("") @db.VarChar(200)
+  dealerName    String     @default("") @db.VarChar(50)
+  hotelnum      String     @default("") @db.VarChar(100)
+  hotelnum2     String     @default("") @db.VarChar(100)
+  startDate     String     @default("") @db.VarChar(30)
+  expiryDate    String     @default("") @db.VarChar(30)
+  numOfRooms    Int        @default(-1)
+  workstationId Int        @default(-1)
+  code          Int        @default(-1)
+  locationRef   Int        @default(-1)
+  roomTypeColor Int        @default(-1)
+  hotelTypeRef  Int        @default(-1)
+  class0Ref     Int        @default(-1)
+  class1Ref     Int        @default(-1)
+  class2Ref     Int        @default(-1)
+  class3Ref     Int        @default(-1)
+  class4Ref     Int        @default(-1)
+  inet          Int        @default(-1)
+  deletionMark  Int        @default(-1)
+  propertyID    Int
+  properties    properties @relation(fields: [propertyID], references: [propertyID], onDelete: NoAction, onUpdate: NoAction, map: "licenses_properties")
+
+  @@index([propertyID], map: "licenses_properties")
+}
+
+model organizations_applications {
+  organizationApplicationID Int           @id @default(autoincrement())
+  organizationID            Int           @default(0)
+  applicationID             Int           @default(0)
+  connectionString          String        @default("") @db.VarChar(150)
+  applications              applications  @relation(fields: [applicationID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "organizationsApplications_applications")
+  organizations             organizations @relation(fields: [organizationID], references: [organizationID], onDelete: NoAction, onUpdate: NoAction, map: "organizationsApplications_organizations")
+
+  @@unique([organizationID, applicationID], map: "organizationID_applicationID")
+  @@index([applicationID], map: "organizationsApplications_applications")
 }

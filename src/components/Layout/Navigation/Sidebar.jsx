@@ -86,9 +86,9 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
                     ref: "/homepage/allproperties",
                     label: "Properties",
                     active: true
-                }
+                },
                 
-            ].filter(Boolean)
+            ].filter(Boolean),
         },
 
         "Profiles": {

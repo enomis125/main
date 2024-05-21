@@ -29,7 +29,7 @@ import { IoApps } from "react-icons/io5";
 
 
 
-
+import ModalUser from "@/components/Modal/modalUser";
 import FormModals from "@/components/Modal/modalProperty";
 import FormOrganizationApplication from "@/components/Modal/modals/modalOrganizationApplication";
 
@@ -86,6 +86,7 @@ const modaluser = ({
                 const response = await axios.get(`/api/hotel/organizations/` + idOrganization + `/users`);
                 setOrganizationUsers(response.data.response);
                 setUserDataFetched(true);
+
             } catch (error) {
                 console.error("Erro ao encontrar os users associados à Organização:", error.message);
             } finally {
@@ -512,27 +513,27 @@ const modaluser = ({
                                                                         </DropdownTrigger>
                                                                         <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
                                                                             <DropdownItem key="edit">
-                                                                                <FormModals
+                                                                                <ModalUser
                                                                                     buttonName={"Editar"}
                                                                                     editIcon={<FiEdit3 size={25} />}
                                                                                     buttonColor={"transparent"}
-                                                                                    modalHeader={"Editar Propriedade"}
+                                                                                    modalHeader={"Editar Utilizador"}
                                                                                     modalEditArrow={<BsArrowRight size={25} />}
                                                                                     modalEdit={`ID: ${organizationUsers.id}`}
-                                                                                    formTypeModal={12}
+                                                                                    formTypeModal={11}
                                                                                     idUser={organizationUsers.id}
-                                                                                ></FormModals>
+                                                                                ></ModalUser>
                                                                             </DropdownItem>
                                                                             <DropdownItem onClick={() => handleDelete(organizationUsers.id)}>Remover</DropdownItem>
                                                                             <DropdownItem >
-                                                                                <FormModals
+                                                                                <ModalUser
                                                                                     buttonName={"Ver"}
                                                                                     buttonColor={"transparent"}
                                                                                     modalHeader={"Ver Detalhes da Propriedade"}
                                                                                     formTypeModal={11}
                                                                                     // modalEdit={`ID: ${organizationProperties.propertyID}`}
                                                                                     idUser = {organizationUsers.id}
-                                                                                ></FormModals>
+                                                                                ></ModalUser>
                                                                             </DropdownItem>
                                                                         </DropdownMenu>
                                                                     </Dropdown>

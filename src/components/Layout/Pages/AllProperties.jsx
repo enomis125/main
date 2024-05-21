@@ -214,6 +214,7 @@ export default function allproperties() {
                                                         modalEdit={`ID: ${property.propertyID}`}
                                                         formTypeModal={12}
                                                         idProperty={property.propertyID}
+                                                        OrganizationName={property.organization}
                                                     ></FormModals>
                                                 </DropdownItem>
                                                 <DropdownItem onClick={() => handleDelete(property.propertyID)}>Remover</DropdownItem>

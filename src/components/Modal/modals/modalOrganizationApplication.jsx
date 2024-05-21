@@ -16,10 +16,9 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [OrganizationApplications, setOrganizationApplications] = useState([]);
-    const [OrganizationApplicationsFetched, setOrganizationApplicationsFetched] = useState([]);
+    const [propertiesCount, setPropertiesCount] = useState([]);
 
-    const [propertiesCount, setpropertiesCount] = useState({});
+
 
     const { data: session, status } = useSession()
 
@@ -34,41 +33,22 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
 
     const toggleModal = async () => {
         setIsModalOpen(!isModalOpen);
-        if (!OrganizationApplicationsFetched) {
-            setIsLoading(true);
-            try {
-                const res = await axios.get(`/api/hotel/organizations/` + idOrganization + `/applications/`);
-                setOrganizationApplications(res.data.response);
-                setOrganizationApplicationsFetched(true);
-            } catch (error) {
-                console.error("Erro ao encontrar as aplicação da organização:", error.message);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-    };
-
+    }
 
     useEffect(() => {
-        async function fetchpropertiesCount() {
+        const fetchPropertiesCount = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get('/api/hotel/organizations/' + idOrganization + '/applications/count');
-                const responseData = response.data.response;
-                const updatedPropertiesCount = {};
-                for (const [key, value] of Object.entries(responseData)) {
-                    updatedPropertiesCount[key] = value;
-                }
-                setpropertiesCount(updatedPropertiesCount);
-                console.log(updatedPropertiesCount);
+                const response = await axios.get(`/api/hotel/organizations/${idOrganization}/applications/count`);
+                setPropertiesCount(response.data.response);
             } catch (error) {
                 console.error("Error fetching properties Count:", error);
             } finally {
                 setIsLoading(false);
             }
-        }
-        fetchpropertiesCount();
-    }, []);
+        };
+        fetchPropertiesCount();
+    }, [idOrganization]);
 
     return (
         <>
@@ -128,9 +108,9 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                         </TableColumn>
                                                     </TableHeader>
                                                     <TableBody>
-                                                        {OrganizationApplications.map((organization, index) => (
+                                                        {Object.entries(propertiesCount).map(([applicationName, count], index) => (
                                                             <TableRow key={index}>
-                                                                <TableCell>{organization.applications.description} </TableCell>
+                                                                <TableCell>{applicationName}</TableCell>
                                                                 <TableCell>
                                                                     {isAdmin() ? (
                                                                         <FormConnectionString
@@ -139,15 +119,13 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                                             formTypeModal={1}
                                                                             modalHeader={"Details"}
                                                                             idOrganization={idOrganization}
-                                                                            idApplication={organization.applicationID}
+                                                                            idApplication={applicationName} // Assuming applicationName is the correct ID
                                                                         />
                                                                     ) : (
                                                                         "***"
                                                                     )}
                                                                 </TableCell>
-                                                                <TableCell>
-                                                                {propertiesCount[organization.applicationID] || 0}
-                                                                </TableCell>
+                                                                <TableCell>{count}</TableCell>
                                                             </TableRow>
                                                         ))}
                                                     </TableBody>

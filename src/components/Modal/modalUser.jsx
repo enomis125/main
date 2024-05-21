@@ -9,7 +9,12 @@ import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
+import { PiInfo } from "react-icons/pi";
+import { BsArrowRight } from "react-icons/bs";
+import { CiCirclePlus } from "react-icons/ci";
+
 import userInsert, { userEdit } from "../functionsForm/user/page";
+import ModalUserProperty from "../Modal/modals/modalUsersProperties"
 
 
 const modaluser = ({
@@ -21,7 +26,10 @@ const modaluser = ({
     buttonColor,
     editIcon,
     modalEditArrow,
-    modalEdit
+    modalEdit,
+    OrganizationUserName,
+    PropertiesUserName,
+    NameUser
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
@@ -35,7 +43,6 @@ const modaluser = ({
     const toggleSecondModal = () => {
         setIsSecondModalOpen(!isSecondModalOpen);
     };
-    console.log("aaa", idUser)
 
     const { handleInputUser, handleSubmitUser } = userInsert();
     const { handleUpdateUser, setValuesUser, valuesUser } = userEdit(idUser);
@@ -196,10 +203,10 @@ const modaluser = ({
                     <Modal
                         classNames={{
                             base: "max-h-screen",
-                            wrapper: isExpanded ? "w-full h-screen" : "lg:pl-72 h-screen w-full",
+                            wrapper: isExpanded ? "w-full h-screen " : "lg:pl-72 h-screen w-full",
                             body: "h-full ",
-
-                        }}
+                        }
+                        }
                         size="full"
                         isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
                         <ModalContent>
@@ -207,7 +214,7 @@ const modaluser = ({
                                 <>
                                     <form onSubmit={(e) => handleUpdateUser(e)}>
                                         <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
-                                        <div className="flex flex-row justify-start gap-4">
+                                            <div className="flex flex-row justify-start gap-4">
                                                 {editIcon} {modalHeader} {modalEditArrow} {modalEdit}
                                             </div>
                                             <div className='flex flex-row items-center mr-5'>
@@ -217,6 +224,34 @@ const modaluser = ({
                                             </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
+                                            <div className="w-1/2 flex flex-col gap-4">
+                                                {variants.map((variant) => (
+                                                    <div
+                                                        key={variant}
+                                                        className="flex w-1/2flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                    >
+                                                        <Input type="text" name="Organization" value={OrganizationUserName} variant={variant} label="Organization" />
+
+                                                        <Input type="text" name="Properties" value={PropertiesUserName} variant={variant} label="Properties" />
+
+                                                        <Button color="transparent" ><PiInfo size={30} /></Button>
+                                            
+                                                        <ModalUserProperty
+                                                        buttonName={<CiCirclePlus size={30} />}
+                                                        buttonColor={"transparent"}
+                                                        modalHeader={"Adicionar Propriedade"}
+                                                        modalEditArrow={<BsArrowRight size={25} />}
+                                                        modalEdit={NameUser}
+                                                        formTypeModal={10}
+                                                        idUser={idUser}
+                                                        NameUser={NameUser}
+                                                        OrganizationUserName={OrganizationUserName}
+                                                        PropertiesUserName={PropertiesUserName}
+                                                    ></ModalUserProperty>
+                                                    </div>
+                                                ))}
+                                            </div>
+
                                             <div className="w-full flex flex-col gap-4">
                                                 {variants.map((variant) => (
                                                     <div
@@ -279,11 +314,13 @@ const modaluser = ({
                                                         className="flex w-1/2flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
                                                         <Input type="password" name="Password" value={valuesUser.Password} onChange={e => setValuesUser({ ...valuesUser, Password: e.target.value })} variant={variant} label="Password" />
-                                                        
+
                                                         <Input type="number" name="RoleID" value={valuesUser.RoleID} onChange={e => setValuesUser({ ...valuesUser, RoleID: e.target.value })} variant={variant} label="Role ID" />
                                                     </div>
                                                 ))}
                                             </div>
+
+
                                         </ModalBody>
                                     </form>
                                 </>
