@@ -36,8 +36,6 @@ export async function GET(request) {
 
         const propertyIDs = user.properties_users.map(property => property.propertyID);
 
-        console.log(propertyIDs)
-
         const properties = await prisma.properties.findMany({
             where: {
                 propertyID: {

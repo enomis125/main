@@ -18,12 +18,12 @@ const modalpropertiesusers = ({
     formTypeModal,
     buttonColor,
     modalEditArrow,
-    idProperty
+    propertyID
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [dataFetched, setDataFetched] = useState(false);
-    const [propertiesUsers, setPropertiesUsers] = useState([])
+    const [dataUserFetched, setDataUserFetched] = useState(false);
+    const [usersProperties, setUsersProperties] = useState([])
     const [isLoading, setIsLoading] = useState(true);
 
     const toggleExpand = () => {
@@ -31,14 +31,14 @@ const modalpropertiesusers = ({
     };
 
     useEffect(() => {
-        const getData = async () => {
-            if (!dataFetched){
+        const getUsersData = async () => {
+            if (!dataUserFetched){
                 setIsLoading(true);
                 try {
-                    const res = await axios.get(`/api/hotel/properties-users?property=`+ idProperty);
-                    setPropertiesUsers(res.data.response);
-                    console.log("aaaaa" + res.data.response)
-                    setDataFetched(true);
+                    console.log(propertyID)
+                    const response = await axios.get(`/api/hotel/properties-users?property=`+ propertyID);
+                    setUsersProperties(response.data.response);
+                    setDataUserFetched(true);
                 } catch (error) {
                     console.error("Erro ao encontrar os utilizadores não associadas à propriedade:", error.message);
             }finally {
@@ -46,8 +46,32 @@ const modalpropertiesusers = ({
             }
         };
         }
-        getData();
+        getUsersData();
     }, []);
+
+    const [selectedUsersProperties, setSelectedUsersProperties] = useState([]);
+
+    const handleCheckboxChange = (userID) => {
+        setSelectedUsersProperties(prevState =>
+            prevState.includes(userID)
+                ? prevState.filter(id => id !== userID)
+                : [...prevState, userID]
+        );
+    };
+
+    const handleSave = async () => {
+        try {
+            const dataToSave = selectedUsersProperties.map(userID => ({
+                propertyID,
+                idUser : userID
+            }));
+            const response = await axios.put(`/api/hotel/properties-users`, {
+                dataToSave
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <>
@@ -71,10 +95,10 @@ const modalpropertiesusers = ({
                                     <form>
                                         <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                         <div className="flex flex-row justify-start gap-4">
-                                            {modalHeader}{modalEditArrow} {idProperty}
+                                            {modalHeader}{modalEditArrow} {propertyID}
                                             </div>
                                             <div className='flex flex-row items-center mr-5'>
-                                                <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
+                                                <Button color="transparent" onPress={handleSave} type="submit"><TfiSave size={25} /></Button>
                                                 <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>
@@ -110,13 +134,18 @@ const modalpropertiesusers = ({
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>
-                                                        {propertiesUsers.map((propertiesusers, index) => (
-                                                            <TableRow key={index}>
-                                                                <TableCell>{propertiesusers.userID}</TableCell>
-                                                                <TableCell>{propertiesusers.name}</TableCell>
-                                                                <TableCell>{propertiesusers.lastName}</TableCell>
-                                                                <TableCell>{propertiesusers.email}</TableCell>
-                                                                <TableCell><Checkbox/></TableCell>
+                                                        {usersProperties.map((propertiesUsers) => (
+                                                            <TableRow key={propertiesUsers.userID}>
+                                                                <TableCell>{propertiesUsers.userID}</TableCell>
+                                                                <TableCell>{propertiesUsers.name}</TableCell>
+                                                                <TableCell>{propertiesUsers.lastName}</TableCell>
+                                                                <TableCell>{propertiesUsers.email}</TableCell>
+                                                                <TableCell>
+                                                                    <Checkbox
+                                                                        checked={selectedUsersProperties.includes(propertiesUsers.userID)}
+                                                                        onChange={() => handleCheckboxChange(propertiesUsers.userID)}
+                                                                    />
+                                                                </TableCell>
                                                             </TableRow>
                                                             ))}
                                                         </TableBody>

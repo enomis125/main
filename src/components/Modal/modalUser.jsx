@@ -234,20 +234,21 @@ const modaluser = ({
 
                                                         <Input type="text" name="Properties" value={PropertiesUserName} variant={variant} label="Properties" />
 
-                                                        <Button color="transparent" ><PiInfo size={30} /></Button>
-                                            
+                                                        <Button  color="transparent" ><PiInfo size={30} /></Button>
+                                                        
+
                                                         <ModalUserProperty
-                                                        buttonName={<CiCirclePlus size={30} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={"Adicionar Propriedade"}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={NameUser}
-                                                        formTypeModal={10}
-                                                        idUser={idUser}
-                                                        NameUser={NameUser}
-                                                        OrganizationUserName={OrganizationUserName}
-                                                        PropertiesUserName={PropertiesUserName}
-                                                    ></ModalUserProperty>
+                                                            buttonName={<CiCirclePlus size={30} />}
+                                                            buttonColor={"transparent"}
+                                                            modalHeader={"Adicionar Propriedade"}
+                                                            modalEditArrow={<BsArrowRight size={25} />}
+                                                            modalEdit={NameUser}
+                                                            formTypeModal={10}
+                                                            idUser={idUser}
+                                                            NameUser={NameUser}
+                                                            OrganizationUserName={OrganizationUserName}
+                                                            PropertiesUserName={PropertiesUserName}
+                                                        ></ModalUserProperty>
                                                     </div>
                                                 ))}
                                             </div>

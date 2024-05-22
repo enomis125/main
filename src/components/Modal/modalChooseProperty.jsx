@@ -59,13 +59,17 @@ const modalchooseproperty = ({
             const res = await axios.get(`/api/hotel/organizations/` + session.user.organization + `/applications/` + application)
 
             const connectionString = res.data.response[0].connectionString
+            const userID = session.user.id
 
             const setCookie = await axios.post(`/api/cookies`, {
                 data: {
+                    userID: userID,
                     propertyID: propertyID,
                     connectionString: connectionString
                 }
             })
+
+            window.location.assign("http://213.146.218.25")
         }
 
     }

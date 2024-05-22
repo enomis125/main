@@ -27,7 +27,7 @@ import FormModals from "@/components/Modal/modals/modalApplications";
 import FormModalsLicence from "@/components/Modal/modals/modalLicences"
 import FormModalsFeature from "@/components/Modal/modals/modalFeatures"
 import FormModalPropertiesUsers from "@/components/Modal/modals/modalPropertiesUsers"
-import FormUsersApplications from "@/components/Modal/modals/UsersApplications"
+import FormUsersInApplications from "@/components/Modal/modals/modalUsersInApplication"
 
 import propertyInsert, { propertyEdit } from "../functionsForm/property/page";
 
@@ -158,6 +158,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             console.error("Erro ao enviar solicitação PUT:", error);
         }
     };
+
 
     useEffect(() => {
         async function fetchUserCount() {
@@ -700,7 +701,17 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                     {editIcon} {modalHeader} {modalEditArrow} {modalEdit} <p>Utilizadores</p>
                                                                 </div>
                                                                 <div className='flex flex-row items-center mr-5'>
-                                                                
+                                                                    <Button>
+                                                                    <FormModalPropertiesUsers
+                                                                            buttonName={"Novo"}
+                                                                            editIcon={<FiEdit3 size={25} />}
+                                                                            buttonColor={"transparent"}
+                                                                            modalHeader={"Inserir Novo Utilizador"}
+                                                                            modalEditArrow={<BsArrowRight size={25} />}
+                                                                            modalEdit={`ID: ${idProperty}`}
+                                                                            formTypeModal={10}
+                                                                            propertyID={idProperty}
+                                                                        /></Button>
                                                                     <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                                     <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                                                     
@@ -708,18 +719,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                 
                                                             </ModalHeader>
                                                             <ModalBody>
-                                                                <div>
-                                                                <FormModalPropertiesUsers
-                                                                            buttonName={"Inserir Utilizador"}
-                                                                            editIcon={<FiEdit3 size={25} />}
-                                                                            buttonColor={"gray"}
-                                                                            modalHeader={"Inserir Novo Utilizador"}
-                                                                            modalEditArrow={<BsArrowRight size={25} />}
-                                                                            modalEdit={`ID: ${idProperty}`}
-                                                                            formTypeModal={10}
-                                                                            idProperty={idProperty}
-                                                                        />
-                                                                </div>
                                                                 {isLoading ? (<p>A Carregar...</p>
                                                                 ) : (
                                                                     <div className="mx-5 h-[65vh] min-h-full">
@@ -873,7 +872,16 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 )}
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                            <FormUsersApplications
+                                                                                                <FormUsersInApplications
+                                                                                                buttonName={<GrUserSettings size={25}/>}
+                                                                                                buttonColor={"transparent"}
+                                                                                                modalHeader={"Associar Utilizador à Aplicação -"}
+                                                                                                formTypeModal={10}
+                                                                                                modalEdit={` ID: ${idProperty}`}
+                                                                                                idApplication={application.id}
+                                                                                                idProperty={idProperty}
+                                                                                                />
+                                                                                            {/* <FormUsersApplications
                                                                                                     buttonName={<GrUserSettings size={25}/>}
                                                                                                     buttonColor={"transparent"}
                                                                                                     modalHeader={"Associar Utilizador à Aplicação -"}
@@ -881,7 +889,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                     modalEdit={` ID: ${idProperty}`}
                                                                                                     idApplication={application.id}
                                                                                                     idProperty={idProperty}
-                                                                                                ></FormUsersApplications>
+                                                                                                ></FormUsersApplications> */}
                                                                                             </TableCell>
                                                                                         </TableRow>
                                                                                     ))
@@ -928,7 +936,16 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 )}
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                            <FormUsersApplications
+                                                                                            <FormUsersInApplications
+                                                                                                buttonName={<GrUserSettings size={25}/>}
+                                                                                                buttonColor={"transparent"}
+                                                                                                modalHeader={"Associar Utilizador à Aplicação -"}
+                                                                                                formTypeModal={10}
+                                                                                                modalEdit={` ID: ${idProperty}`}
+                                                                                                idApplication={application.id}
+                                                                                                idProperty={idProperty}
+                                                                                                />
+                                                                                            {/* <FormUsersApplications
                                                                                                     buttonName={<GrUserSettings />}
                                                                                                     buttonColor={"transparent"}
                                                                                                     modalHeader={"Associar Utilizador à Aplicação -"}
@@ -936,7 +953,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                     modalEdit={` ID: ${idProperty}`}
                                                                                                     idApplication={application.id}
                                                                                                     idProperty={idProperty}
-                                                                                                ></FormUsersApplications>
+                                                                                                ></FormUsersApplications> */}
                                                                                             </TableCell>
                                                                                         </TableRow>
                                                                                     ))

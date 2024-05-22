@@ -16,6 +16,7 @@ export async function POST(request, context) {
     // cookies().set('propertyID', data.propertyID)
 
     const payload = {
+        userID: data.userID,
         propertyID: data.propertyID,
         connectionString: data.connectionString
     };

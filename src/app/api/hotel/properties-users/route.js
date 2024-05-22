@@ -97,12 +97,19 @@ export async function GET(request) {
 export async function PUT(request) {
 
     try {
-        const { data } = await request.json();
-        const response = await prisma.properties_users.create({
-            data: {
-                propertyID: parseInt(data.propertyID),
-                userID: parseInt(data.userID)
-            }
+
+        const { dataToSave } = await request.json();
+
+        console.log(dataToSave)
+
+        const transformedData = dataToSave.map(item => ({
+            propertyID: item.propertyID,
+            userID: item.idUser
+        }));
+
+        const response = await prisma.properties_users.createMany({
+            data: transformedData
+
         });
 
         return new NextResponse(JSON.stringify({ response, status: 200 }));

@@ -54,7 +54,9 @@ export async function GET(request, context) {
 
     const response = users.map(user => ({
         id: user.userID,
-        name: user.name + " " + user.lastName
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email
     }));
 
     if (!response) {
