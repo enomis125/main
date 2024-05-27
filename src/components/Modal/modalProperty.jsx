@@ -40,8 +40,11 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const [isExpanded, setIsExpanded] = useState(false);
     const [isInvisible, setIsInvisible] = React.useState(false);
     const [isLoading, setIsLoading] = useState(true);
+
     const { handleInputProperty, handleSubmitProperty } = propertyInsert();
     const { handleUpdateProperty, setValuesProperty, valuesProperty } = propertyEdit(idProperty);
+
+    
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isSelected, setIsSelected] = useState(true);
 
@@ -145,7 +148,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                 response = await axios.put("/api/hotel/properties-applications", { data: requestData });
             } else {
                 const propertyApplication = await axios.get("/api/hotel/properties-applications?propertyID=" + idProperty + "&applicationID=" + applicationID);
-                // console.log(id)
+                
                 response = await axios.delete("/api/hotel/properties-applications/" + propertyApplication.data.response.propertyApplicationID)
             }
 

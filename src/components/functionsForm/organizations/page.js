@@ -59,7 +59,8 @@ export function organizationEdit(idOrganization) {
         Country: '',
         District: '',
         ZipCode: '',
-        PhoneNumber: ''
+        PhoneNumber: '',
+        active: 0
     })
 
     useEffect(() => {
@@ -67,6 +68,7 @@ export function organizationEdit(idOrganization) {
             .then(res => {
                 const organizationData = res.data.response[0];
                 setValuesOrganization({ ...valuesOrganization,
+                    idOrganization: valuesOrganization.organizationID,
                     Name: organizationData.name,
                     Email: organizationData.email,
                     FiscalNumber: organizationData.fiscalNumber,
@@ -77,7 +79,8 @@ export function organizationEdit(idOrganization) {
                     District: organizationData.district,
                     ZipCode: organizationData.zipCode,
                     Password: organizationData.password,
-                    RoleID: organizationData.roleID
+                    RoleID: organizationData.roleID,
+                    active: organizationData.del
                 })
             })
             .catch(err => console.log(err))
@@ -86,16 +89,17 @@ export function organizationEdit(idOrganization) {
     function handleUpdateOrganization(e) {
         e.preventDefault()
         axios.patch('/api/hotel/organizations/' + idOrganization, {
-            data: {
-                name: valuesOrganization.Name,
-                email: valuesOrganization.Email,
-                fiscalNumber: valuesOrganization.FiscalNumber,
-                address1: valuesOrganization.Address1,
-                address2: valuesOrganization.Address2,
-                country: valuesOrganization.Country,
-                district: valuesOrganization.District,
-                zipCode: valuesOrganization.ZipCode,
-                phoneNumber: valuesOrganization.PhoneNumber
+            data: {  
+                Name: valuesOrganization.Name,
+                Email: valuesOrganization.Email,
+                FiscalNumber: valuesOrganization.FiscalNumber,
+                Address1: valuesOrganization.Address1,
+                Address2: valuesOrganization.Address2,
+                Country: valuesOrganization.Country,
+                District: valuesOrganization.District,
+                ZipCode: valuesOrganization.ZipCode,
+                PhoneNumber: valuesOrganization.PhoneNumber,
+                active: valuesOrganization.active ? 1 : 0
             }
         })
             .catch(err => console.log(err))

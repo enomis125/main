@@ -10,7 +10,7 @@ export async function GET(request) {
 
     if (propertyID == "" && applicationID == "") {
         const response = await prisma.properties_applications.findMany()
-    
+
         prisma.$disconnect()
 
         return new NextResponse(JSON.stringify({ response, status: 200 }));
@@ -49,14 +49,17 @@ export async function PUT(request) {
             }
         })
 
-        const organizationApplication = await prisma.organizations_applications.findMany({
+        const organizationApplication = await prisma.organizations_applications.findUnique({
             where: {
-                organizationID: parseInt(property.organizationID),
-                applicationID: parseInt(data.applicationID),
+                organizationID_applicationID: {
+                    organizationID: parseInt(property.organizationID),
+                    applicationID: parseInt(data.applicationID)
+                }
+
             }
         })
 
-        if (organizationApplication == "") {
+        if (organizationApplication == null) {
             const newOrganizationApplication = await prisma.organizations_applications.create({
                 data: {
                     organizationID: parseInt(property.organizationID),
@@ -64,6 +67,25 @@ export async function PUT(request) {
 
                 }
             });
+        }
+
+        if (data.applicationID == 1) {
+            const organizationApplication = await prisma.organizations_applications.findUnique({
+                where: {
+                    organizationID_applicationID: {
+                        organizationID: parseInt(property.organizationID),
+                        applicationID: parseInt(data.applicationID)
+                    }
+                }
+            })
+
+            const newSysPMSProperty = axios.put("http://127.0.0.1:60123/api/v1/sysMain/properties", {
+                data: {
+                    connectionString: organizationApplication.connectionString,
+                    property: property
+                }
+            })
+
         }
 
         return new NextResponse(JSON.stringify({ status: 200 }));

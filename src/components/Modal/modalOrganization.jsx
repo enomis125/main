@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { Modal, ScrollShadow, ModalContent, ModalHeader, ModalBody, Avatar, ModalFooter, Button, useDisclosure, Input, Autocomplete, AutocompleteItem,Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, } from "@nextui-org/react";
+import { Modal, Switch, ModalContent, ModalHeader, ModalBody, Avatar, ModalFooter, Button, useDisclosure, Input, Autocomplete, AutocompleteItem,Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, } from "@nextui-org/react";
 import { AiOutlineGlobal } from "react-icons/ai";
 import axios from 'axios';
 
@@ -95,6 +95,16 @@ const modalorg = ({
                                             </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
+                                        <div className="w-full flex flex-col gap-4">
+                                            <Switch
+                                                    size="sm"
+                                                    className="mr-auto"
+                                                    defaultSelected={!valuesOrg.active}
+                                                    onChange={e => setValuesOrg({...valuesOrg, active: !e.target.checked})}
+                                                >
+                                                    {valuesOrg.active ? "Organização Inativa" : "Organização Ativa"}
+                                                </Switch>
+                                                </div>
                                             <div className="w-full flex flex-col gap-4">
                                                 {variants.map((variant) => (
                                                     <div key={variant} className="flex w-1/2 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">

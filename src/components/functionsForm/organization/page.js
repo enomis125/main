@@ -13,7 +13,8 @@ export default function OrgEdit(idOrg){
         PhoneNumber: '',
         Country: '',
         District: '',
-        ZipCode: ''
+        ZipCode: '',
+        active: 0
     })
 
 
@@ -30,7 +31,8 @@ export default function OrgEdit(idOrg){
                     PhoneNumber: userData.phoneNumber,
                     Country: userData.country,
                     District: userData.district,
-                    ZipCode: userData.zipCode
+                    ZipCode: userData.zipCode,
+                    active: userData.del
                 })
             })
             .catch(err => console.log(err))
@@ -49,7 +51,8 @@ export default function OrgEdit(idOrg){
                 PhoneNumber: valuesOrg.PhoneNumber,
                 Country: valuesOrg.Country,
                 District: valuesOrg.District,
-                ZipCode: valuesOrg.ZipCode
+                ZipCode: valuesOrg.ZipCode,
+                active: valuesOrg.active ? 1 : 0
             }
         })
         .catch(err => console.log(err))

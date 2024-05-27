@@ -20,14 +20,13 @@ import { IoMdDownload } from "react-icons/io";
 import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
-import organizationInsert, { organizationEdit } from "../functionsForm/organizations/page";
 import { GoGear } from "react-icons/go";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiEdit3 } from "react-icons/fi";
 import { BsArrowRight } from "react-icons/bs";
 import { IoApps } from "react-icons/io5";
 
-
+import organizationInsert, { organizationEdit } from "../functionsForm/organizations/page";
 
 import ModalUser from "@/components/Modal/modalUser";
 import FormModals from "@/components/Modal/modalProperty";
@@ -111,18 +110,6 @@ const modaluser = ({
     const { handleInputOrganization, handleSubmitOrganization } = organizationInsert();
     const { handleUpdateOrganization, setValuesOrganization, valuesOrganization } = organizationEdit(idOrganization);
 
-    const toggleOrganization = async (organizationID, active) => {
-        try {
-            await axios.patch(`/api/hotel/organizations/` + organizationID, {
-                active: active,
-            });
-            // Atualizar a lista de organizações após alterar o estado
-            const res = await axios.get("/api/hotel/organizations");
-            setOrganizations(res.data.response);
-        } catch (error) {
-            console.error("Erro ao desativar a Organização é preciso primeiramente desativar as organizações:", error.message);
-        }
-    };
 
 
     return (
@@ -251,12 +238,13 @@ const modaluser = ({
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                             <div className=" bg-gray-100 p-1 rounded border d-flex justify-content-end">
-                                                <Switch
+                                            <Switch
                                                     size="sm"
-                                                    isSelected={isSelected}
-                                                    onValueChange={toggleOrganization}
+                                                    className="mr-auto"
+                                                    defaultSelected={!valuesOrganization.active}
+                                                    onChange={e => setValuesOrganization({...valuesOrganization, active: !e.target.checked})}
                                                 >
-                                                    {isSelected ? "Organização Ativada" : "Organização Desativada"}
+                                                    {valuesOrganization.active ? "Organização Inativa" : "Organização Ativa"}
                                                 </Switch>
                                                 <FormOrganizationApplication
                                                     buttonIcon={<IoApps size={20} className="text-gray-500" />}
