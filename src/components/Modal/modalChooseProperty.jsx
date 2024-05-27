@@ -55,7 +55,7 @@ const modalchooseproperty = ({
 
     const handleCookies = async (propertyID, application) => {
 
-        if (application == 1) {
+        if (application == 5) {
             const res = await axios.get(`/api/hotel/organizations/` + session.user.organization + `/applications/` + application)
 
             const connectionString = res.data.response[0].connectionString
