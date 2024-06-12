@@ -98,6 +98,46 @@ export async function PUT(request) {
             data: createData
         });
 
+        if (dataToSave[0].idApplication == 1) {
+
+            const property = await prisma.properties.findUnique({
+                where: {
+                    propertyID: parseInt(propertyID)
+                }
+            })
+
+            const organizationApplication = await prisma.organizations_applications.findUnique({
+                where: {
+                    organizationID_applicationID: {
+                        organizationID: parseInt(property.organizationID),
+                        applicationID: parseInt(applicationID)
+                    }
+                }
+            })
+
+            const usersIDS = dataToSave.map(item => ({
+                userID: item.userID
+            }))
+
+            const ids = usersIDS.map(user => user.userID);
+
+            const users = await prisma.users.findMany({
+                where: {
+                    userID: {
+                        in: ids
+                    }
+                }
+            })
+
+            const newSysPMSUsers = axios.put("http://localhost:3001/api/v1/sysMain/users", {
+                data: {
+                    connectionString: organizationApplication.connectionString,
+                    users: users
+                }
+            })
+
+        }
+
         return new NextResponse(JSON.stringify({ response, status: 200 }), { status: 200 });
 
     } catch (error) {

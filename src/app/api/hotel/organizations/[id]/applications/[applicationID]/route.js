@@ -33,8 +33,6 @@ export async function PATCH(request, context) {
         const { id, applicationID } = context.params;
         const { data } = await request.json();
 
-        console.log(data.connectionString)
-
         const response = await prisma.organizations_applications.update({
             where: {
                 organizationID_applicationID: {

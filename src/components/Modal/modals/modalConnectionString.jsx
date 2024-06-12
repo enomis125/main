@@ -26,8 +26,8 @@ const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, 
         if (!connection && !initialConnection) {
             setIsLoading(true);
             try {
-                const res = await axios.get(`/api/hotel/organizations/` + idOrganization + `/applications/` + idApplication);
-                const connectionString = res.data.response[0].connectionString;
+                const res = await axios.get(`/api/hotel/organizations-applications?organization=` + idOrganization + `&application=` + idApplication);
+                const connectionString = res.data.response.connectionString;
                 setConnection(connectionString);
                 setInitialConnection(connectionString);
             } catch (error) {
@@ -45,8 +45,12 @@ const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, 
     const handleSave = async () => {
         setEditable(false);
         try {
-            await axios.patch(`/api/hotel/organizations/${idOrganization}/applications/${idApplication}`, {
-                data: { connectionString: connection }
+            await axios.patch(`/api/hotel/organizations-application`, {
+                data: {
+                    organizationID: idOrganization,
+                    applicationID: idApplication,
+                    connectionString: connection
+                }
             });
             setInitialConnection(connection);
         } catch (error) {
@@ -82,9 +86,9 @@ const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, 
                                             {modalHeader} {modalEditArrow} {modalEdit}
                                     </div>
                                         <div className='flex flex-row items-center mr-5'>
-                                            {editable ? ( 
+                                            {editable ? (
                                                 <Button color="transparent" onClick={handleSave}><TfiSave size={25} /></Button>
-                                            ) : ( 
+                                            ) : (
                                                 <Button color="transparent" onClick={handleEdit}><MdEdit size={30} /></Button>
                                             )}
                                             <Button color="transparent" onPress={onClose}><MdClose size={30} /></Button>

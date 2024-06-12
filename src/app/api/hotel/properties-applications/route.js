@@ -49,26 +49,6 @@ export async function PUT(request) {
             }
         })
 
-        const organizationApplication = await prisma.organizations_applications.findUnique({
-            where: {
-                organizationID_applicationID: {
-                    organizationID: parseInt(property.organizationID),
-                    applicationID: parseInt(data.applicationID)
-                }
-
-            }
-        })
-
-        if (organizationApplication == null) {
-            const newOrganizationApplication = await prisma.organizations_applications.create({
-                data: {
-                    organizationID: parseInt(property.organizationID),
-                    applicationID: parseInt(data.applicationID),
-
-                }
-            });
-        }
-
         if (data.applicationID == 1) {
             const organizationApplication = await prisma.organizations_applications.findUnique({
                 where: {
@@ -79,7 +59,7 @@ export async function PUT(request) {
                 }
             })
 
-            const newSysPMSProperty = axios.put("http://127.0.0.1:60123/api/v1/sysMain/properties", {
+            const newSysPMSProperty = axios.put("http://localhost:3001/api/v1/sysMain/properties", {
                 data: {
                     connectionString: organizationApplication.connectionString,
                     property: property

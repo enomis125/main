@@ -44,7 +44,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const { handleInputProperty, handleSubmitProperty } = propertyInsert();
     const { handleUpdateProperty, setValuesProperty, valuesProperty } = propertyEdit(idProperty);
 
-    
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isSelected, setIsSelected] = useState(true);
 
@@ -145,10 +145,36 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             console.log(active)
 
             if (active) {
-                response = await axios.put("/api/hotel/properties-applications", { data: requestData });
+
+                const property = await axios.get("/api/hotel/properties/" + idProperty)
+
+                const organizationID = property.data.response.organizationID
+
+                const organizationApplication = await axios.get("/api/hotel/organizations-applications?organization=" + organizationID + "&application=" + applicationID)
+
+
+                if (organizationApplication.data.response == null) {
+                    // abre a modal
+
+                    const newOrganizationApplication = await axios.put("/api/hotel/organizations-applications", {
+                        data: {
+                            organizationID: organizationID,
+                            applicationID: applicationID,
+                            connectionString: connectionString
+                        }
+                    })
+                }
+
+                response = await axios.put("/api/hotel/properties-applications", {
+                    data: {
+                        propertyID: idProperty,
+                        applicationID: applicationID
+                    }
+                });
+
             } else {
                 const propertyApplication = await axios.get("/api/hotel/properties-applications?propertyID=" + idProperty + "&applicationID=" + applicationID);
-                
+
                 response = await axios.delete("/api/hotel/properties-applications/" + propertyApplication.data.response.propertyApplicationID)
             }
 
@@ -717,9 +743,9 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                         /></Button>
                                                                     <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                                     <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
-                                                                    
+
                                                                 </div>
-                                                                
+
                                                             </ModalHeader>
                                                             <ModalBody>
                                                                 {isLoading ? (<p>A Carregar...</p>

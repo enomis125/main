@@ -100,8 +100,6 @@ export async function PUT(request) {
 
         const { dataToSave } = await request.json();
 
-        console.log(dataToSave)
-
         const transformedData = dataToSave.map(item => ({
             propertyID: item.propertyID,
             userID: item.idUser
