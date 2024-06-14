@@ -5,6 +5,7 @@ import { MdClose, MdEdit, MdSave } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
 import { BsArrowRight } from "react-icons/bs";
 import { TfiSave } from "react-icons/tfi";
+import {useTranslations} from 'next-intl';
 
 const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, modalEditArrow, formTypeModal, buttonColor, idOrganization, idApplication }) => {
 
@@ -16,6 +17,7 @@ const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, 
     const [editable, setEditable] = useState(false); // Adicionado estado para controle de edição
     const [initialConnection, setInitialConnection] = useState(""); // Para armazenar a Connection String original
     const variants = ["underlined"];
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -96,7 +98,7 @@ const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, 
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 {variants.map((variant) => (
@@ -108,7 +110,7 @@ const ModalConnectionString = ({ buttonName, buttonIcon, modalHeader,modalEdit, 
                                                             type="text"
                                                             variant={variant}
                                                             value={connection}
-                                                            label="Connection String"
+                                                            label={t("allOrganizations.applications.connectionString.connectionStringLabel")}
                                                             onChange={(e) => setConnection(e.target.value)}
                                                             readOnly={!editable}
                                                         />

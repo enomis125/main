@@ -13,6 +13,8 @@ import userInsert, { userEdit } from "../functionsForm/user/page";
 import OrgEdit from "../functionsForm/organization/page";
 import organization from "@/app/homepage/organization/page";
 
+import {useTranslations} from 'next-intl';
+
 
 const modalorg = ({
     idOrg,
@@ -33,6 +35,7 @@ const modalorg = ({
     const [organizationsLicenses, setOrganizationsLicenses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [dataFetched, setDataFetched] = useState(false);
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -102,43 +105,36 @@ const modalorg = ({
                                                     defaultSelected={!valuesOrg.active}
                                                     onChange={e => setValuesOrg({...valuesOrg, active: !e.target.checked})}
                                                 >
-                                                    {valuesOrg.active ? "Organização Inativa" : "Organização Ativa"}
+                                                    {valuesOrg.active ? t('organization.account.edit.statusInactive') : t('organization.account.edit.statusActive')}
                                                 </Switch>
                                                 </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-4 my-4">
                                                 {variants.map((variant) => (
-                                                    <div key={variant} className="flex w-1/2 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                                        <Input type="text" variant={variant} label="Name" value={valuesOrg.Name} onChange={e => setValuesOrg({ ...valuesOrg, Name: e.target.value })}/>
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                                        <Input type="text" variant={variant} label={t('organization.account.companyNameLabel')} value={valuesOrg.Name} onChange={e => setValuesOrg({ ...valuesOrg, Name: e.target.value })}/>
+                                                        <Input type="text" variant={variant} label={t('organization.account.fiscalNumberLabel')} value={valuesOrg.FiscalNumber} onChange={e => setValuesOrg({ ...valuesOrg, FiscalNumber: e.target.value })}/>
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="w-full flex flex-col gap-4 my-4">
                                                 {variants.map((variant) => (
                                                     <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                                        <Input type="text" variant={variant} label="Company Name" value={valuesOrg.Name} onChange={e => setValuesOrg({ ...valuesOrg, Name: e.target.value })}/>
-                                                        <Input type="text" variant={variant} label="Fiscal Number" value={valuesOrg.FiscalNumber} onChange={e => setValuesOrg({ ...valuesOrg, FiscalNumber: e.target.value })}/>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="w-full flex flex-col gap-4 my-4">
-                                                {variants.map((variant) => (
-                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                                        <Input type="text" variant={variant} label="Email" value={valuesOrg.Email} onChange={e => setValuesOrg({ ...valuesOrg, Email: e.target.value })}/>
-                                                        <Input type="text" variant={variant} label="Phone Number" value={valuesOrg.PhoneNumber} onChange={e => setValuesOrg({ ...valuesOrg, PhoneNumber: e.target.value })}/>
+                                                        <Input type="text" variant={variant} label={t('organization.account.emailLabel')} value={valuesOrg.Email} onChange={e => setValuesOrg({ ...valuesOrg, Email: e.target.value })}/>
+                                                        <Input type="text" variant={variant} label={t('organization.account.phoneNumberLabel')} value={valuesOrg.PhoneNumber} onChange={e => setValuesOrg({ ...valuesOrg, PhoneNumber: e.target.value })}/>
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="w-full flex flex-col gap-4">
                                                 {variants.map((variant) => (
                                                     <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                                        <Input variant={variant} label="Address 1" value={valuesOrg.Address1} onChange={e => setValuesOrg({ ...valuesOrg, Address1: e.target.value })}/>
+                                                        <Input variant={variant} label={t('organization.account.mainAddressLabel')} value={valuesOrg.Address1} onChange={e => setValuesOrg({ ...valuesOrg, Address1: e.target.value })}/>
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="w-full flex flex-col gap-4 my-4">
                                                 {variants.map((variant) => (
                                                     <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                                        <Input variant={variant} label="Address 2" value={valuesOrg.Address2} onChange={e => setValuesOrg({ ...valuesOrg, Address2: e.target.value })}/>
+                                                        <Input variant={variant} label={t('organization.account.secondAddressLabel')} value={valuesOrg.Address2} onChange={e => setValuesOrg({ ...valuesOrg, Address2: e.target.value })}/>
                                                     </div>
                                                 ))}
                                             </div>
@@ -148,9 +144,9 @@ const modalorg = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" variant={variant} label="Country" value={valuesOrg.Country} onChange={e => setValuesOrg({ ...valuesOrg, Country: e.target.value })}/>
-                                                        <Input type="text" name="District" variant={variant} label="District" value={valuesOrg.District} onChange={e => setValuesOrg({ ...valuesOrg, District: e.target.value })}/>
-                                                        <Input type="number" name="ZipCode" variant={variant} label="zipCode" value={valuesOrg.ZipCode} onChange={e => setValuesOrg({ ...valuesOrg, ZipCode: e.target.value })}/>
+                                                        <Input type="text" name="Country" variant={variant} label={t('organization.account.countryLabel')} value={valuesOrg.Country} onChange={e => setValuesOrg({ ...valuesOrg, Country: e.target.value })}/>
+                                                        <Input type="text" name="District" variant={variant} label={t('organization.account.districtLabel')} value={valuesOrg.District} onChange={e => setValuesOrg({ ...valuesOrg, District: e.target.value })}/>
+                                                        <Input type="number" name="ZipCode" variant={variant} label={t('organization.account.zipcodeLabel')} value={valuesOrg.ZipCode} onChange={e => setValuesOrg({ ...valuesOrg, ZipCode: e.target.value })}/>
                                                     </div>
                                                 ))}
                                             </div>
@@ -191,7 +187,7 @@ const modalorg = ({
                                             </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
-                                        {isLoading ? (<p>A Carregar...</p>
+                                        {isLoading ? (<p>{t('general.loadingStatus')}</p>
                                             ) : (
                                                 <div className="mx-5 h-[65vh] min-h-full">
                                                     <Table
@@ -205,16 +201,16 @@ const modalorg = ({
                                                     >
                                                         <TableHeader>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ID
+                                                                {t('organization.account.propertyLicenses.datatable.id')}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ABBREVIATION
+                                                                {t('organization.account.propertyLicenses.datatable.shortname')}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                BEDROOMS
+                                                                {t('organization.account.propertyLicenses.datatable.bedrooms')}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                WORKSTATIONS
+                                                                {t('organization.account.propertyLicenses.datatable.workstations')}
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>

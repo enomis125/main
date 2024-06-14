@@ -1,103 +1,76 @@
 "use client";
-import React from "react";
-
-//import de axios para BD
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react"
-
-import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
     Input,
     Button,
-    useDisclosure,
-
-    //imports de tabelas
-    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination,
-
-    //imports de dropdown menu
-    DropdownTrigger, Dropdown, DropdownMenu, DropdownItem,
-} from "@nextui-org/react"
-
-//imports de icons
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    DropdownTrigger,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+} from "@nextui-org/react";
 import { GoGear } from "react-icons/go";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FiSearch } from "react-icons/fi";
-import { FiPlus } from "react-icons/fi";
-import { FiEdit3 } from "react-icons/fi";
+import { FiSearch, FiPlus, FiEdit3 } from "react-icons/fi";
 import { BsArrowRight } from "react-icons/bs";
-import { IoMdDownload } from "react-icons/io"; 
+import { IoMdDownload } from "react-icons/io";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
 
+import {useTranslations} from 'next-intl';
+
 
 import Modaluser from "@/components/Modal/modalUser";
-import properties from "@/app/homepage/properties/page";
-import organization from "@/app/homepage/organization/page";
+import PaginationComponent from "@/components/Pagination/Pagination";
 
-export default function allUsers() {
-    const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(15);
-    const [searchValue, setSearchValue] = React.useState("");
-    const [user, setUser] = useState([]);
-    const { data: session, status } = useSession()
+export default function AllUsers() {
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [searchValue, setSearchValue] = useState("");
+    const [users, setUsers] = useState([]);
+    const { data: session, status } = useSession();
+    const t = useTranslations('Index');
 
     const filteredItems = React.useMemo(() => {
-        return user.filter((user) =>
-            user.name.toLowerCase().includes(
-                searchValue.toLowerCase()
-            ) ||
-            user.userID.toString().toLowerCase().includes(
-                searchValue.toLowerCase()
-            )
+        return users.filter(user =>
+            user.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            user.userID.toString().toLowerCase().includes(searchValue.toLowerCase())
         );
-    }, [user, searchValue]);
-
-    const exportToPDF = () => {
-        const pdf = new jsPDF();
-        pdf.autoTable({ html: "#TableToPDF" })
-        pdf.save("Utilizadores.pdf")
-    }
-
-    useEffect(() => {
-        const getData = async () => {
-
-            if (status !== "loading"){
-                const res = await axios.get(`/api/hotel/users`);
-                setUser(res.data.response);
-            }
-        };
-        getData();
-    }, []);
-
+    }, [users, searchValue]);
 
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-
         return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
-    const handleChangePage = (page) => {
-        setPage(page);
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1); // Reset page to 1 when changing rows per page
+        setPage(1);
     };
 
     const handleSearchChange = (value) => {
         setSearchValue(value);
         setPage(1);
     };
+
     const handleDelete = async (userID) => {
-
         const confirmDelete = window.confirm("Tem certeza de que deseja excluir este utilizador?");
-
         if (confirmDelete) {
             try {
-                const response = await axios.delete(`/api/hotel/users/` + userID);
+                await axios.delete(`/api/hotel/users/` + userID);
                 alert("Utilizador removido com sucesso!");
             } catch (error) {
                 console.error("Erro ao remover Utilizador:", error.message);
@@ -105,34 +78,48 @@ export default function allUsers() {
         }
     };
 
+    const exportToPDF = () => {
+        const pdf = new jsPDF();
+        pdf.autoTable({ html: "#TableToPDF" });
+        pdf.save("Utilizadores.pdf");
+    };
+
+    useEffect(() => {
+        const getData = async () => {
+            if (status !== "loading") {
+                const res = await axios.get(`/api/hotel/users`);
+                setUsers(res.data.response);
+            }
+        };
+        getData();
+    }, [status]);
+
     return (
         <>
             <main>
                 <div className="flex flex-col mt-5 py-3">
-                    <p className="text-xs px-6">Utilizador</p>
+                    <p className="text-xs px-6">{t("allUsers.label")}</p>
                     <div className="flex flex-row justify-between items-center mx-5">
                         <div className="flex flex-row">
                             <div className="flex flex-wrap md:flex-nowrap gap-4">
                                 <Input
                                     className="mt-4 w-80"
-                                    placeholder="Procurar..."
+                                    placeholder={t('general.search')}
                                     labelPlacement="outside"
-                                    startContent={
-                                        <FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                    }
+                                    startContent={<FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />}
                                     value={searchValue}
                                     onChange={(e) => handleSearchChange(e.target.value)}
                                 />
                             </div>
                         </div>
                         <Modaluser
-                            buttonName={"Inserir Utilizador"}
+                            buttonName={t("general.newRecord")}
                             buttonIcon={<FiPlus size={15} />}
                             buttonColor={"primary"}
-                            modalHeader={"Inserir Utilizador"}
+                            modalHeader={t("allUsers.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
-                            
+
                         ></Modaluser>
                     </div>
                 </div>
@@ -142,9 +129,7 @@ export default function allUsers() {
                         isHeaderSticky={"true"}
                         layout={"fixed"}
                         removeWrapper
-                        classNames={{
-                            wrapper: "min-h-[222px]",
-                        }}
+                        classNames={{ wrapper: "min-h-[222px]" }}
                         className="h-full overflow-auto"
                     >
                         <TableHeader>
@@ -152,16 +137,16 @@ export default function allUsers() {
                                 ID
                         </TableColumn> */}
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                NAME
+                                {t("allUsers.datatable.name")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                EMAIL
+                                {t("allUsers.datatable.email")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ORGANIZATION
+                                {t("allUsers.datatable.organization")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                            PROPERTY
+                                {t("allUsers.datatable.properties")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                 <GoGear size={20} />
@@ -178,20 +163,17 @@ export default function allUsers() {
                                     <TableCell className="flex justify-center">
                                         <Dropdown>
                                             <DropdownTrigger>
-                                                <Button
-                                                    variant="light"
-                                                    className="flex flex-row justify-center"
-                                                >
+                                                <Button variant="light" className="flex flex-row justify-center">
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" closeOnSelect={false} isOpen={true}>
+                                            <DropdownMenu aria-label="Static Actions">
                                                 <DropdownItem key="edit">
                                                     <Modaluser
-                                                        buttonName={"Editar"}
+                                                        buttonName={t("general.editRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Editar Utilizador"}
+                                                        modalHeader={t("allUsers.edit.modalHeader")}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${user.userID}`}
                                                         formTypeModal={11}
@@ -199,23 +181,23 @@ export default function allUsers() {
                                                         NameUser={user.name}
                                                         OrganizationUserName={user.organization}
                                                         PropertiesUserName={user.properties}
-                                                    ></Modaluser>
+                                                    />
                                                 </DropdownItem>
-                                                <DropdownItem><button onClick={() => handleDelete(user.id)}>Remover</button></DropdownItem>
+                                                <DropdownItem><button onClick={() => handleDelete(user.id)}>{t("general.removeRecord")}</button></DropdownItem>
                                                 <DropdownItem key="view">
                                                 <Modaluser
-                                                        buttonName={"Ver"}
+                                                        buttonName={t("general.viewRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Ver Utilizador"}
+                                                        modalHeader={t("allUsers.view.modalHeader")}
                                                         modalEdit={`ID: ${user.userID}`}
                                                         formTypeModal={11}
                                                         idUser={user.userID}
                                                         NameUser={user.name}
                                                         OrganizationUserName={user.organization}
                                                         PropertiesUserName={user.properties}
-                                                    ></Modaluser>
+                                                    />
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
@@ -232,49 +214,24 @@ export default function allUsers() {
                         data={items.map((item) => ({
                             Name: item.name,
                             Email: item.email,
-                            Organization: item.organization, 
+                            Organization: item.organization,
                             Properties: item.properties,
                         }))}
                         filename={"Utilizadores"}
                         separator=";"
                         enclosingCharacter=""
                     >
-                        CSV 
+                        CSV
                     </CSVLink><IoMdDownload />
                     </Button>
                     </div>
-                    <div className="flex flex-row items-center">
-                        <Pagination
-                            isCompact
-                            showControls
-                            color="primary"
-                            variant="flat"
-                            page={page}
-                            total={Math.ceil(filteredItems.length / rowsPerPage)}
-                            onChange={handleChangePage} 
-                            className="mx-5"
-                        />
-                        <div>
-                            <span className="text-sm text-black">Items por página:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={handleChangeRowsPerPage} 
-                                className="ml-2 py-1 px-2 border rounded bg-transparent text-sm text-default-600 mx-5"
-                            >
-                                <option value={15}>15</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                            </select>
-                        </div>
-                        <div className="ml-5 mr-10 text-black">
-                            {items.length > 0
-                                ? `${(page - 1) * rowsPerPage + 1}-${Math.min(
-                                    page * rowsPerPage,
-                                    filteredItems.length
-                                )} de ${filteredItems.length}`
-                                : "0 resultados"}
-                        </div>
-                    </div>
+                    <PaginationComponent
+                        page={page}
+                        totalItems={filteredItems.length}
+                        rowsPerPage={rowsPerPage}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
                 </div>
             </main>
         </>

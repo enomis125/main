@@ -9,6 +9,9 @@ import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 
+import {useTranslations} from 'next-intl';
+
+
 
 
 const modalpropertiesusers = ({
@@ -25,6 +28,8 @@ const modalpropertiesusers = ({
     const [dataUserFetched, setDataUserFetched] = useState(false);
     const [usersProperties, setUsersProperties] = useState([])
     const [isLoading, setIsLoading] = useState(true);
+
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -75,7 +80,7 @@ const modalpropertiesusers = ({
 
     return (
         <>
-            {formTypeModal === 10 && ( 
+            {formTypeModal === 10 && (
                 <>
                     <Button onPress={onOpen} color={buttonColor} className="bg-gray-300 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full">
                         {buttonName} {buttonIcon}
@@ -104,7 +109,7 @@ const modalpropertiesusers = ({
                                             </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
-                                        {isLoading ? (<p>A Carregar...</p>
+                                        {isLoading ? (<p>{t("general.loadingStatus")}</p>
                                             ) : (
                                                 <div className="mx-5 h-[65vh] min-h-full">
                                                     <Table
@@ -118,19 +123,19 @@ const modalpropertiesusers = ({
                                                     >
                                                         <TableHeader>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                USER ID
+                                                                {t("organization.properties.users.datatable.id")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                NAME
+                                                                {t("organization.properties.users.datatable.name")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                LASTNAME
+                                                                {t("organization.properties.users.datatable.lastName")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                EMAIL
+                                                                {t("organization.properties.users.datatable.email")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ADD
+                                                                {t("organization.properties.users.datatable.add")}
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>

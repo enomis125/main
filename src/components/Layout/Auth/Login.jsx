@@ -6,11 +6,14 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {useTranslations} from 'next-intl';
 
 export default function LoginForm() {
   const router = useRouter()
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye size={20} className="text-gray-500"/>);
+
+  const t = useTranslations('Index');
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -49,18 +52,18 @@ export default function LoginForm() {
           <div  className="w-full">
             <Image src="/images/Logo-Login.png" alt="Logotipo" width={250} height={250} />
           </div>
-          <p className="text-sm text-gray-600">E-mail</p>
-          <input type="email" name="email" placeholder="Insira o seu E-Mail" className="outline-none border-b border-gray-400 px-1 py-2 font-medium" />
+          <p className="text-sm text-gray-600">{t('login.emailLabel')}</p>
+          <input type="email" name="email" placeholder={t('login.emailPlaceholder')} className="outline-none border-b border-gray-400 px-1 py-2 font-medium" />
           <div className="my-5">
-            <p className="text-sm text-gray-600">Palavra-passe</p>
+            <p className="text-sm text-gray-600">{t('login.passwordLabel')}</p>
             <div className="flex flex-row items-center">
-              <input type={type} name="password" placeholder="Insira a palavra-passe" className="outline-none border-b border-gray-400 px-1 py-2 font-medium" />
+              <input type={type} name="password" placeholder={t('login.passwordPlaceholder')} className="outline-none border-b border-gray-400 px-1 py-2 font-medium" />
               <span className="flex justify-around items-center" onClick={handleToggle}>
                 {icon}
               </span>
             </div>
           </div>
-          <button type="submit" className="bg-primary-600 rounded-md h-9 text-white">Login</button>
+          <button type="submit" className="bg-primary-600 rounded-md h-9 text-white">{t('login.buttonLabel')}</button>
         </div>
       </div>
     </form>

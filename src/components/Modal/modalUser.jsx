@@ -16,6 +16,8 @@ import { CiCirclePlus } from "react-icons/ci";
 import userInsert, { userEdit } from "../functionsForm/user/page";
 import ModalUserProperty from "../Modal/modals/modalUsersProperties"
 
+import {useTranslations} from 'next-intl';
+
 
 const modaluser = ({
     idUser,
@@ -35,6 +37,7 @@ const modaluser = ({
     const variants = ["underlined"];
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -123,8 +126,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Name" onChange={handleInputUser} variant={variant} label="Name" />
-                                                        <Input type="text" name="LastName" onChange={handleInputUser} variant={variant} label="Last Name" />
+                                                        <Input type="text" name="Name" onChange={handleInputUser} variant={variant} label={t("profiles.users.nameLabel")} />
+                                                        <Input type="text" name="LastName" onChange={handleInputUser} variant={variant} label={t("profiles.users.lastNameLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -134,8 +137,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Email" onChange={handleInputUser} variant={variant} label="Email" />
-                                                        <Input type="text" name="FiscalNumber" onChange={handleInputUser} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="Email" onChange={handleInputUser} variant={variant} label={t("profiles.users.emailLabel")} />
+                                                        <Input type="text" name="FiscalNumber" onChange={handleInputUser} variant={variant} label={t("profiles.users.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -145,7 +148,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
                                                     >
-                                                        <Input type="text" name="PhoneNumber" onChange={handleInputUser} variant={variant} label="Phone Number" />
+                                                        <Input type="text" name="PhoneNumber" onChange={handleInputUser} variant={variant} label={t("profiles.users.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -155,8 +158,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Address1" onChange={handleInputUser} variant={variant} label="Address 1" />
-                                                        <Input type="text" name="Address2" onChange={handleInputUser} variant={variant} label="Address 2" />
+                                                        <Input type="text" name="Address1" onChange={handleInputUser} variant={variant} label={t("profiles.users.mainAddressLabel")} />
+                                                        <Input type="text" name="Address2" onChange={handleInputUser} variant={variant} label={t("profiles.users.secondAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -166,9 +169,9 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" onChange={handleInputUser} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" onChange={handleInputUser} variant={variant} label="District" />
-                                                        <Input type="text" name="ZipCode" onChange={handleInputUser} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" onChange={handleInputUser} variant={variant} label={t("profiles.users.countryLabel")} />
+                                                        <Input type="text" name="District" onChange={handleInputUser} variant={variant} label={t("profiles.users.districtLabel")} />
+                                                        <Input type="text" name="ZipCode" onChange={handleInputUser} variant={variant} label={t("profiles.users.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -178,9 +181,9 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-1/2flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="password" name="Password" onChange={handleInputUser} variant={variant} label="Password" />
-                                                        <Input type="number" name="OrganizationID" onChange={handleInputUser} variant={variant} label="Organiztion ID" />
-                                                        <Input type="number" name="RoleID" onChange={handleInputUser} variant={variant} label="Role ID" />
+                                                        <Input type="password" name="Password" onChange={handleInputUser} variant={variant} label={t("profiles.users.passwordLabel")} />
+                                                        <Input type="number" name="OrganizationID" onChange={handleInputUser} variant={variant} label={t("profiles.users.organizationLabel")} />
+                                                        <Input type="number" name="RoleID" onChange={handleInputUser} variant={variant} label={t("profiles.users.roleLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -230,17 +233,17 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-1/2flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Organization" value={OrganizationUserName} variant={variant} label="Organization" />
+                                                        <Input type="text" name="Organization" value={OrganizationUserName} variant={variant} label={t("profiles.users.organizationLabel")} />
 
-                                                        <Input type="text" name="Properties" value={PropertiesUserName} variant={variant} label="Properties" />
+                                                        <Input type="text" name="Properties" value={PropertiesUserName} variant={variant} label={t("profiles.users.propertiesLabel")} />
 
                                                         <Button  color="transparent" ><PiInfo size={30} /></Button>
-                                                        
+
 
                                                         <ModalUserProperty
                                                             buttonName={<CiCirclePlus size={30} />}
                                                             buttonColor={"transparent"}
-                                                            modalHeader={"Adicionar Propriedade"}
+                                                            modalHeader={t("profiles.users.properties.modalHeader")}
                                                             modalEditArrow={<BsArrowRight size={25} />}
                                                             modalEdit={NameUser}
                                                             formTypeModal={10}
@@ -259,8 +262,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Name" value={valuesUser.Name} onChange={e => setValuesUser({ ...valuesUser, Name: e.target.value })} variant={variant} label="Name" />
-                                                        <Input type="text" name="LastName" value={valuesUser.LastName} onChange={e => setValuesUser({ ...valuesUser, LastName: e.target.value })} variant={variant} label="Last Name" />
+                                                        <Input type="text" name="Name" value={valuesUser.Name} onChange={e => setValuesUser({ ...valuesUser, Name: e.target.value })} variant={variant} label={t("profiles.users.nameLabel")} />
+                                                        <Input type="text" name="LastName" value={valuesUser.LastName} onChange={e => setValuesUser({ ...valuesUser, LastName: e.target.value })} variant={variant} label={t("profiles.users.lastNameLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -270,8 +273,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Email" value={valuesUser.Email} onChange={e => setValuesUser({ ...valuesUser, Email: e.target.value })} variant={variant} label="Email" />
-                                                        <Input type="text" name="FiscalNumber" value={valuesUser.FiscalNumber} onChange={e => setValuesUser({ ...valuesUser, FiscalNumber: e.target.value })} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="Email" value={valuesUser.Email} onChange={e => setValuesUser({ ...valuesUser, Email: e.target.value })} variant={variant} label={t("profiles.users.emailLabel")} />
+                                                        <Input type="text" name="FiscalNumber" value={valuesUser.FiscalNumber} onChange={e => setValuesUser({ ...valuesUser, FiscalNumber: e.target.value })} variant={variant} label={t("profiles.users.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -281,7 +284,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
                                                     >
-                                                        <Input type="text" name="PhoneNumber" value={valuesUser.PhoneNumber} onChange={e => setValuesUser({ ...valuesUser, PhoneNumber: e.target.value })} variant={variant} label="Phone Number" />
+                                                        <Input type="text" name="PhoneNumber" value={valuesUser.PhoneNumber} onChange={e => setValuesUser({ ...valuesUser, PhoneNumber: e.target.value })} variant={variant} label={t("profiles.users.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -291,8 +294,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Address1" value={valuesUser.Address1} onChange={e => setValuesUser({ ...valuesUser, Address1: e.target.value })} variant={variant} label="Address 1" />
-                                                        <Input type="text" name="Address2" value={valuesUser.Address2} onChange={e => setValuesUser({ ...valuesUser, Address2: e.target.value })} variant={variant} label="Address 2" />
+                                                        <Input type="text" name="Address1" value={valuesUser.Address1} onChange={e => setValuesUser({ ...valuesUser, Address1: e.target.value })} variant={variant} label={t("profiles.users.mainAddressLabel")} />
+                                                        <Input type="text" name="Address2" value={valuesUser.Address2} onChange={e => setValuesUser({ ...valuesUser, Address2: e.target.value })} variant={variant} label={t("profiles.users.secondAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -302,9 +305,9 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" value={valuesUser.Country} onChange={e => setValuesUser({ ...valuesUser, Country: e.target.value })} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" value={valuesUser.District} onChange={e => setValuesUser({ ...valuesUser, District: e.target.value })} variant={variant} label="District" />
-                                                        <Input type="text" name="ZipCode" value={valuesUser.ZipCode} onChange={e => setValuesUser({ ...valuesUser, ZipCode: e.target.value })} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" value={valuesUser.Country} onChange={e => setValuesUser({ ...valuesUser, Country: e.target.value })} variant={variant} label={t("profiles.users.countryLabel")} />
+                                                        <Input type="text" name="District" value={valuesUser.District} onChange={e => setValuesUser({ ...valuesUser, District: e.target.value })} variant={variant} label={t("profiles.users.districtLabel")} />
+                                                        <Input type="text" name="ZipCode" value={valuesUser.ZipCode} onChange={e => setValuesUser({ ...valuesUser, ZipCode: e.target.value })} variant={variant} label={t("profiles.users.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -314,9 +317,9 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-1/2flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="password" name="Password" value={valuesUser.Password} onChange={e => setValuesUser({ ...valuesUser, Password: e.target.value })} variant={variant} label="Password" />
+                                                        <Input type="password" name="Password" value={valuesUser.Password} onChange={e => setValuesUser({ ...valuesUser, Password: e.target.value })} variant={variant} label={t("profiles.users.passwordLabel")} />
 
-                                                        <Input type="number" name="RoleID" value={valuesUser.RoleID} onChange={e => setValuesUser({ ...valuesUser, RoleID: e.target.value })} variant={variant} label="Role ID" />
+                                                        <Input type="number" name="RoleID" value={valuesUser.RoleID} onChange={e => setValuesUser({ ...valuesUser, RoleID: e.target.value })} variant={variant} label={t("profiles.users.roleLabel")} />
                                                     </div>
                                                 ))}
                                             </div>

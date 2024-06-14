@@ -26,6 +26,9 @@ import { TfiSave } from "react-icons/tfi";
 import FormModals from "@/components/Modal/modalRoles";
 import roleEdit from "@/components/functionsForm/role/page";
 
+import {useTranslations} from 'next-intl';
+
+
 const RolesPage = () => {
 
     const [page, setPage] = React.useState(1);
@@ -34,6 +37,7 @@ const RolesPage = () => {
     const [roles, setRoles] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isInvisible, setIsInvisible] = React.useState(false);
+    const t = useTranslations('Index');
 
     const filteredItems = React.useMemo(() => {
         return roles.filter((roles) =>
@@ -70,9 +74,9 @@ const RolesPage = () => {
 
 
     const handleDelete = async (roleID) => {
-    
-        const confirmDelete = window.confirm("Tem certeza de que deseja excluir este perfil?");
-        
+
+        const confirmDelete = window.confirm(t("profiles.roles.confirmDelete"));
+
         if (confirmDelete) {
             try {
                 const response = await axios.delete(`/api/hotel/roles/` + roleID);
@@ -119,13 +123,13 @@ const RolesPage = () => {
         <>
             <main>
                 <div className="flex flex-col mt-5 py-3">
-                    <p className="text-xs px-6">Perfil</p>
+                    <p className="text-xs px-6">{t("profiles.roles.label")}</p>
                     <div className="flex flex-row justify-between items-center mx-5">
                         <div className="flex flex-row">
                             <div className="flex flex-wrap md:flex-nowrap gap-4">
                                 <Input
                                     className="mt-4 w-80"
-                                    placeholder="Procurar..."
+                                    placeholder={t('general.search')}
                                     labelPlacement="outside"
                                     startContent={
                                         <FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
@@ -136,10 +140,10 @@ const RolesPage = () => {
                             </div>
                         </div>
                         <FormModals
-                            buttonName={"Inserir Perfil"}
+                            buttonName={t("general.newRecord")}
                             buttonIcon={<FiPlus size={15} />}
                             buttonColor={"primary"}
-                            modalHeader={"Inserir Perfil"}
+                            modalHeader={t("profiles.roles.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
                         ></FormModals>

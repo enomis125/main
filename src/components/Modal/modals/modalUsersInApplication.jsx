@@ -27,6 +27,8 @@ import { LiaExpandSolid } from "react-icons/lia";
 
 import FormUsersApplications from "@/components/Modal/modals/modalUsersApplications"
 
+import {useTranslations} from 'next-intl';
+
 
 const users_applications = ({ idProperty, idApplication, formTypeModal, buttonName,
     buttonIcon,
@@ -41,6 +43,8 @@ const users_applications = ({ idProperty, idApplication, formTypeModal, buttonNa
     const [isLoading, setIsLoading] = useState(false);
     const [usersApplicationsFetched, setUsersApplicationFetched] = useState(false);
     const [usersInApplication, setUsersInApplications] = useState([])
+
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -91,9 +95,9 @@ const users_applications = ({ idProperty, idApplication, formTypeModal, buttonNa
                                         <div className='flex flex-row items-center mr-5'>
                                         <Button>
                                             <FormUsersApplications
-                                                buttonName={"Novo"}
+                                                buttonName={t("general.newRecord")}
                                                 buttonColor={"transparent"}
-                                                modalHeader={"Associar Utilizador à Aplicação -"}
+                                                modalHeader={t("organization.properties.applications.assign.modalHeader")}
                                                 formTypeModal={11}
                                                 modalEdit={` ID: ${idProperty}`}
                                                 idApplication={idApplication}
@@ -103,12 +107,12 @@ const users_applications = ({ idProperty, idApplication, formTypeModal, buttonNa
                                             <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
                                             <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                             <Button color="transparent" onPress={onClose}><MdClose size={30} /></Button>
-                                            
+
                                         </div>
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.newRecord")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -122,16 +126,16 @@ const users_applications = ({ idProperty, idApplication, formTypeModal, buttonNa
                                                 >
                                                     <TableHeader>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            USER ID
+                                                            {t("organization.properties.applications.assign.datatable.id")}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            NAME
+                                                            {t("organization.properties.applications.assign.datatable.name")}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            LASTNAME
+                                                            {t("organization.properties.applications.assign.datatable.lastName")}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            EMAIL
+                                                            {t("organization.properties.applications.assign.datatable.email")}
                                                         </TableColumn>
                                                     </TableHeader>
                                                     <TableBody>

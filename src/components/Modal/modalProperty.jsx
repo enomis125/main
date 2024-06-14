@@ -31,6 +31,9 @@ import FormUsersInApplications from "@/components/Modal/modals/modalUsersInAppli
 
 import propertyInsert, { propertyEdit } from "../functionsForm/property/page";
 
+import { useTranslations } from 'next-intl';
+import organization from "@/app/homepage/organization/page";
+
 
 const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor, idProperty, editIcon, modalEditArrow, modalEdit, OrganizationName }) => {
 
@@ -41,7 +44,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const [isInvisible, setIsInvisible] = React.useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const { handleInputProperty, handleSubmitProperty } = propertyInsert();
+    const { handleInputProperty, handleSubmitProperty, handleOrganizationSelect } = propertyInsert();
     const { handleUpdateProperty, setValuesProperty, valuesProperty } = propertyEdit(idProperty);
 
 
@@ -51,6 +54,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     /* Modals Open*/
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [isThirdModalOpen, setIsThirdModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     /*Array para listar */
     const [propertyUsers, setPropertyUsers] = useState([]);
@@ -63,6 +67,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
     const { data: session, status } = useSession()
 
+    const t = useTranslations('Index');
+
     const isAdmin = () => {
         return session?.user?.admin;
     };
@@ -72,6 +78,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         setIsExpanded(!isExpanded);
     };
 
+    console.log(OrganizationName)
 
     const toggleSecondModal = async () => {
         setIsSecondModalOpen(!isSecondModalOpen);
@@ -104,7 +111,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                 setIsLoading(false);
             }
         };
-
         fetchAllApplications();
     }, []);
 
@@ -131,6 +137,10 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         }
     };
 
+    const handleModalOpenChange = async () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
     const [switchState, setSwitchState] = useState(false);
 
     const handleSwitchToggle = async (applicationID, active) => {
@@ -141,7 +151,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             };
 
             var response
-
+            console.log("Switch active state:", active);
+            setSwitchState(active);
             console.log(active)
 
             if (active) {
@@ -154,7 +165,9 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
 
                 if (organizationApplication.data.response == null) {
-                    // abre a modal
+
+                    console.log("Organization application is null, opening modal");
+                    handleModalOpenChange();
 
                     const newOrganizationApplication = await axios.put("/api/hotel/organizations-applications", {
                         data: {
@@ -189,6 +202,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     };
 
 
+
     useEffect(() => {
         async function fetchUserCount() {
             try {
@@ -201,6 +215,25 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         fetchUserCount();
     }, []);
 
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const fetchOrganizations = async () => {
+            try {
+                const response = await fetch('/api/hotel/organizations');
+                const result = await response.json();
+                if (response.ok) {
+                    setItems(result.response.map(org => ({ value: org.organizationID, OrganizationName: org.name })));
+                } else {
+                    console.error('Failed to fetch organizations:', result.error);
+                }
+            } catch (error) {
+                console.error('Error fetching organizations:', error);
+            }
+        };
+
+        fetchOrganizations();
+    }, []);
 
 
     return (
@@ -230,81 +263,101 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>
                                         </ModalHeader>
-                                        <ModalBody className="flex flex-col mx-5 my-5 space-y-4">
-                                            <div className="w-full flex flex-col gap-4">
+                                        <ModalBody className="flex flex-col mx-5 my-5 space-y-2">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2"
                                                     >
-                                                        <Input type="text" name="Name" onChange={handleInputProperty} variant={variant} label="Name" />
-                                                        <Input type="number" name="FiscalNumber" onChange={handleInputProperty} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="Name" onChange={handleInputProperty} variant={variant} label={t("organization.properties.nameLabel")} />
+                                                        <Input type="number" name="FiscalNumber" onChange={handleInputProperty} variant={variant} label={t("organization.properties.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2"
                                                     >
-                                                        <Input onChange={handleInputProperty} name="Email" type="text" variant={variant} label="Email" />
+                                                        <Input onChange={handleInputProperty} name="Email" type="text" variant={variant} label={t("organization.properties.emailLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="max-w-xs flex flex-col gap-4">
+                                            <div className="max-w-xs flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
+                                                        className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2 "
                                                     >
-                                                        <Input type="number" name="PhoneNumber" onChange={handleInputProperty} variant={variant} label="Phone Number" />
+                                                        <Input type="number" name="PhoneNumber" onChange={handleInputProperty} variant={variant} label={t("organization.properties.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2"
                                                     >
-                                                        <Input type="text" name="Address1" onChange={handleInputProperty} variant={variant} label="Address 1" />
+                                                        <Input type="text" name="Address1" onChange={handleInputProperty} variant={variant} label={t("organization.properties.mainAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2"
                                                     >
-                                                        <Input type="text" name="Country" onChange={handleInputProperty} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" onChange={handleInputProperty} variant={variant} label="District" />
-                                                        <Input type="number" name="ZipCode" onChange={handleInputProperty} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" onChange={handleInputProperty} variant={variant} label={t("organization.properties.countryLabel")} />
+                                                        <Input type="text" name="District" onChange={handleInputProperty} variant={variant} label={t("organization.properties.districtLabel")} />
+                                                        <Input type="number" name="ZipCode" onChange={handleInputProperty} variant={variant} label={t("organization.properties.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2"
                                                     >
-                                                        <Input type="text" name="Description" onChange={handleInputProperty} variant={variant} label="Description" />
+                                                        <Input type="text" name="Description" onChange={handleInputProperty} variant={variant} label={t("organization.properties.descriptionLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2"
                                                     >
-                                                        <Input type="text" name="Abbreviation" onChange={handleInputProperty} variant={variant} label="Abbreviation" />
-                                                        <Input type="text" name="Designation" onChange={handleInputProperty} variant={variant} label="Designation" />
+                                                        <Input type="text" name="Abbreviation" onChange={handleInputProperty} variant={variant} label={t("organization.properties.shortnameLabel")} />
+                                                        <Input type="text" name="Designation" onChange={handleInputProperty} variant={variant} label={t("organization.properties.designationLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
+                                            <div className="w-full flex flex-col gap-1">
+                                            {variants.map((variant) => (
+                                                <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2">
+                                                    {isAdmin() && (
+                                                        <Autocomplete
+                                                            variant={variant}
+                                                            label="Select Organization"
+                                                            defaultItems={items}
+                                                            defaultSelectedKey=""
+                                                            className="max-1/4"
+                                                            onSelectionChange={handleOrganizationSelect}
+                                                        >
+                                                            {items.map((item) => (
+                                                                <AutocompleteItem key={item.value} value={item.value}>{item.OrganizationName}</AutocompleteItem>
+                                                            ))}
+                                                        </Autocomplete>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
                                         </ModalBody>
                                     </form>
                                 </>
@@ -365,7 +418,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         <ModalContent>
                                                             <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                                                 <div className="flex flex-row justify-start gap-4">
-                                                                    {modalHeader} {modalEditArrow} {modalEdit} <p>Utilizadores</p>
+                                                                    {modalHeader} {modalEditArrow} {modalEdit} <p>{t("organization.properties.users.label")}</p>
                                                                 </div>
                                                                 <div className='flex flex-row items-center mr-5'>
                                                                     <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
@@ -373,7 +426,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                 </div>
                                                             </ModalHeader>
                                                             <ModalBody>
-                                                                {isLoading ? (<p>A Carregar...</p>
+                                                                {isLoading ? (<p>{t("general.loadingStatus")}</p>
                                                                 ) : (
                                                                     <div className="mx-5 h-[65vh] min-h-full">
                                                                         <Table
@@ -387,16 +440,16 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                         >
                                                                             <TableHeader>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    NAME
+                                                                                    {t("organization.properties.users.datatable.name")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    LASTNAME
+                                                                                    {t("organization.properties.users.datatable.lastName")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    EMAIL
+                                                                                    {t("organization.properties.users.datatable.email")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    PERFIL
+                                                                                    {t("organization.properties.users.datatable.role")}
                                                                                 </TableColumn>
                                                                             </TableHeader>
                                                                             <TableBody>
@@ -436,7 +489,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         <ModalContent>
                                                             <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                                                 <div className="flex flex-row justify-start gap-4">
-                                                                    {modalHeader} {modalEditArrow} {modalEdit} <p>Aplicações</p>
+                                                                    {modalHeader} {modalEditArrow} {modalEdit} <p>{t("organization.properties.applications.label")}</p>
                                                                 </div>
                                                                 <div className='flex flex-row items-center mr-5'>
                                                                     <Button color="transparent" onClick={toggleSecondModal}><FaArrowLeft size={25} /></Button>
@@ -445,7 +498,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                 </div>
                                                             </ModalHeader>
                                                             <ModalBody>
-                                                                {isLoading ? (<p>A Carregar...</p>
+                                                                {isLoading ? (<p>{t("general.loadingStatus")}</p>
                                                                 ) : (
                                                                     <div className="mx-5 h-[65vh] min-h-full">
                                                                         <Table
@@ -459,16 +512,16 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                         >
                                                                             <TableHeader>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    SYSTEM
+                                                                                    {t("organization.properties.applications.datatable.system")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    AVAILABLE
+                                                                                    {t("organization.properties.applications.datatable.available")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    LICENCES
+                                                                                    {t("organization.properties.applications.datatable.license")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    FEATURES
+                                                                                    {t("organization.properties.applications.datatable.features")}
                                                                                 </TableColumn>
                                                                             </TableHeader>
                                                                             <TableBody>
@@ -499,7 +552,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                         buttonName={<BiSpreadsheet size={25} />}
                                                                                                         buttonColor={"transparent"}
                                                                                                         formTypeModal={2}
-                                                                                                        modalHeader={"Licenças da Propriedade -"}
+                                                                                                        modalHeader={t("organizations.properties.applications.features.modalHeader")}
                                                                                                         modalEdit={` ID: ${idProperty}`}
                                                                                                         idApplication={application.id}
                                                                                                         idProperty={idProperty}
@@ -514,7 +567,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                         buttonName={<FaPlug size={20} />}
                                                                                                         buttonColor={"transparent"}
                                                                                                         formTypeModal={3}
-                                                                                                        modalHeader={"Features da Propriedade -"}
+                                                                                                        modalHeader={t("organization.properties.applications.features.modalHeader")}
                                                                                                         modalEdit={` ID: ${idProperty}`}
                                                                                                         idApplication={application.id}
                                                                                                         idProperty={idProperty}
@@ -538,7 +591,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 ></FormModals>
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                            <Checkbox defaultSelected color="success"></Checkbox>
+                                                                                                <Checkbox defaultSelected color="success"></Checkbox>
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
                                                                                                 {application.description === "OnPremPMS" ? (
@@ -585,8 +638,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Name" value={valuesProperty.Name} onChange={handleInputProperty} variant={variant} label="Name" />
-                                                        <Input type="number" name="FiscalNumber" value={valuesProperty.FiscalNumber} onChange={handleInputProperty} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="Name" value={valuesProperty.Name} onChange={handleInputProperty} variant={variant} label={t("organization.properties.nameLabel")} />
+                                                        <Input type="number" name="FiscalNumber" value={valuesProperty.FiscalNumber} onChange={handleInputProperty} variant={variant} label={t("organization.properties.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -596,7 +649,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input onChange={handleInputProperty} name="Email" value={valuesProperty.Email} type="text" variant={variant} label="Email" />
+                                                        <Input onChange={handleInputProperty} name="Email" value={valuesProperty.Email} type="text" variant={variant} label={t("organization.properties.emailLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -606,7 +659,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
                                                     >
-                                                        <Input type="number" name="PhoneNumber" value={valuesProperty.PhoneNumber} onChange={handleInputProperty} variant={variant} label="Phone Number" />
+                                                        <Input type="number" name="PhoneNumber" value={valuesProperty.PhoneNumber} onChange={handleInputProperty} variant={variant} label={t("organization.properties.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -616,7 +669,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Address1" value={valuesProperty.Address1} onChange={handleInputProperty} variant={variant} label="Address 1" />
+                                                        <Input type="text" name="Address1" value={valuesProperty.Address1} onChange={handleInputProperty} variant={variant} label={t("organization.properties.mainAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -626,9 +679,9 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" value={valuesProperty.Country} onChange={handleInputProperty} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" value={valuesProperty.District} onChange={handleInputProperty} variant={variant} label="District" />
-                                                        <Input type="number" name="ZipCode" value={valuesProperty.ZipCode} onChange={handleInputProperty} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" value={valuesProperty.Country} onChange={handleInputProperty} variant={variant} label={t("organization.properties.countryLabel")} />
+                                                        <Input type="text" name="District" value={valuesProperty.District} onChange={handleInputProperty} variant={variant} label={t("organization.properties.districtLabel")} />
+                                                        <Input type="number" name="ZipCode" value={valuesProperty.ZipCode} onChange={handleInputProperty} variant={variant} label={t("organization.properties.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -638,7 +691,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Description" value={valuesProperty.Description} onChange={handleInputProperty} variant={variant} label="Description" />
+                                                        <Input type="text" name="Description" value={valuesProperty.Description} onChange={handleInputProperty} variant={variant} label={t("organization.properties.descriptionLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -648,8 +701,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Abbreviation" value={valuesProperty.Abbreviation} onChange={handleInputProperty} variant={variant} label="Abbreviation" />
-                                                        <Input type="text" name="Designation" value={valuesProperty.Designation} onChange={handleInputProperty} variant={variant} label="Designation" />
+                                                        <Input type="text" name="Abbreviation" value={valuesProperty.Abbreviation} onChange={handleInputProperty} variant={variant} label={t("organization.properties.shortnameLabel")} />
+                                                        <Input type="text" name="Designation" value={valuesProperty.Designation} onChange={handleInputProperty} variant={variant} label={t("organization.properties.designationLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -699,9 +752,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     defaultSelected={!valuesProperty.active}
                                                     onChange={e => setValuesProperty({ ...valuesProperty, active: !e.target.checked })}
                                                 >
-                                                    {valuesProperty.active ? "Propriedade Inativa" : "Propriedade Ativa"}
-
-                                                    <p>Organização: {OrganizationName}</p>
+                                                    {valuesProperty.active ? t("organization.properties.edit.statusInactive") : t("organization.properties.edit.statusActive")}
 
                                                 </Switch>
 
@@ -727,15 +778,15 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         <ModalContent>
                                                             <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                                                 <div className="flex flex-row justify-start gap-4">
-                                                                    {editIcon} {modalHeader} {modalEditArrow} {modalEdit} <p>Utilizadores</p>
+                                                                    {editIcon} {modalHeader} {modalEditArrow} {modalEdit} <p>{t("organization.properties.users.label")}</p>
                                                                 </div>
                                                                 <div className='flex flex-row items-center mr-5'>
                                                                     <Button>
-                                                                    <FormModalPropertiesUsers
-                                                                            buttonName={"Novo"}
+                                                                        <FormModalPropertiesUsers
+                                                                            buttonName={t("general.newRecord")}
                                                                             editIcon={<FiEdit3 size={25} />}
                                                                             buttonColor={"transparent"}
-                                                                            modalHeader={"Inserir Novo Utilizador"}
+                                                                            modalHeader={t("organization.properties.users.assign.modalHeader")}
                                                                             modalEditArrow={<BsArrowRight size={25} />}
                                                                             modalEdit={`ID: ${idProperty}`}
                                                                             formTypeModal={10}
@@ -748,7 +799,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
                                                             </ModalHeader>
                                                             <ModalBody>
-                                                                {isLoading ? (<p>A Carregar...</p>
+                                                                {isLoading ? (<p>{t("general.loadingStatus")}</p>
                                                                 ) : (
                                                                     <div className="mx-5 h-[65vh] min-h-full">
                                                                         <Table
@@ -762,16 +813,16 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                         >
                                                                             <TableHeader>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    NAME
+                                                                                    {t("organization.properties.users.datatable.name")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    LASTNAME
+                                                                                    {t("organization.properties.users.datatable.lastName")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    EMAIL
+                                                                                    {t("organization.properties.users.datatable.email")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    PERFIL
+                                                                                    {t("organization.properties.users.datatable.role")}
                                                                                 </TableColumn>
                                                                             </TableHeader>
                                                                             <TableBody>
@@ -811,7 +862,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         <ModalContent>
                                                             <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                                                 <div className="flex flex-row justify-start gap-4">
-                                                                    {editIcon} {modalHeader} {modalEditArrow} {modalEdit} <p>Aplicações</p>
+                                                                    {editIcon} {modalHeader} {modalEditArrow} {modalEdit} <p>{t("organization.properties.applications.label")}</p>
                                                                 </div>
                                                                 <div className='flex flex-row items-center mr-5'>
                                                                     <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
@@ -819,7 +870,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                 </div>
                                                             </ModalHeader>
                                                             <ModalBody>
-                                                                {isLoading ? (<p>A Carregar...</p>
+                                                                {isLoading ? (<p>{t("general.loadingStatus")}</p>
                                                                 ) : (
                                                                     <div className="mx-5 h-[65vh] min-h-full ">
                                                                         <Table
@@ -833,19 +884,19 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                         >
                                                                             <TableHeader>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    SYSTEM
+                                                                                    {t("organization.properties.applications.datatable.system")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    AVAILABLE
+                                                                                    {t("organization.properties.applications.datatable.available")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    LICENCE
+                                                                                    {t("organization.properties.applications.datatable.license")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    FEATURES
+                                                                                    {t("organization.properties.applications.datatable.features")}
                                                                                 </TableColumn>
                                                                                 <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                                    USERS
+                                                                                    {t("organization.properties.applications.datatable.users")}
                                                                                 </TableColumn>
                                                                             </TableHeader>
                                                                             <TableBody>
@@ -867,8 +918,34 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 <Switch
                                                                                                     className="mr-auto"
                                                                                                     size="sm"
+                                                                                                    checked={switchState}
                                                                                                     onChange={(e) => handleSwitchToggle(application.id, e.target.checked)}
                                                                                                 />
+                                                                                                <Modal
+                                                                                                    isOpen={isModalOpen}
+                                                                                                    onOpenChange={handleModalOpenChange}
+                                                                                                    isDismissable={false}
+                                                                                                    isKeyboardDismissDisabled={true}
+                                                                                                >
+                                                                                                    <ModalContent>
+                                                                                                        {(onClose) => (
+                                                                                                            <>
+                                                                                                                <ModalHeader className="flex flex-col gap-1">New Connection String</ModalHeader>
+                                                                                                                <ModalBody>
+                                                                                                                    <Input />
+                                                                                                                </ModalBody>
+                                                                                                                <ModalFooter>
+                                                                                                                    <Button color="danger" variant="light" onPress={onClose}>
+                                                                                                                        X
+                                                                                                                    </Button>
+                                                                                                                    <Button color="primary" onPress={onClose}>
+                                                                                                                        ADD
+                                                                                                                    </Button>
+                                                                                                                </ModalFooter>
+                                                                                                            </>
+                                                                                                        )}
+                                                                                                    </ModalContent>
+                                                                                                </Modal>
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
                                                                                                 {application.description === "OnPremPMS" ? (
@@ -876,7 +953,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                         buttonName={<BiSpreadsheet size={25} />}
                                                                                                         buttonColor={"transparent"}
                                                                                                         formTypeModal={2}
-                                                                                                        modalHeader={"Licenças da Propriedade -"}
+                                                                                                        modalHeader={t("organization.properties.applications.licenses.modalHeader")}
                                                                                                         modalEdit={` ID: ${idProperty}`}
                                                                                                         idApplication={application.id}
                                                                                                         idProperty={idProperty}
@@ -891,7 +968,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                         buttonName={<FaPlug size={20} />}
                                                                                                         buttonColor={"transparent"}
                                                                                                         formTypeModal={3}
-                                                                                                        modalHeader={"Features da Propriedade -"}
+                                                                                                        modalHeader={t("organization.properties.applications.features.modalHeader")}
                                                                                                         modalEdit={` ID: ${idProperty}`}
                                                                                                         idApplication={application.id}
                                                                                                         idProperty={idProperty}
@@ -902,23 +979,14 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                             </TableCell>
                                                                                             <TableCell>
                                                                                                 <FormUsersInApplications
-                                                                                                buttonName={<GrUserSettings size={25}/>}
-                                                                                                buttonColor={"transparent"}
-                                                                                                modalHeader={"Associar Utilizador à Aplicação -"}
-                                                                                                formTypeModal={10}
-                                                                                                modalEdit={` ID: ${idProperty}`}
-                                                                                                idApplication={application.id}
-                                                                                                idProperty={idProperty}
-                                                                                                />
-                                                                                            {/* <FormUsersApplications
-                                                                                                    buttonName={<GrUserSettings size={25}/>}
+                                                                                                    buttonName={<GrUserSettings size={25} />}
                                                                                                     buttonColor={"transparent"}
-                                                                                                    modalHeader={"Associar Utilizador à Aplicação -"}
+                                                                                                    modalHeader={t("organization.properties.applications.assign.modalHeader")}
                                                                                                     formTypeModal={10}
                                                                                                     modalEdit={` ID: ${idProperty}`}
                                                                                                     idApplication={application.id}
                                                                                                     idProperty={idProperty}
-                                                                                                ></FormUsersApplications> */}
+                                                                                                />
                                                                                             </TableCell>
                                                                                         </TableRow>
                                                                                     ))
@@ -965,16 +1033,16 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 )}
                                                                                             </TableCell>
                                                                                             <TableCell>
-                                                                                            <FormUsersInApplications
-                                                                                                buttonName={<GrUserSettings size={25}/>}
-                                                                                                buttonColor={"transparent"}
-                                                                                                modalHeader={"Associar Utilizador à Aplicação -"}
-                                                                                                formTypeModal={10}
-                                                                                                modalEdit={` ID: ${idProperty}`}
-                                                                                                idApplication={application.id}
-                                                                                                idProperty={idProperty}
+                                                                                                <FormUsersInApplications
+                                                                                                    buttonName={<GrUserSettings size={25} />}
+                                                                                                    buttonColor={"transparent"}
+                                                                                                    modalHeader={t("organization.properties.applications.assign.modalHeader")}
+                                                                                                    formTypeModal={10}
+                                                                                                    modalEdit={` ID: ${idProperty}`}
+                                                                                                    idApplication={application.id}
+                                                                                                    idProperty={idProperty}
                                                                                                 />
-                                                                                            {/* <FormUsersApplications
+                                                                                                {/* <FormUsersApplications
                                                                                                     buttonName={<GrUserSettings />}
                                                                                                     buttonColor={"transparent"}
                                                                                                     modalHeader={"Associar Utilizador à Aplicação -"}
@@ -1002,8 +1070,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Name" value={valuesProperty.Name} onChange={e => setValuesProperty({ ...valuesProperty, Name: e.target.value })} variant={variant} label="Name" />
-                                                        <Input type="number" name="FiscalNumber" value={valuesProperty.FiscalNumber} onChange={e => setValuesProperty({ ...valuesProperty, FiscalNumber: e.target.value })} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="Name" value={valuesProperty.Name} onChange={e => setValuesProperty({ ...valuesProperty, Name: e.target.value })} variant={variant} label={t("organization.properties.nameLabel")} />
+                                                        <Input type="number" name="FiscalNumber" value={valuesProperty.FiscalNumber} onChange={e => setValuesProperty({ ...valuesProperty, FiscalNumber: e.target.value })} variant={variant} label={t("organization.properties.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -1013,7 +1081,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input value={valuesProperty.Email} onChange={e => setValuesProperty({ ...valuesProperty, Email: e.target.value })} name="Email" type="text" variant={variant} label="Email" />
+                                                        <Input value={valuesProperty.Email} onChange={e => setValuesProperty({ ...valuesProperty, Email: e.target.value })} name="Email" type="text" variant={variant} label={t("organization.properties.emailLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -1023,7 +1091,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
                                                     >
-                                                        <Input type="number" name="PhoneNumber" value={valuesProperty.PhoneNumber} onChange={e => setValuesProperty({ ...valuesProperty, PhoneNumber: e.target.value })} variant={variant} label="Phone Number" />
+                                                        <Input type="number" name="PhoneNumber" value={valuesProperty.PhoneNumber} onChange={e => setValuesProperty({ ...valuesProperty, PhoneNumber: e.target.value })} variant={variant} label={t("organization.properties.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -1033,7 +1101,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Address1" value={valuesProperty.Address1} onChange={e => setValuesProperty({ ...valuesProperty, Address1: e.target.value })} variant={variant} label="Address 1" />
+                                                        <Input type="text" name="Address1" value={valuesProperty.Address1} onChange={e => setValuesProperty({ ...valuesProperty, Address1: e.target.value })} variant={variant} label={t("organization.properties.mainAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -1043,9 +1111,9 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" value={valuesProperty.Country} onChange={e => setValuesProperty({ ...valuesProperty, Country: e.target.value })} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" value={valuesProperty.District} onChange={e => setValuesProperty({ ...valuesProperty, District: e.target.value })} variant={variant} label="District" />
-                                                        <Input type="number" name="ZipCode" value={valuesProperty.ZipCode} onChange={e => setValuesProperty({ ...valuesProperty, ZipCode: e.target.value })} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" value={valuesProperty.Country} onChange={e => setValuesProperty({ ...valuesProperty, Country: e.target.value })} variant={variant} label={t("organization.properties.countryLabel")} />
+                                                        <Input type="text" name="District" value={valuesProperty.District} onChange={e => setValuesProperty({ ...valuesProperty, District: e.target.value })} variant={variant} label={t("organization.properties.districtLabel")} />
+                                                        <Input type="number" name="ZipCode" value={valuesProperty.ZipCode} onChange={e => setValuesProperty({ ...valuesProperty, ZipCode: e.target.value })} variant={variant} label={t("organization.properties.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -1055,7 +1123,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Description" value={valuesProperty.Description} onChange={e => setValuesProperty({ ...valuesProperty, Description: e.target.value })} variant={variant} label="Description" />
+                                                        <Input type="text" name="Description" value={valuesProperty.Description} onChange={e => setValuesProperty({ ...valuesProperty, Description: e.target.value })} variant={variant} label={t("organization.properties.descriptionLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -1065,8 +1133,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Abbreviation" value={valuesProperty.Abbreviation} onChange={e => setValuesProperty({ ...valuesProperty, Abbreviation: e.target.value })} variant={variant} label="Abbreviation" />
-                                                        <Input type="text" name="Designation" value={valuesProperty.Designation} onChange={e => setValuesProperty({ ...valuesProperty, Designation: e.target.value })} variant={variant} label="Designation" />
+                                                        <Input type="text" name="Abbreviation" value={valuesProperty.Abbreviation} onChange={e => setValuesProperty({ ...valuesProperty, Abbreviation: e.target.value })} variant={variant} label={t("organization.properties.shortnameLabel")} />
+                                                        <Input type="text" name="Designation" value={valuesProperty.Designation} onChange={e => setValuesProperty({ ...valuesProperty, Designation: e.target.value })} variant={variant} label={t("organization.properties.designationLabel")} />
                                                     </div>
                                                 ))}
                                             </div>

@@ -1,11 +1,9 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import axios from 'axios';
 
-export default function propertyInsert() {
-
-    //inserção na tabela property
+export default function PropertyInsert() {
     const [property, setProperty] = useState({
         Name: '',
         Email: '',
@@ -18,41 +16,47 @@ export default function propertyInsert() {
         Description: '',
         Abbreviation: '',
         Designation: '',
-    })
-    const { data: session } = useSession()
+        OrganizationID: ''
+    });
+
+    const { data: session } = useSession();
+
+    console.log(property.OrganizationID)
     const handleInputProperty = (event) => {
-        setProperty({ ...property, [event.target.name]: event.target.value })
-    }
-    function handleSubmitProperty(event) {
-        event.preventDefault()
+        setProperty({ ...property, [event.target.name]: event.target.value });
+    };
+
+    const handleOrganizationSelect = (selectedOrganization) => {
+        setProperty({ ...property, OrganizationID: selectedOrganization });
+    };
+
+    const handleSubmitProperty = (event) => {
+        event.preventDefault();
+
         if (!property.Name || !property.Email || !property.PhoneNumber || !property.FiscalNumber || !property.Address1 || !property.Country || !property.District || !property.ZipCode || !property.Abbreviation || !property.Description || !property.Designation) {
             alert("Preencha os campos corretamente");
             return;
         }
+
+        const organizationID = property.OrganizationID || session.user.organization;
+
         axios.put('/api/hotel/properties', {
             data: {
-                Name: property.Name,
-                Email: property.Email,
-                FiscalNumber: property.FiscalNumber,
-                Address1: property.Address1,
-                Country: property.Country,
-                District: property.District,
-                ZipCode: property.ZipCode,
-                PhoneNumber: property.PhoneNumber,
-                Description: property.Description,
-                Abbreviation: property.Abbreviation,
-                Designation: property.Designation,
-                OrganizationID: session.user.organization
+                ...property,
+                OrganizationID: organizationID
             }
         })
             .then(response => console.log(response))
-            .catch(err => console.log(err))
-    }
-    //final da inserção na tabela property
+            .catch(err => console.log(err));
+    };
+
     return {
-        handleInputProperty, handleSubmitProperty
+        handleInputProperty,
+        handleSubmitProperty,
+        handleOrganizationSelect
     };
 }
+
 
 export function propertyEdit(idProperty) {
 

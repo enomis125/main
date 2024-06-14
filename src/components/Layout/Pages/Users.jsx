@@ -25,13 +25,16 @@ import { FiSearch } from "react-icons/fi";
 import { FiPlus } from "react-icons/fi";
 import { FiEdit3 } from "react-icons/fi";
 import { BsArrowRight } from "react-icons/bs";
-import { IoMdDownload } from "react-icons/io"; 
+import { IoMdDownload } from "react-icons/io";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
 
+import {useTranslations} from 'next-intl';
+
 
 import Modaluser from "@/components/Modal/modalUser";
+import PaginationComponent from "@/components/Pagination/Pagination";
 
 
 export default function users() {
@@ -40,6 +43,7 @@ export default function users() {
     const [searchValue, setSearchValue] = React.useState("");
     const [user, setUser] = useState([]);
     const { data: session, status } = useSession()
+    const t = useTranslations('Index');
 
     const filteredItems = React.useMemo(() => {
         return user.filter((user) =>
@@ -108,13 +112,13 @@ export default function users() {
         <>
             <main>
                 <div className="flex flex-col mt-5 py-3">
-                    <p className="text-xs px-6">Utilizador</p>
+                    <p className="text-xs px-6">{t("profiles.users.label")}</p>
                     <div className="flex flex-row justify-between items-center mx-5">
                         <div className="flex flex-row">
                             <div className="flex flex-wrap md:flex-nowrap gap-4">
                                 <Input
                                     className="mt-4 w-80"
-                                    placeholder="Procurar..."
+                                    placeholder={t('general.search')}
                                     labelPlacement="outside"
                                     startContent={
                                         <FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
@@ -125,10 +129,10 @@ export default function users() {
                             </div>
                         </div>
                         <Modaluser
-                            buttonName={"Inserir Utilizador"}
+                            buttonName={t("general.newRecord")}
                             buttonIcon={<FiPlus size={15} />}
                             buttonColor={"primary"}
-                            modalHeader={"Inserir Utilizador"}
+                            modalHeader={t("profiles.users.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
                         ></Modaluser>
@@ -150,16 +154,16 @@ export default function users() {
                                 ID
                     </TableColumn>`*/}
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                NAME
+                                {t("profiles.users.datatable.name")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                EMAIL
+                                {t("profiles.users.datatable.email")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ROLE
+                                {t("profiles.users.datatable.role")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                PROPERTY
+                                {t("profiles.users.datatable.properties")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                 <GoGear size={20} />
@@ -186,10 +190,10 @@ export default function users() {
                                             <DropdownMenu aria-label="Static Actions" closeOnSelect={false} isOpen={true}>
                                                 <DropdownItem key="edit">
                                                     <Modaluser
-                                                        buttonName={"Editar"}
+                                                        buttonName={t("general.editRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Editar Utilizador"}
+                                                        modalHeader={t("profiles.users.edit.modalHeader")}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
@@ -198,12 +202,12 @@ export default function users() {
                                                         NameUser={user.name}
                                                     ></Modaluser>
                                                 </DropdownItem>
-                                                <DropdownItem><button onClick={() => handleDelete(user.id)}>Remover</button></DropdownItem>
+                                                <DropdownItem><button onClick={() => handleDelete(user.id)}>{t("general.removeRecord")}</button></DropdownItem>
                                                 <DropdownItem>
                                                 <Modaluser
-                                                        buttonName={"Ver"}
+                                                        buttonName={t("general.viewRecord")}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Ver Utilizador"}
+                                                        modalHeader={t("profiles.users.view.modalHeader")}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
@@ -227,50 +231,25 @@ export default function users() {
                         data={items.map((item) => ({
                             Name: item.name,
                             Email: item.email,
-                            Role: item.role, 
+                            Role: item.role,
                             Properties: item.properties,
                         }))}
                         filename={"Utilizadores"}
                         separator=";"
                         enclosingCharacter=""
                     >
-                        CSV 
+                        CSV
                     </CSVLink><IoMdDownload />
                     </Button>
                     </div>
-                    <div className="flex flex-row items-center">
-                        <Pagination
-                            isCompact
-                            showControls
-                            color="primary"
-                            variant="flat"
-                            page={page}
-                            total={Math.ceil(filteredItems.length / rowsPerPage)}
-                            onChange={handleChangePage} 
-                            className="mx-5"
-                        />
-                        <div>
-                            <span className="text-sm text-black">Items por página:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={handleChangeRowsPerPage} 
-                                className="ml-2 py-1 px-2 border rounded bg-transparent text-sm text-default-600 mx-5"
-                            >
-                                <option value={15}>15</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                            </select>
-                        </div>
-                        <div className="ml-5 mr-10 text-black">
-                            {items.length > 0
-                                ? `${(page - 1) * rowsPerPage + 1}-${Math.min(
-                                    page * rowsPerPage,
-                                    filteredItems.length
-                                )} de ${filteredItems.length}`
-                                : "0 resultados"}
-                        </div>
+                    <PaginationComponent
+                        page={page}
+                        totalItems={filteredItems.length}
+                        rowsPerPage={rowsPerPage}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
                     </div>
-                </div>
             </main>
         </>
     );

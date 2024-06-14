@@ -9,6 +9,9 @@ import { BsArrowRight } from "react-icons/bs";
 
 import FormConnectionString from "@/components/Modal/modals/modalConnectionString"
 
+import {useTranslations} from 'next-intl';
+
+
 const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, modalEditArrow, modalEdit, formTypeModal, buttonColor, idOrganization }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -17,6 +20,8 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [propertiesCount, setPropertiesCount] = useState([]);
+    const t = useTranslations('Index');
+
 
 
 
@@ -84,7 +89,7 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t('general.loadingStatus')}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -98,13 +103,13 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                 >
                                                     <TableHeader>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            APPLICATION
+                                                            {t('organization.account.applications.datatable.applicationName')}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            DETAILS
+                                                            {t('organization.account.applications.datatable.details')}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            PROPERTIES
+                                                            {t('organization.account.applications.datatable.properties')}
                                                         </TableColumn>
                                                     </TableHeader>
                                                     <TableBody>
@@ -117,7 +122,7 @@ const ModalOrganizationApplication = ({ buttonName, buttonIcon, modalHeader, mod
                                                                             buttonName={<FaPlug size={20} />}
                                                                             buttonColor={"transparent"}
                                                                             formTypeModal={1}
-                                                                            modalHeader={"Details"}
+                                                                            modalHeader={t("allOrganizations.applications.connectionString.modalHeader")}
                                                                             idOrganization={idOrganization}
                                                                             idApplication={applicationName} // Assuming applicationName is the correct ID
                                                                         />

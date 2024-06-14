@@ -1,21 +1,17 @@
+// pages/allproperties.js
 "use client";
-import React from "react";
-
-//import de axios para BD
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react"
-
-import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
     Input,
     Button,
-
-    //imports de tabelas
-    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination,
-
-    //imports de dropdown menu
-    DropdownTrigger, Dropdown, DropdownMenu, DropdownItem,
-} from "@nextui-org/react"
+    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownSection,
+    DropdownItem,
+} from "@nextui-org/react";
 
 //imports de icons
 import { GoGear } from "react-icons/go";
@@ -27,60 +23,51 @@ import { BsArrowRight } from "react-icons/bs";
 import { IoMdDownload } from "react-icons/io";
 import { BiSpreadsheet } from "react-icons/bi";
 
-
 import FormModals from "@/components/Modal/modalProperty";
-
+import PaginationComponent from "@/components/Pagination/Pagination";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
+import {useTranslations} from 'next-intl';
 
-export default function allproperties() {
 
-    const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(15);
-    const [searchValue, setSearchValue] = React.useState("");
+export default function AllProperties() {
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [searchValue, setSearchValue] = useState("");
     const [property, setProperty] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const { data: session, status } = useSession()
+    const t = useTranslations('Index');
 
-    // const filteredItems = property.filter(
-    //     (property) =>
-    //         property.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-    //         property.propertyID.toString().toLowerCase().includes(searchValue.toLowerCase())
-    // );
-    // const items = filteredItems.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
     const filteredItems = React.useMemo(() => {
         return property.filter((property) =>
-            property.name.toLowerCase().includes(
-                searchValue.toLowerCase()
-            ) ||
-            property.propertyID.toString().toLowerCase().includes(
-                searchValue.toLowerCase()
-            )
+            property.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            property.propertyID.toString().toLowerCase().includes(searchValue.toLowerCase())
         );
     }, [property, searchValue]);
 
     const exportToPDF = () => {
         const pdf = new jsPDF();
-        pdf.autoTable({ html: "#TableToPDF" })
-        pdf.save("Propriedades.pdf")
-    }
-    /*---------------------------------------------------------------------------------------- */
+        pdf.autoTable({ html: "#TableToPDF" });
+        pdf.save("Propriedades.pdf");
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             if (status !== "loading") {
                 try {
                     const res = await axios.get("/api/hotel/properties");
                     setProperty(res.data.response);
-                    console.log(res)
+                    console.log(res);
                 } catch (error) {
                     console.error("Erro ao obter as propriedades:", error.message);
                 }
-            };
-        }
+            }
+        };
         fetchData();
-    }, []);
+    }, [status]);
 
     const handleSearchChange = (value) => {
         setSearchValue(value);
@@ -99,7 +86,7 @@ export default function allproperties() {
             }
         }
     };
-    /*---------------------------------------------------------------------------------------- */
+
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -120,30 +107,28 @@ export default function allproperties() {
         <>
             <main>
                 <div className="flex flex-col mt-5 py-3">
-                    <p className="text-xs px-6">Todas as Propriedades</p>
+                    <p className="text-xs px-6">{t("allProperties.label")}</p>
                     <div className="flex flex-row justify-between items-center mx-5">
                         <div className="flex flex-row">
                             <div className="flex flex-wrap md:flex-nowrap gap-4">
                                 <Input
                                     className="mt-4 w-80"
-                                    placeholder="Procurar..."
+                                    placeholder={t('general.search')}
                                     labelPlacement="outside"
-                                    startContent={
-                                        <FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                    }
+                                    startContent={<FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />}
                                     value={searchValue}
                                     onChange={(e) => handleSearchChange(e.target.value)}
                                 />
                             </div>
                         </div>
                         <FormModals
-                            buttonName={"Inserir Propriedade"}
+                            buttonName={t("general.newRecord")}
                             buttonIcon={<FiPlus size={15} />}
                             buttonColor={"primary"}
-                            modalHeader={"Inserir Propriedade"}
+                            modalHeader={t("allProperties.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
-                        ></FormModals>
+                        />
                     </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
@@ -159,25 +144,25 @@ export default function allproperties() {
                     >
                         <TableHeader>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ID
+                                {t("allProperties.datatable.id")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                NAME
+                                {t("allProperties.datatable.name")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ADDRESS
+                                {t("allProperties.datatable.address")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                DESCRIPTION
+                                {t("allProperties.datatable.description")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ABBREVIATION
+                                {t("allProperties.datatable.shortname")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                DESIGNATION
+                                {t("allProperties.datatable.designation")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ORGANIZATION
+                                {t("allProperties.datatable.organization")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                 <GoGear size={20} />
@@ -206,38 +191,39 @@ export default function allproperties() {
                                             <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
                                                 <DropdownItem key="edit">
                                                     <FormModals
-                                                        buttonName={"Editar"}
+                                                        buttonName={t("general.editRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Editar Propriedade"}
+                                                        modalHeader={t("allProperties.edit.modalHeader")}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${property.propertyID}`}
                                                         formTypeModal={12}
                                                         idProperty={property.propertyID}
                                                         OrganizationName={property.organization}
-                                                    ></FormModals>
+                                                    />
                                                 </DropdownItem>
-                                                <DropdownItem onClick={() => handleDelete(property.propertyID)}>Remover</DropdownItem>
+                                                <DropdownItem onClick={() => handleDelete(property.propertyID)}>{t("general.removeRecord")}</DropdownItem>
                                                 <DropdownItem >
                                                     <FormModals
-                                                        buttonName={"Ver"}
+                                                        buttonName={t("general.viewRecord")}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Ver Detalhes da Propriedade"}
+                                                        modalHeader={t("allProperties.view.modalHeader")}
                                                         formTypeModal={11}
                                                         idProperty={property.propertyID}
-                                                    ></FormModals>
+                                                    />
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
                                         <FormModals
-                                            buttonName={<BiSpreadsheet size={20} className="text-gray-400" />}
+                                            buttonName={<BiSpreadsheet size={20} className="text-gray-400"
+                                            />}
                                             buttonColor={"transparent"}
                                             modalHeader={"Licença"}
                                             variant="light"
                                             className="flex flex-row justify-center"
                                             formTypeModal={13}
                                             idProperty={property.propertyID}
-                                        ></FormModals>
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -247,58 +233,34 @@ export default function allproperties() {
                 <div className="bg-tableFooter border border-tableFooterBorder flex justify-end items-center lg:pl-72 w-full min-h-10vh fixed bottom-0 right-0 z-20 text-sm text-default-400 py-3">
                     <div className="space-x-4">
                         <Button onClick={exportToPDF}>PDF <IoMdDownload /></Button>
-                        <Button>                    <CSVLink
-                            data={items.map((item) => ({
-                                propertyID: item.propertyID,
-                                Name: item.name,
-                                Address1: item.address1,
-                                Description: item.description,
-                                Abbreviation: item.abbreviation,
-                                Designation: item.designation
-                            }))}
-                            filename={"Propriedades"}
-                            separator=";"
-                            enclosingCharacter=""
-                        >
-                            CSV
-                        </CSVLink><IoMdDownload />
+                        <Button>
+                            <CSVLink
+                                data={items.map((item) => ({
+                                    propertyID: item.propertyID,
+                                    Name: item.name,
+                                    Address1: item.address1,
+                                    Description: item.description,
+                                    Abbreviation: item.abbreviation,
+                                    Designation: item.designation
+                                }))}
+                                filename={"Propriedades.csv"}
+                                separator=";"
+                                enclosingCharacter=""
+                            >
+                                CSV
+                            </CSVLink><IoMdDownload />
                         </Button>
                     </div>
 
-                    <div className="flex flex-row items-center ">
-                        <Pagination
-                            isCompact
-                            showControls
-                            color="primary"
-                            variant="flat"
-                            page={page}
-                            total={Math.ceil(filteredItems.length / rowsPerPage)}
-                            onChange={handleChangePage}
-                            className="mx-5"
-                        />
-                        <div>
-                            <span className="text-sm text-black">Items por página:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={handleChangeRowsPerPage}
-                                className="ml-2 py-1 px-2 border rounded bg-transparent text-sm text-default-600 mx-5"
-                            >
-                                <option value={15}>15</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                            </select>
-                        </div>
-                        <div className="ml-5 mr-10 text-black">
-                            {items.length > 0
-                                ? `${(page - 1) * rowsPerPage + 1}-${Math.min(
-                                    page * rowsPerPage,
-                                    filteredItems.length
-                                )} de ${filteredItems.length}`
-                                : "0 resultados"}
-                        </div>
-                    </div>
+                    <PaginationComponent
+                        page={page}
+                        totalItems={filteredItems.length}
+                        rowsPerPage={rowsPerPage}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
                 </div>
-            </main >
+            </main>
         </>
     );
-};
+}

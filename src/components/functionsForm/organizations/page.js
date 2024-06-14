@@ -22,7 +22,8 @@ export default function organizationInsert() {
 
     function handleSubmitOrganization(event) {
         event.preventDefault()
-        if (!organization.Name || !organization.Email || !organization.PhoneNumber || !organization.FiscalNumber || !organization.Address1 || !organization.Country || !organization.District || !organization.ZipCode || !organization.Address2) {
+        if (!organization.Name || !organization.Email || !organization.PhoneNumber || !organization.FiscalNumber || !organization.Address1 || 
+            !organization.Country || !organization.District || !organization.ZipCode || !organization.Address2) {
             alert("Fill in the fields correctly");
             return;
         }

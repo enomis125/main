@@ -32,6 +32,8 @@ import ModalUser from "@/components/Modal/modalUser";
 import FormModals from "@/components/Modal/modalProperty";
 import FormOrganizationApplication from "@/components/Modal/modals/modalOrganizationApplication";
 
+import {useTranslations} from 'next-intl';
+
 
 const modaluser = ({
     idOrganization,
@@ -56,6 +58,7 @@ const modaluser = ({
     const [dataFetched, setDataFetched] = useState(false);
     const [dataUserFetched, setUserDataFetched] = useState(false)
     const [isSelected, setIsSelected] = useState(true);
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -150,7 +153,9 @@ const modaluser = ({
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
                                                         <Input type="text" name="Name" onChange={handleInputOrganization} variant={variant} label="Name" />
-                                                        <Input type="text" name="E-Mail" onChange={handleInputOrganization} variant={variant} label="E-Mail" />
+                                                        <Input type="text" name="Email" onChange={handleInputOrganization} variant={variant} label="E-Mail" />
+                                                        <Input type="text" name="Name" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.companyNameLabel")} />
+                                                        <Input type="text" name="Email" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.emailLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -160,7 +165,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="FiscalNumber" onChange={handleInputOrganization} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="FiscalNumber" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -170,7 +175,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
                                                     >
-                                                        <Input type="text" name="PhoneNumber" onChange={handleInputOrganization} variant={variant} label="Phone Number" />
+                                                        <Input type="text" name="PhoneNumber" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -180,8 +185,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Address1" onChange={handleInputOrganization} variant={variant} label="Address 1" />
-                                                        <Input type="text" name="Address2" onChange={handleInputOrganization} variant={variant} label="Address 2" />
+                                                        <Input type="text" name="Address1" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.mainAddressLabel")} />
+                                                        <Input type="text" name="Address2" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.secondAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -191,9 +196,9 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" onChange={handleInputOrganization} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" onChange={handleInputOrganization} variant={variant} label="District" />
-                                                        <Input type="text" name="ZipCode" onChange={handleInputOrganization} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.countryLabel")} />
+                                                        <Input type="text" name="District" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.districtLabel")} />
+                                                        <Input type="text" name="ZipCode" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -244,12 +249,12 @@ const modaluser = ({
                                                     defaultSelected={!valuesOrganization.active}
                                                     onChange={e => setValuesOrganization({...valuesOrganization, active: !e.target.checked})}
                                                 >
-                                                    {valuesOrganization.active ? "Organização Inativa" : "Organização Ativa"}
+                                                    {valuesOrganization.active ? t("allOrganizations.edit.statusInactive") : t("allOrganizations.edit.statusActive")}
                                                 </Switch>
                                                 <FormOrganizationApplication
                                                     buttonIcon={<IoApps size={20} className="text-gray-500" />}
                                                     buttonColor={"gray-500"}
-                                                    modalHeader={"Aplicações da Organização"}
+                                                    modalHeader={t("allOrganizations.applications.modalHeader")}
                                                     modalIcons={"bg-red"}
                                                     formTypeModal={1}
                                                     idOrganization={idOrganization}
@@ -261,7 +266,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Name" value={valuesOrganization.Name} onChange={e => setValuesOrganization({ ...valuesOrganization, Name: e.target.value })} variant={variant} label="Name" />
+                                                        <Input type="text" name="Name" value={valuesOrganization.Name} onChange={e => setValuesOrganization({ ...valuesOrganization, Name: e.target.value })} variant={variant} label={t("allOrganizations.companyNameLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -271,8 +276,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Email" value={valuesOrganization.Email} onChange={e => setValuesOrganization({ ...valuesOrganization, Email: e.target.value })} variant={variant} label="Email" />
-                                                        <Input type="text" name="FiscalNumber" value={valuesOrganization.FiscalNumber} onChange={e => setValuesOrganization({ ...valuesOrganization, FiscalNumber: e.target.value })} variant={variant} label="Fiscal Number" />
+                                                        <Input type="text" name="Email" value={valuesOrganization.Email} onChange={e => setValuesOrganization({ ...valuesOrganization, Email: e.target.value })} variant={variant} label={t("allOrganizations.emailLabel")} />
+                                                        <Input type="text" name="FiscalNumber" value={valuesOrganization.FiscalNumber} onChange={e => setValuesOrganization({ ...valuesOrganization, FiscalNumber: e.target.value })} variant={variant} label={t("allOrganizations.fiscalNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -282,7 +287,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
                                                     >
-                                                        <Input type="text" name="PhoneNumber" value={valuesOrganization.PhoneNumber} onChange={e => setValuesOrganization({ ...valuesOrganization, PhoneNumber: e.target.value })} variant={variant} label="Phone Number" />
+                                                        <Input type="text" name="PhoneNumber" value={valuesOrganization.PhoneNumber} onChange={e => setValuesOrganization({ ...valuesOrganization, PhoneNumber: e.target.value })} variant={variant} label={t("allOrganizations.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -292,8 +297,8 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Address1" value={valuesOrganization.Address1} onChange={e => setValuesOrganization({ ...valuesOrganization, Address1: e.target.value })} variant={variant} label="Address 1" />
-                                                        <Input type="text" name="Address2" value={valuesOrganization.Address2} onChange={e => setValuesOrganization({ ...valuesOrganization, Address2: e.target.value })} variant={variant} label="Address 2" />
+                                                        <Input type="text" name="Address1" value={valuesOrganization.Address1} onChange={e => setValuesOrganization({ ...valuesOrganization, Address1: e.target.value })} variant={variant} label={t("allOrganizations.mainAddressLabel")} />
+                                                        <Input type="text" name="Address2" value={valuesOrganization.Address2} onChange={e => setValuesOrganization({ ...valuesOrganization, Address2: e.target.value })} variant={variant} label={t("allOrganizations.secondAddressLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -303,9 +308,9 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="Country" value={valuesOrganization.Country} onChange={e => setValuesOrganization({ ...valuesOrganization, Country: e.target.value })} variant={variant} label="Country" />
-                                                        <Input type="text" name="District" value={valuesOrganization.District} onChange={e => setValuesOrganization({ ...valuesOrganization, District: e.target.value })} variant={variant} label="District" />
-                                                        <Input type="text" name="ZipCode" value={valuesOrganization.ZipCode} onChange={e => setValuesOrganization({ ...valuesOrganization, ZipCode: e.target.value })} variant={variant} label="zipCode" />
+                                                        <Input type="text" name="Country" value={valuesOrganization.Country} onChange={e => setValuesOrganization({ ...valuesOrganization, Country: e.target.value })} variant={variant} label={t("allOrganizations.countryLabel")} />
+                                                        <Input type="text" name="District" value={valuesOrganization.District} onChange={e => setValuesOrganization({ ...valuesOrganization, District: e.target.value })} variant={variant} label={t("allOrganizations.districtLabel")} />
+                                                        <Input type="text" name="ZipCode" value={valuesOrganization.ZipCode} onChange={e => setValuesOrganization({ ...valuesOrganization, ZipCode: e.target.value })} variant={variant} label={t("allOrganizations.zipcodeLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -349,7 +354,7 @@ const modaluser = ({
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -362,11 +367,11 @@ const modaluser = ({
                                                     className="h-full"
                                                 >
                                                     <TableHeader>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">ID</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">NAME</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">ADDRESS</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">COUNTRY</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">EMAIL</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.properties.datatable.id")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.properties.datatable.name")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.properties.datatable.address")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.properties.datatable.country")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.properties.datatable.email")}</TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                                             <GoGear size={20} />
                                                         </TableColumn>
@@ -392,22 +397,22 @@ const modaluser = ({
                                                                         <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
                                                                             <DropdownItem key="edit">
                                                                                 <FormModals
-                                                                                    buttonName={"Editar"}
+                                                                                    buttonName={t("general.editRecord")}
                                                                                     editIcon={<FiEdit3 size={25} />}
                                                                                     buttonColor={"transparent"}
-                                                                                    modalHeader={"Editar Propriedade"}
+                                                                                    modalHeader={t("allOrganizations.properties.edit.modalHeader")}
                                                                                     modalEditArrow={<BsArrowRight size={25} />}
                                                                                     modalEdit={`ID: ${organizationProperties.propertyID}`}
                                                                                     formTypeModal={12}
                                                                                     idProperty={organizationProperties.propertyID}
                                                                                 ></FormModals>
                                                                             </DropdownItem>
-                                                                            <DropdownItem onClick={() => handleDelete(organizationProperties.propertyID)}>Remover</DropdownItem>
+                                                                            <DropdownItem onClick={() => handleDelete(organizationProperties.propertyID)}>{t("general.removeRecord")}</DropdownItem>
                                                                             <DropdownItem >
                                                                                 <FormModals
-                                                                                    buttonName={"Ver"}
+                                                                                    buttonName={t("general.viewRecord")}
                                                                                     buttonColor={"transparent"}
-                                                                                    modalHeader={"Ver Detalhes da Propriedade"}
+                                                                                    modalHeader={t("allOrganizations.properties.view.modalHeader")}
                                                                                     formTypeModal={11}
                                                                                     modalEditArrow={<BsArrowRight size={25} />}
                                                                                     modalEdit={`ID: ${organizationProperties.propertyID}`}
@@ -461,7 +466,7 @@ const modaluser = ({
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -474,10 +479,10 @@ const modaluser = ({
                                                     className="h-full"
                                                 >
                                                     <TableHeader>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">ID</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">NAME</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">EMAIL</TableColumn>
-                                                        <TableColumn className="bg-primary-600 text-white font-bold">PROPERTY</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.users.datatable.id")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.users.datatable.name")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.users.datatable.email")}</TableColumn>
+                                                        <TableColumn className="bg-primary-600 text-white font-bold">{t("allOrganizations.users.datatable.properties")}</TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                                             <GoGear size={20} />
                                                         </TableColumn>
@@ -502,22 +507,22 @@ const modaluser = ({
                                                                         <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
                                                                             <DropdownItem key="edit">
                                                                                 <ModalUser
-                                                                                    buttonName={"Editar"}
+                                                                                    buttonName={t("general.editRecord")}
                                                                                     editIcon={<FiEdit3 size={25} />}
                                                                                     buttonColor={"transparent"}
-                                                                                    modalHeader={"Editar Utilizador"}
+                                                                                    modalHeader={t("allOrganizations.users.edit.modalHeader")}
                                                                                     modalEditArrow={<BsArrowRight size={25} />}
                                                                                     modalEdit={`ID: ${organizationUsers.id}`}
                                                                                     formTypeModal={11}
                                                                                     idUser={organizationUsers.id}
                                                                                 ></ModalUser>
                                                                             </DropdownItem>
-                                                                            <DropdownItem onClick={() => handleDelete(organizationUsers.id)}>Remover</DropdownItem>
+                                                                            <DropdownItem onClick={() => handleDelete(organizationUsers.id)}>{t("general.removeRecord")}</DropdownItem>
                                                                             <DropdownItem >
                                                                                 <ModalUser
-                                                                                    buttonName={"Ver"}
+                                                                                    buttonName={t("general.viewRecord")}
                                                                                     buttonColor={"transparent"}
-                                                                                    modalHeader={"Ver Detalhes da Propriedade"}
+                                                                                    modalHeader={t("allOrganizations.users.view.modalHeader")}
                                                                                     formTypeModal={11}
                                                                                     // modalEdit={`ID: ${organizationProperties.propertyID}`}
                                                                                     idUser = {organizationUsers.id}

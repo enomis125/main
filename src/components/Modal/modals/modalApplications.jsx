@@ -7,6 +7,7 @@ import axios from 'axios';
 //icons
 import { MdClose } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
+import {useTranslations} from 'next-intl';
 
 
 const modalapplications = ({buttonName,
@@ -25,13 +26,14 @@ modalEdit
     const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
     const [applicationUsersFetch, setApplicationUsersFetched] = useState(false);
     const [propertyApplicationsUsers, setPropertyApplicationsUsers] = useState([]);
+    const t = useTranslations('Index');
 
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
 
-    
+
     const toggleFirstModal = async () => {
         setIsFirstModalOpen(!isFirstModalOpen);
         if (!applicationUsersFetch) {
@@ -83,7 +85,7 @@ modalEdit
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -95,7 +97,7 @@ modalEdit
                                                     }}
                                                     className="h-full"
                                                 >
-                                                    <TableHeader>  
+                                                    <TableHeader>
                                                     <TableColumn className="bg-primary-600 text-white font-bold">NAME</TableColumn>
                                                     <TableColumn className="bg-primary-600 text-white flex justify-center items-center" />
                                                     </TableHeader>

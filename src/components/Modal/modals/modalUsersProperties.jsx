@@ -9,6 +9,8 @@ import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 
+import {useTranslations} from 'next-intl';
+
 
 
 const modalusersproperties = ({
@@ -26,6 +28,7 @@ const modalusersproperties = ({
     const [usersFetched, setUsersFetched] = useState(false);
     const [usersproperties, setUsersProperties] = useState([])
     const [isLoading, setIsLoading] = useState(true);
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -107,7 +110,7 @@ const modalusersproperties = ({
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                             {isLoading ? (
-                                                <p>A Carregar...</p>
+                                                <p>{t("general.loadingStatus")}</p>
                                             ) : (
                                                 <div className="mx-5 h-[65vh] min-h-full">
                                                     <Table
@@ -121,13 +124,13 @@ const modalusersproperties = ({
                                                     >
                                                         <TableHeader>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                PROPERTY ID
+                                                                {t("profiles.users.properties.datatable.id")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                NAME
+                                                                {t("profiles.users.properties.datatable.name")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ADD
+                                                                {t("profiles.users.properties.datatable.add")}
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>

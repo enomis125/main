@@ -8,10 +8,13 @@ import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 
+import {useTranslations} from 'next-intl';
+
 
 const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, buttonColor }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const t = useTranslations('Index');
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
@@ -20,7 +23,7 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
 
     //inserção na tabela roles
     const [roles, setRoles] = useState({
-        Name:'', 
+        Name:'',
         Description:'',
     })
 
@@ -38,7 +41,7 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
                 Name: roles.Name,
                 Description: roles.Description
             }
-        }) 
+        })
             .then(response => console.log(response))
             .catch(err => console.log(err))
     }
@@ -75,8 +78,8 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-10 my-5 space-y-8">
                                         <div className="w-full flex flex-col gap-16 max-w-xl">
-                                            <Input type="text" name="Name" onChange={handleInput} variant="underlined" label="Name" />
-                                            <Input type="text" name="Description" onChange={handleInput}  variant="underlined" label="Description" />
+                                            <Input type="text" name="Name" onChange={handleInput} variant="underlined" label={t("profiles.roles.nameLabel")} />
+                                            <Input type="text" name="Description" onChange={handleInput}  variant="underlined" label={t("profiles.roles.descriptionLabel")} />
                                         </div>
                                     </ModalBody>
                                     </form>

@@ -4,14 +4,16 @@ import { useSession } from "next-auth/react"
 import axios from 'axios';
 import { useRouter } from "next/navigation";
 import FormModals from "@/components/Modal/modalChooseProperty";
+import {useTranslations} from 'next-intl';
 
 const ChooseOrganization = () => {
     const [isHovered1, setIsHovered1] = useState(false)
     const [properties, setProperties] = useState([])
     const [apps, setApps] = useState([])
+    const t = useTranslations('Index');
 
     const { data: session, status } = useSession()
-    const router = useRouter(); // Inicialize o useRouter
+    const router = useRouter();
 
     const isAdmin = () => {
         return session?.user?.admin;
@@ -32,19 +34,17 @@ const ChooseOrganization = () => {
         getData()
     }, [session])
 
-    // Redirecionar o usuário administrador para /homepage
     useEffect(() => {
         if (isAdmin()) {
             router.push('/homepage');
         }
-    }, [session]); // Redirecionar quando a sessão for carregada ou mudar
+    }, [session]);
 
     return (
         <>
-            {/* Renderizar o conteúdo apenas se o usuário não for administrador */}
             {!isAdmin() && (
                 <>
-                    <p className="text-center text-3xl mt-60 antialiased">Selecione a propriedade que deseja abrir:</p>
+                    <p className="text-center text-3xl mt-60 antialiased">{t('propertySelect.label')}</p>
                     <div className="flex justify-center items-center mt-16">
                         <div className="grid grid-cols-2 gap-6">
                             {properties.map((property, index) => (
@@ -56,7 +56,7 @@ const ChooseOrganization = () => {
 
                                     <FormModals
                                         buttonName={property.name}
-                                        modalHeader={"Escolha que aplicação quer utilizar"}
+                                        modalHeader={t('applicationSelect.label')}
                                         formTypeModal={10}
                                         idProperty={property.id}
                                     ></FormModals>

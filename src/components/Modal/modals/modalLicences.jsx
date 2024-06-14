@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import { MdClose } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
+import {useTranslations} from 'next-intl';
 
 
 const modallicence = ({buttonName,
@@ -25,13 +26,14 @@ const modallicence = ({buttonName,
     const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
     const [propertyLicense, setPropertyLicense] = useState([]);
     const [licencesFetched, setLicencesFetched] = useState(false);
+    const t = useTranslations('Index');
 
 
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
-    
+
     const toggleFirstModal = async () => {
         setIsFirstModalOpen(!isFirstModalOpen);
         if (!licencesFetched) {
@@ -47,7 +49,7 @@ const modallicence = ({buttonName,
             }
         }
     }
-    
+
     return (
         <>
             {formTypeModal === 2 && (
@@ -82,7 +84,7 @@ const modallicence = ({buttonName,
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -96,16 +98,16 @@ const modallicence = ({buttonName,
                                                 >
                                                     <TableHeader>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ID
+                                                                {t("organization.properties.applications.licenses.datatable.id")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ABV
+                                                                {t("organization.properties.applications.licenses.datatable.abreviature")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                BEDROOMS
+                                                                {t("organization.properties.applications.licenses.datatable.bedrooms")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                WORKSTATIONS
+                                                                {t("organization.properties.applications.licenses.datatable.workstations")}
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>

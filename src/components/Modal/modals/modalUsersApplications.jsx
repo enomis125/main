@@ -25,6 +25,8 @@ import { MdClose } from "react-icons/md";
 import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 
+import {useTranslations} from 'next-intl';
+
 
 const users_applications = ({idProperty, idApplication, formTypeModal, buttonName,
     buttonIcon,
@@ -33,12 +35,14 @@ const users_applications = ({idProperty, idApplication, formTypeModal, buttonNam
     editIcon,
     modalEditArrow,
     modalEdit}) => {
-    
+
     const [isExpanded, setIsExpanded] = useState(false);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [usersApplicationsFetched, setUsersApplicationFetched] = useState(false);
     const [usersApplication, setUsersApplications] = useState([])
+
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -88,7 +92,7 @@ const users_applications = ({idProperty, idApplication, formTypeModal, buttonNam
 
     return (
         <>
-            {formTypeModal === 11 && 
+            {formTypeModal === 11 &&
                 <>
                     <Button onPress={onOpen} color={buttonColor} className="w-fit">
                         {buttonName} {buttonIcon}
@@ -118,7 +122,7 @@ const users_applications = ({idProperty, idApplication, formTypeModal, buttonNam
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -132,19 +136,19 @@ const users_applications = ({idProperty, idApplication, formTypeModal, buttonNam
                                                 >
                                                     <TableHeader>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                USER ID
+                                                                {t("organization.properties.applications.assign.datatable.id")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                NAME
+                                                                {t("organization.properties.applications.assign.datatable.name")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                LASTNAME
+                                                                {t("organization.properties.applications.assign.datatable.lastName")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                EMAIL
+                                                                {t("organization.properties.applications.assign.datatable.email")}
                                                             </TableColumn>
                                                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                                                ADD
+                                                                {t("organization.properties.applications.assign.datatable.add")}
                                                             </TableColumn>
                                                         </TableHeader>
                                                         <TableBody>

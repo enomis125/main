@@ -9,7 +9,6 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Pagination,
     Dropdown,
     DropdownTrigger,
     DropdownMenu,
@@ -18,8 +17,11 @@ import {
 import { GoGear } from "react-icons/go";
 import { BsThreeDotsVertical, BsArrowRight } from "react-icons/bs";
 import { FiSearch, FiPlus, FiEdit3 } from "react-icons/fi";
-import { IoMdDownload } from "react-icons/io"; 
+import { IoMdDownload } from "react-icons/io";
 import FormModals from "@/components/Modal/modalOrganizations";
+import PaginationComponent from "@/components/Pagination/Pagination";
+import {useTranslations} from 'next-intl';
+
 
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -31,28 +33,23 @@ export default function Contact() {
     const [searchValue, setSearchValue] = useState("");
     const [organizations, setOrganizations] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const t = useTranslations('Index');
 
-    // const filteredItems = organizations.filter(
-    //     (organization) =>
-    //         organization.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-    //         organization.organizationID.toString().toLowerCase().includes(searchValue.toLowerCase())
-    // );
-    // const items = filteredItems.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
     const filteredItems = React.useMemo(() => {
-        return organizations.filter((organizations) =>
-        organizations.name.toLowerCase().includes(
+        return organizations.filter((organization) =>
+            organization.name.toLowerCase().includes(
                 searchValue.toLowerCase()
             ) ||
-            organizations.organizationID.toString().toLowerCase().includes(
+            organization.organizationID.toString().toLowerCase().includes(
                 searchValue.toLowerCase()
             )
         );
     }, [organizations, searchValue]);
-        const items = React.useMemo(() => {
+
+    const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-
         return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
@@ -69,8 +66,8 @@ export default function Contact() {
         const pdf = new jsPDF();
         pdf.autoTable({ html: "#TableToPDF" })
         pdf.save("Organizations.pdf")
-    }
-/*---------------------------------------------------------------------------------------- */
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -100,18 +97,17 @@ export default function Contact() {
         }
     };
 
-
     return (
         <>
             <main>
                 <div className="flex flex-col mt-5 py-3">
-                    <p className="text-xs px-6">Todas as Organizações</p>
+                    <p className="text-xs px-6">{t("allOrganizations.label")}</p>
                     <div className="flex flex-row justify-between items-center mx-5">
                         <div className="flex flex-row">
                             <div className="flex flex-wrap md:flex-nowrap gap-4">
                                 <Input
                                     className="mt-4 w-80"
-                                    placeholder="Procurar..."
+                                    placeholder={t('general.search')}
                                     labelPlacement="outside"
                                     startContent={
                                         <FiSearch color={"black"} className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
@@ -122,10 +118,10 @@ export default function Contact() {
                             </div>
                         </div>
                         <FormModals
-                            buttonName={"Inserir Organização"}
+                            buttonName={t("general.newRecord")}
                             buttonIcon={<FiPlus size={15} />}
                             buttonColor={"primary"}
-                            modalHeader={"Inserir Organização"}
+                            modalHeader={t("allOrganizations.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
                         ></FormModals>
@@ -144,22 +140,22 @@ export default function Contact() {
                     >
                         <TableHeader>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ID
+                                {t("allOrganizations.datatable.id")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                NAME
+                                {t("allOrganizations.datatable.name")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                ADDRESS
+                                {t("allOrganizations.datatable.address")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                COUNTRY
+                                {t("allOrganizations.datatable.country")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                Nº. PROPERTIES
+                                {t("allOrganizations.datatable.properties")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
-                                Nº. USERS
+                                {t("allOrganizations.datatable.users")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
                                 <GoGear size={20} />
@@ -176,7 +172,7 @@ export default function Contact() {
                                         buttonName={organization.properties}
                                         buttonColor={"transparent"}
                                         modalEdit={`ID: ${organization.organizationID}`}
-                                        modalHeader={"All Properties from"}
+                                        modalHeader={t("allOrganizations.properties.label")}
                                         formTypeModal={13}
                                         idOrganization={organization.organizationID}
                                     ></FormModals>
@@ -185,7 +181,7 @@ export default function Contact() {
                                         buttonName={organization.users}
                                         buttonColor={"transparent"}
                                         modalEdit={`Id: ${organization.organizationID}`}
-                                        modalHeader={"All Users from Organization"}
+                                        modalHeader={t("allOrganizations.users.label")}
                                         formTypeModal={14}
                                         idOrganization={organization.organizationID}
                                     ></FormModals>
@@ -196,7 +192,6 @@ export default function Contact() {
                                                 <Button
                                                     variant="light"
                                                     className="flex flex-row justify-center"
-
                                                 >
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
@@ -204,27 +199,27 @@ export default function Contact() {
                                             <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
                                                 <DropdownItem key="edit">
                                                     <FormModals
-                                                        buttonName={"Editar"}
+                                                        buttonName={t("general.editRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Editar Organizacao"}
+                                                        modalHeader={t("allOrganizations.edit.modalHeader")}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${organization.organizationID}`}
                                                         formTypeModal={11}
                                                         idOrganization={organization.organizationID}
-                                                    ></FormModals>
+                                                    />
                                                 </DropdownItem>
-                                                <DropdownItem onClick={() => handleDelete(organization.organizationID)}>Remover</DropdownItem>
+                                                <DropdownItem onClick={() => handleDelete(organization.organizationID)}>{t("general.removeRecord")}</DropdownItem>
                                                 <DropdownItem>
                                                     <FormModals
-                                                        buttonName={"Ver"}
+                                                        buttonName={t("general.viewRecord")}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={"Ver Detalhes da Organizacao"}
+                                                        modalHeader={t("allOrganizations.view.modalHeader")}
                                                         formTypeModal={11}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${organization.organizationID}`}
                                                         idOrganization={organization.organizationID}
-                                                    ></FormModals>
+                                                    />
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
@@ -235,55 +230,31 @@ export default function Contact() {
                     </Table>
                 </div>
                 <div className="bg-tableFooter border border-tableFooterBorder flex justify-end items-center lg:pl-72 w-full min-h-10vh fixed bottom-0 right-0 z-20 text-sm text-default-400 py-3">
-                <div className="space-x-4">
-                    <Button onClick={exportToPDF}>PDF <IoMdDownload /></Button>
-                    <Button>                    <CSVLink
-                        data={items.map((item) => ({
-                            organizationID: item.organizationID,
-                            Name: item.name,
-                            Address1: item.address1, 
-                            Country: item.country ,
-                        }))}
-                        filename={"Organizações"}
-                        separator=";"
-                        enclosingCharacter=""
-                    >
-                        CSV 
-                    </CSVLink><IoMdDownload />
-                    </Button>
+                    <div className="space-x-4">
+                        <Button onClick={exportToPDF}>PDF <IoMdDownload /></Button>
+                        <Button>
+                            <CSVLink
+                            data={items.map((item) => ({
+                                organizationID: item.organizationID,
+                                Name: item.name,
+                                Address1: item.address1,
+                                Country: item.country,
+                            }))}
+                            filename={"Organizações"}
+                            separator=";"
+                            enclosingCharacter=""
+                        >
+                            CSV
+                        </CSVLink> <IoMdDownload />
+                        </Button>
                     </div>
-                    <div className="flex flex-row items-center">
-                        <Pagination
-                            isCompact
-                            showControls
-                            color="primary"
-                            variant="flat"
-                            page={page}
-                            total={Math.ceil(filteredItems.length / rowsPerPage)}
-                            onChange={handleChangePage} 
-                            className="mx-5"
-                        />
-                        <div>
-                            <span className="text-sm text-black">Items por página:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={handleChangeRowsPerPage} 
-                                className="ml-2 py-1 px-2 border rounded bg-transparent text-sm text-default-600 mx-5"
-                            >
-                                <option value={15}>15</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                            </select>
-                        </div>
-                        <div className="ml-5 mr-10 text-black">
-                            {items.length > 0
-                                ? `${(page - 1) * rowsPerPage + 1}-${Math.min(
-                                    page * rowsPerPage,
-                                    filteredItems.length
-                                )} de ${filteredItems.length}`
-                                : "0 resultados"}
-                        </div>
-                    </div>
+                    <PaginationComponent
+                        page={page}
+                        totalItems={filteredItems.length}
+                        rowsPerPage={rowsPerPage}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
                 </div>
             </main>
         </>

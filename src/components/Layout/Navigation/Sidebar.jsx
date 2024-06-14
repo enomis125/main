@@ -1,114 +1,61 @@
 'use client'
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io'
+import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
 import { FaUser } from 'react-icons/fa';
 import { useSession, signOut } from 'next-auth/react';
-import { IoSettings } from "react-icons/io5";
-import { FaHotel } from "react-icons/fa";
-import { FaUserTie } from "react-icons/fa";
-import axios from 'axios';
+import { IoSettings } from 'react-icons/io5';
+import { FaHotel, FaUserTie } from 'react-icons/fa';
+import { useTranslations } from 'next-intl';
+
 import {
-    Dropdown,
-    DropdownTrigger,
-    DropdownMenu,
-    DropdownSection,
-    DropdownItem,
     Button,
 } from "@nextui-org/react";
-import { LuLogOut } from "react-icons/lu";
+import { LuLogOut } from 'react-icons/lu';
 
 const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
 
     const hotelSetup = process.env.NEXT_PUBLIC_HOTEL_SETUP === "true";
 
-    const { data: session, status } = useSession()
-    const [user, setUser] = useState([]);
-
-    const items = [
-        {
-            key: "new",
-            label: "New file",
-        },
-        {
-            key: "copy",
-            label: "Copy link",
-        },
-        {
-            key: "edit",
-            label: "Edit file",
-        },
-        {
-            key: "delete",
-            label: "Delete file",
-        }
-    ];
+    const { data: session, status } = useSession();
+    const t = useTranslations('Index');
 
     const isAdmin = () => {
         return session?.user?.admin;
     };
 
     const listItems = {
-        //"Dashboard": [],
-
-        "Settings": {
+        settings: {
             icon: <IoSettings size={20} />,
             active: true,
             items: [
-                {
-                    ref: "/homepage/changePassword", label: "Change Password", active: true
-                },
-                {
-                    ref: "/homepage/securitySettings", label: "Security Setting", active: true
-                },
+                { ref: "/homepage/changePassword", label: t('sidebar.settings.changePasswordLabel'), active: true },
+                { ref: "/homepage/securitySettings", label: t('sidebar.settings.securitySettingsLabel'), active: true },
             ]
         },
-
-        "Organization": {
+        organization: {
             icon: <FaHotel size={20} />,
             active: true,
             items: [
-                !isAdmin() && {
-                    ref: "/homepage/organization", label: "Account", active: true
-                },
-                !isAdmin() && {
-                    ref: "/homepage/properties", label: "Properties", active: true
-                },
-
-                isAdmin() && {
-                    ref: "/homepage/organizations",
-                    label: "Organizations",
-                    active: true
-                },
-                isAdmin() && {
-                    ref: "/homepage/allproperties",
-                    label: "Properties",
-                    active: true
-                },
-                
+                !isAdmin() && { ref: "/homepage/organization", label: t('sidebar.organization.accountLabel'), active: true },
+                !isAdmin() && { ref: "/homepage/properties", label: t('sidebar.organization.propertiesLabel'), active: true },
+                isAdmin() && { ref: "/homepage/organizations", label: t('sidebar.organization.allOrganizationsLabel'), active: true },
+                isAdmin() && { ref: "/homepage/allproperties", label: t('sidebar.organization.allPropertiesLabel'), active: true },
             ].filter(Boolean),
         },
-
-        "Profiles": {
+        profiles: {
             icon: <FaUserTie size={20} />,
             active: true,
             items: [
-                {
-                    ref: "/homepage/profile", label: "Profiles", active: true
-                },
-                !isAdmin() && {
-                    ref: "/homepage/users", label: "Manage Users", active: true
-                },
-                isAdmin() && {
-                    ref: "/homepage/allusers", label: "Users", active: true
-                },
-
+                { ref: "/homepage/profile", label: t('sidebar.profiles.manageProfilesLabel'), active: true },
+                !isAdmin() && { ref: "/homepage/users", label: t('sidebar.profiles.manageUsersLabel'), active: true },
+                isAdmin() && { ref: "/homepage/allusers", label:t('sidebar.profiles.manageAllUsersLabel'), active: true },
             ].filter(Boolean)
         }
+    };
 
-    }
     return (
         <>
             <aside className={(showSidebar ? "" : "hidden ") + "bg-white h-screen border-r border-bg-primary overflow-hidden w-72 flex shrink-0 fixed top-0 z-40 inset-0 lg:block z-100"} aria-label="Sidebar">
@@ -124,16 +71,12 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
                     <hr className="border-t border-primary-800 my-4" />
 
                     <ul className="space-y-2 h-full max-h-[calc(100vh-330px)] overflow-y-auto">
-                        {
-                            children
-                        }
-                        {
-                            Object.entries(listItems).map(([k, { icon, items, active }], i) =>
-                                <li key={i}>
-                                    <ProfileDropdown title={k} labels={items} icon={icon} active={active} />
-                                </li>
-                            )
-                        }
+                        {children}
+                        {Object.entries(listItems).map(([key, { icon, items, active }], index) =>
+                            <li key={index}>
+                                <ProfileDropdown title={t(`sidebar.${key}.label`)} labels={items} icon={icon} active={active} />
+                            </li>
+                        )}
                     </ul>
 
                     <hr className="border-t border-primary-800 my-4" />
@@ -141,14 +84,13 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
                     <br />
 
                     <div className="flex items-center gap-x-2">
-
-
-                                    <FaUser className="text-2xl text-primary-800 ml-3" />
-                                    {status === 'authenticated' && session && (
-                                        <span className="text-md text-primary-800 font-semibold ml-1 mt-0.5">{`${session.user.name} ${session.user.lastname}`}
-                                        </span>
-                                    )}
-                                    <Button size="sm" className="bg-red-500 ml-4" onClick={() => signOut()}><LuLogOut className='text-white' size={17} /></Button>
+                        <FaUser className="text-2xl text-primary-800 ml-3" />
+                        {status === 'authenticated' && session && (
+                            <span className="text-md text-primary-800 font-semibold ml-1 mt-0.5">{`${session.user.name} ${session.user.lastname}`}</span>
+                        )}
+                        <Button size="sm" className="bg-red-500 ml-4" onClick={() => signOut()}>
+                            <LuLogOut className='text-white' size={17} />
+                        </Button>
                     </div>
 
                     <br />
@@ -161,19 +103,18 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
             />
         </>
     );
-}
-
+};
 
 const ProfileDropdown = ({ title, labels, icon, active }) => {
-    const pathname = usePathname()
+    const pathname = usePathname();
     const router = useRouter();
 
-    const actives = []
+    const actives = [];
     labels.forEach((label) => {
-        if (pathname != "/") actives.push(pathname.includes(label.ref))
-    })
-    const isActive = actives.some((val) => { return val == true })
-    const [isOpen, setIsOpen] = useState(isActive)
+        if (pathname != "/") actives.push(pathname.includes(label.ref));
+    });
+    const isActive = actives.some((val) => val === true);
+    const [isOpen, setIsOpen] = useState(isActive);
 
     return (
         <>
@@ -182,13 +123,13 @@ const ProfileDropdown = ({ title, labels, icon, active }) => {
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <div className="ml-2 flex items-center">
-                    {active ? icon && <span className="mr-2">{icon}</span> : null}
-                    {active ? title && <h2 className="text-lg font-semibold">{title}</h2> : null}
+                    {active && icon && <span className="mr-2">{icon}</span>}
+                    {active && title && <h2 className="text-lg font-semibold">{title}</h2>}
                 </div>
-                {active ? ((isOpen) ? <IoIosArrowDown /> : <IoIosArrowForward />) : null}
+                {active && (isOpen ? <IoIosArrowDown /> : <IoIosArrowForward />)}
             </header>
 
-            <ul title={title} className={(isOpen) ? "my-2 " : "hidden" + " mb-2 "}>
+            <ul title={title} className={isOpen ? "my-2 " : "hidden mb-2 "}>
                 {labels.map(({ ref, label, active }, index) => {
                     const linkIsActive = pathname.includes(ref);
                     const disabled = !active && ref !== "/";
@@ -196,7 +137,7 @@ const ProfileDropdown = ({ title, labels, icon, active }) => {
                     return (
                         <li
                             key={index}
-                            className={(linkIsActive ? "text-primary-800 font-bold bg-primary-600" : "text-primary-800") + "  ml-2 my-1 p-2 text-sm  rounded-lg cursor-pointer hover:bg-primary-600 hover:text-primary-800 active:ring transition ease-in-out duration-150"}
+                            className={(linkIsActive ? "text-primary-800 font-bold bg-primary-600" : "text-primary-800") + " ml-2 my-1 p-2 text-sm rounded-lg cursor-pointer hover:bg-primary-600 hover:text-primary-800 active:ring transition ease-in-out duration-150"}
                             onClick={() => !disabled && router.push(ref)}
                             style={{ opacity: disabled ? 0.5 : 1, cursor: disabled ? "not-allowed" : "pointer" }}
                         >
@@ -210,6 +151,6 @@ const ProfileDropdown = ({ title, labels, icon, active }) => {
             </ul>
         </>
     );
-}
+};
 
 export default Sidebar;

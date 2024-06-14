@@ -23,6 +23,7 @@ import { MdClose } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
 import { GoGear } from "react-icons/go";
 import { FiEdit3, FiCheck } from "react-icons/fi";
+import {useTranslations} from 'next-intl';
 
 const modalfeatures = ({
     buttonName,
@@ -41,6 +42,7 @@ const modalfeatures = ({
     const [featuresFetch, setFeaturesFetched] = useState(false);
     const [features, setFeatures] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -125,7 +127,7 @@ const modalfeatures = ({
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
                                         {isLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{t("general.loadingStatus")}</div>
                                         ) : (
                                             <div className="mx-5 h-[65vh] min-h-full overflow-auto">
                                                 <Table
@@ -139,16 +141,16 @@ const modalfeatures = ({
                                                 >
                                                     <TableHeader>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            IP
+                                                            {t("organization.properties.applications.features.datatable.ip")}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            PORTA
+                                                            {t("organization.properties.applications.features.datatable.port")}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            PREFIX
+                                                            {t("organization.properties.applications.features.datatable.prefix")}
                                                         </TableColumn>
                                                         <TableColumn className="bg-primary-600 text-white font-bold">
-                                                            AÇÕES
+                                                            {t("organization.properties.applications.features.datatable.actions")}
                                                         </TableColumn>
                                                     </TableHeader>
                                                     <TableBody>

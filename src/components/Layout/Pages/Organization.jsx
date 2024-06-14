@@ -20,6 +20,7 @@ import { BsArrowRight } from "react-icons/bs";
 import { BiSpreadsheet } from "react-icons/bi";
 import { IoApps } from "react-icons/io5";
 import { FaPlug } from "react-icons/fa";
+import {useTranslations} from 'next-intl';
 
 
 
@@ -38,6 +39,7 @@ const Contact = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     const { data: session, status } = useSession()
     const [isSelected, setIsSelected] = useState(true);
+    const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -86,7 +88,7 @@ const Contact = () => {
                         <Modalorg
                             buttonIcon={<BsPencil size={20} color={"white"} />}
                             buttonColor={""}
-                            modalHeader={"Editar Organização"}
+                            modalHeader={t('organization.account.edit.modalHeader')}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
                             idOrg={organizations.organizationID}
@@ -95,10 +97,10 @@ const Contact = () => {
                             modalEdit={`ID: ${organizations.organizationID}`}
                         ></Modalorg>
 
-<FormModals
+                        <FormModals
                             buttonName={<BiSpreadsheet size={20} color={"white"}/>}
                             buttonColor={""}
-                            modalHeader={"Todas as Licenças das Propriedades"}
+                            modalHeader={t('organization.account.propertyLicenses.modalHeader')}
                             variant="light"
                             className="flex flex-row justify-center"
                             formTypeModal={13}
@@ -108,7 +110,7 @@ const Contact = () => {
                         <FormOrganizationApplication
                             buttonIcon={<FaPlug size={20} className="text-white" />}
                             buttonColor={"gray-500"}
-                            modalHeader={"Aplicações da Organização"}
+                            modalHeader={t('organization.account.applications.modalHeader')}
                             modalIcons={"bg-red"}
                             formTypeModal={1}
                             idOrganization={organizations.organizationID} // Make sure this is the correct ID
@@ -116,24 +118,17 @@ const Contact = () => {
                     </div>
                     <div className="w-full flex flex-col gap-4 my-4">
                         {variants.map((variant) => (
-                            <div key={variant} className="flex w-1/2 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                <Input type="text" variant={variant} label="Name" value={organizations.name} />
+                            <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                <Input type="text" variant={variant} label={t('organization.account.companyNameLabel')} value={organizations.name} />
+                                <Input type="text" variant={variant} label={t('organization.account.fiscalNumberLabel')} value={organizations.fiscalNumber} />
                             </div>
                         ))}
                     </div>
                     <div className="w-full flex flex-col gap-4 my-4">
                         {variants.map((variant) => (
                             <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                <Input type="text" variant={variant} label="Company Name" value={organizations.name} />
-                                <Input type="text" variant={variant} label="Fiscal Number" value={organizations.fiscalNumber} />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="w-full flex flex-col gap-4 my-4">
-                        {variants.map((variant) => (
-                            <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                <Input type="text" variant={variant} label="Email" value={organizations.email} />
-                                <Input type="text" variant={variant} label="Phone Number" value={organizations.phoneNumber} />
+                                <Input type="text" variant={variant} label={t('organization.account.emailLabel')} value={organizations.email} />
+                                <Input type="text" variant={variant} label={t('organization.account.phoneNumberLabel')} value={organizations.phoneNumber} />
                             </div>
                         ))}
                     </div>
@@ -143,14 +138,14 @@ const Contact = () => {
                     <div className="w-full flex flex-col gap-4">
                         {variants.map((variant) => (
                             <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                <Input variant={variant} label="Address 1" value={organizations.address1} />
+                                <Input variant={variant} label={t('organization.account.mainAddressLabel')} value={organizations.address1} />
                             </div>
                         ))}
                     </div>
                     <div className="w-full flex flex-col gap-4 my-4">
                         {variants.map((variant) => (
                             <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                <Input variant={variant} label="Address 2" value={organizations.address2} />
+                                <Input variant={variant} label={t('organization.account.secondAddressLabel')} value={organizations.address2} />
                             </div>
                         ))}
                     </div>
@@ -160,9 +155,9 @@ const Contact = () => {
                                 key={variant}
                                 className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                             >
-                                <Input type="text" name="Country" onChange={handleInput} variant={variant} label="Country" value={organizations.country} />
-                                <Input type="text" name="District" onChange={handleInput} variant={variant} label="District" value={organizations.district} />
-                                <Input type="number" name="ZipCode" onChange={handleInput} variant={variant} label="zipCode" value={organizations.zipCode} />
+                                <Input type="text" name="Country" onChange={handleInput} variant={variant} label={t('organization.account.countryLabel')} value={organizations.country} />
+                                <Input type="text" name="District" onChange={handleInput} variant={variant} label={t('organization.account.districtLabel')} value={organizations.district} />
+                                <Input type="number" name="ZipCode" onChange={handleInput} variant={variant} label={t('organization.account.zipcodeLabel')} value={organizations.zipCode} />
                             </div>
                         ))}
                     </div>
