@@ -48,13 +48,6 @@ export default function Contact() {
     const { data: session, status } = useSession()
     const t = useTranslations('Index');
 
-    // const filteredItems = property.filter(
-    //     (property) =>
-    //         property.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-    //         property.propertyID.toString().toLowerCase().includes(searchValue.toLowerCase())
-    // );
-    // const items = filteredItems.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-
     const filteredItems = React.useMemo(() => {
         return property.filter((property) =>
             property.name.toLowerCase().includes(
@@ -100,6 +93,7 @@ export default function Contact() {
                 const res = await axios.delete(`/api/hotel/properties/` + propertyID);
                 console.log(res.data);
                 alert("Propriedade removida com sucesso!");
+                window.location.reload();
             } catch (error) {
                 console.error("Erro ao remover Propriedade:", error.message);
             }

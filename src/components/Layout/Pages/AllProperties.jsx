@@ -81,6 +81,7 @@ export default function AllProperties() {
                 const res = await axios.delete(`/api/hotel/properties/` + propertyID);
                 console.log(res.data);
                 alert("Propriedade removida com sucesso!");
+                window.location.reload();
             } catch (error) {
                 console.error("Erro ao remover Propriedade:", error.message);
             }

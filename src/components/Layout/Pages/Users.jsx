@@ -97,11 +97,13 @@ export default function users() {
     const handleDelete = async (userID) => {
 
         const confirmDelete = window.confirm("Tem certeza de que deseja excluir este utilizador?");
-
+        console.log()
         if (confirmDelete) {
             try {
                 const response = await axios.delete(`/api/hotel/users/` + userID);
+                console.log(response.data);
                 alert("Utilizador removido com sucesso!");
+                window.location.reload();
             } catch (error) {
                 console.error("Erro ao remover Utilizador:", error.message);
             }

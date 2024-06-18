@@ -42,7 +42,7 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
                 Description: roles.Description
             }
         })
-            .then(response => console.log(response))
+            .then(response => {console.log(response); window.location.reload();})
             .catch(err => console.log(err))
     }
 
@@ -71,7 +71,7 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
                                 <form onSubmit={handleSubmit}>
                                     <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">{modalHeader}
                                         <div className='flex flex-row items-center mr-5'>
-                                            <Button color="transparent" type="submit" onPress={onClose}><TfiSave size={25} /></Button>
+                                            <Button color="transparent" type="submit"><TfiSave size={25} /></Button>
                                             <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                             <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                         </div>

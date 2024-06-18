@@ -60,3 +60,22 @@ export async function PATCH(request, context) {
     }
 
 }
+
+export async function DELETE(request, context) {
+
+    try {
+        const { id } = context.params;
+
+        const response = await prisma.organizations.delete({
+            where: {
+                organizationID: parseInt(id),
+            }
+        })
+        return new NextResponse(JSON.stringify({ status: 200 }));
+
+    } catch (error) {
+        return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
+}

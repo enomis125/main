@@ -40,10 +40,9 @@ export default function organizationInsert() {
                 phoneNumber: organization.PhoneNumber
             }
         })
-            .then(response => console.log(response))
+            .then(response => {console.log(response); window.location.reload();})
             .catch(err => console.log(err))
     }
-
     return {
         handleInputOrganization, handleSubmitOrganization, setOrganization, organization
     };

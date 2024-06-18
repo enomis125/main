@@ -21,7 +21,6 @@ export default function PropertyInsert() {
 
     const { data: session } = useSession();
 
-    console.log(property.OrganizationID)
     const handleInputProperty = (event) => {
         setProperty({ ...property, [event.target.name]: event.target.value });
     };
@@ -46,7 +45,7 @@ export default function PropertyInsert() {
                 OrganizationID: organizationID
             }
         })
-            .then(response => console.log(response))
+            .then(response => {console.log(response); window.location.reload();})
             .catch(err => console.log(err));
     };
 

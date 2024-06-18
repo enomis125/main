@@ -72,6 +72,7 @@ export default function AllUsers() {
             try {
                 await axios.delete(`/api/hotel/users/` + userID);
                 alert("Utilizador removido com sucesso!");
+                window.location.reload();
             } catch (error) {
                 console.error("Erro ao remover Utilizador:", error.message);
             }
@@ -183,7 +184,7 @@ export default function AllUsers() {
                                                         PropertiesUserName={user.properties}
                                                     />
                                                 </DropdownItem>
-                                                <DropdownItem><button onClick={() => handleDelete(user.id)}>{t("general.removeRecord")}</button></DropdownItem>
+                                                <DropdownItem><button onClick={() => handleDelete(user.userID)}>{t("general.removeRecord")}</button></DropdownItem>
                                                 <DropdownItem key="view">
                                                 <Modaluser
                                                         buttonName={t("general.viewRecord")}

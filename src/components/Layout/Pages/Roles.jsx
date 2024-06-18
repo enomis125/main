@@ -81,6 +81,7 @@ const RolesPage = () => {
             try {
                 const response = await axios.delete(`/api/hotel/roles/` + roleID);
                 alert("Perfil removido com sucesso!");
+                window.location.reload();
             } catch (error) {
                 console.error("Erro ao remover Perfil:", error.message);
             }

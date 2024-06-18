@@ -9,13 +9,12 @@ import { useSession, signOut } from 'next-auth/react';
 import { IoSettings } from 'react-icons/io5';
 import { FaHotel, FaUserTie } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
-
-import {
-    Button,
-} from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
+import { RadioGroup, Radio } from "@nextui-org/react";
 import { LuLogOut } from 'react-icons/lu';
 
 const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
+
 
     const hotelSetup = process.env.NEXT_PUBLIC_HOTEL_SETUP === "true";
 
@@ -25,6 +24,35 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
     const isAdmin = () => {
         return session?.user?.admin;
     };
+
+    const [selectedLanguage, setSelectedLanguage] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const [selected, setSelected] = useState('');
+
+
+    const languages = [
+        { label: 'Português', value: 'pt' },
+        { label: 'Espanhol', value: 'es' },
+        { label: 'Francês', value: 'fr' },
+        { label: 'Inglês', value: 'en' }
+    ];
+
+    const handleOpen = () => {
+        setIsOpen(true);
+    };
+
+    const handleClose = () => {
+        setIsOpen(false);
+    };
+
+    const handleLanguageSelect = () => {
+        const selectedLang = languages.find(lang => lang.label === selected);
+        setSelectedLanguage(selectedLang ? selectedLang.value : '');
+        console.log('Selected language:', selectedLang ? selectedLang.value : '');
+        handleClose();
+    };
+
+
 
     const listItems = {
         settings: {
@@ -51,7 +79,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
             items: [
                 { ref: "/homepage/profile", label: t('sidebar.profiles.manageProfilesLabel'), active: true },
                 !isAdmin() && { ref: "/homepage/users", label: t('sidebar.profiles.manageUsersLabel'), active: true },
-                isAdmin() && { ref: "/homepage/allusers", label:t('sidebar.profiles.manageAllUsersLabel'), active: true },
+                isAdmin() && { ref: "/homepage/allusers", label: t('sidebar.profiles.manageAllUsersLabel'), active: true },
             ].filter(Boolean)
         }
     };
@@ -81,15 +109,47 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
 
                     <hr className="border-t border-primary-800 my-4" />
 
-                    <br />
-
                     <div className="flex items-center gap-x-2">
-                        <FaUser className="text-2xl text-primary-800 ml-3" />
+
+                        <Button size="sm" className="bg-slate-200 uppercase" onClick={handleOpen}>
+                            {selectedLanguage || 'Select Language'}
+                        </Button>
+                        <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
+                            <ModalContent>
+                                {(onClose) => (
+                                    <>
+                                        <ModalHeader className="flex flex-col gap-1">Select Language</ModalHeader>
+                                        <ModalBody>
+                                            <div className="flex flex-col gap-3">
+                                                <RadioGroup value={selected} onValueChange={setSelected}>
+                                                    {languages.map((language) => (
+                                                        <Radio key={language.value} value={language.label}>
+                                                            {language.value.toUpperCase()} - {language.label}
+                                                        </Radio>
+                                                    ))}
+                                                </RadioGroup>
+                                                <p className="text-default-500 text-small">Selected: {selected}</p>
+                                            </div>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button color="danger" variant="light" onClick={onClose}>
+                                                Close
+                                            </Button>
+                                            <Button color="primary" onClick={handleLanguageSelect}>
+                                                Choose
+                                            </Button>
+                                        </ModalFooter>
+                                    </>
+                                )}
+                            </ModalContent>
+                        </Modal>
+
+                        <FaUser className="text-2xl text-primary-800 ml-2" />
                         {status === 'authenticated' && session && (
                             <span className="text-md text-primary-800 font-semibold ml-1 mt-0.5">{`${session.user.name} ${session.user.lastname}`}</span>
                         )}
-                        <Button size="sm" className="bg-red-500 ml-4" onClick={() => signOut()}>
-                            <LuLogOut className='text-white' size={17} />
+                        <Button size="sm" className="bg-red-500 ml-2" onClick={() => signOut()}>
+                            <LuLogOut className='text-white' size={15} />
                         </Button>
                     </div>
 

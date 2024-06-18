@@ -36,16 +36,12 @@ const modaluser = ({
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const t = useTranslations('Index');
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
 
-    const toggleSecondModal = () => {
-        setIsSecondModalOpen(!isSecondModalOpen);
-    };
 
     const { handleInputUser, handleSubmitUser } = userInsert();
     const { handleUpdateUser, setValuesUser, valuesUser } = userEdit(idUser);
@@ -70,51 +66,10 @@ const modaluser = ({
                             {(onClose) => (
                                 <>
                                     <form onSubmit={handleSubmitUser}>
-                                        <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">{modalHeader}
+                                        <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
+                                            {modalHeader}
                                             <div className='flex flex-row items-center mr-5'>
-                                                <Button color="transparent" onPress={toggleSecondModal}><FaRegUser size={25} /></Button>
-                                                <Modal
-                                                    classNames={{
-                                                        base: "max-h-screen",
-                                                        wrapper: isExpanded
-                                                            ? "w-full h-screen"
-                                                            : "lg:pl-72 h-screen w-full",
-                                                        body: "h-full",
-                                                    }}
-                                                    size="full"
-                                                    hideCloseButton="true"
-                                                    isOpen={isSecondModalOpen}
-                                                    onClose={toggleSecondModal}
-                                                    isDismissable={false}
-                                                    isKeyboardDismissDisabled={true}
-                                                >
-                                                    <ModalContent>
-                                                        <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">{modalHeader}
-                                                            <div className='flex flex-row items-center mr-5'>
-                                                                <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
-                                                                <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
-                                                            </div>
-                                                        </ModalHeader>
-                                                        <ModalBody>
-                                                            <table>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Utilizador</th>
-                                                                        <th>Perfil</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Data 1</td>
-                                                                        <td>Data 2</td>
-                                                                        {/* Add more rows and data as needed */}
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </ModalBody>
-                                                    </ModalContent>
-                                                </Modal>
-                                                <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
+                                                <Button color="transparent"  type="submit"><TfiSave size={25} /></Button>
                                                 <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>

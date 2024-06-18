@@ -92,7 +92,7 @@ const modalorg = ({
                                         {editIcon} {modalHeader} {modalEditArrow} {modalEdit}
                                         </div>
                                             <div className='flex flex-row items-center mr-5'>
-                                                <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
+                                                <Button color="transparent" type="submit"><TfiSave size={25} /></Button>
                                                 <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>
@@ -146,7 +146,7 @@ const modalorg = ({
                                                     >
                                                         <Input type="text" name="Country" variant={variant} label={t('organization.account.countryLabel')} value={valuesOrg.Country} onChange={e => setValuesOrg({ ...valuesOrg, Country: e.target.value })}/>
                                                         <Input type="text" name="District" variant={variant} label={t('organization.account.districtLabel')} value={valuesOrg.District} onChange={e => setValuesOrg({ ...valuesOrg, District: e.target.value })}/>
-                                                        <Input type="number" name="ZipCode" variant={variant} label={t('organization.account.zipcodeLabel')} value={valuesOrg.ZipCode} onChange={e => setValuesOrg({ ...valuesOrg, ZipCode: e.target.value })}/>
+                                                        <Input type="text" name="ZipCode" variant={variant} label={t('organization.account.zipcodeLabel')} value={valuesOrg.ZipCode} onChange={e => setValuesOrg({ ...valuesOrg, ZipCode: e.target.value })}/>
                                                     </div>
                                                 ))}
                                             </div>
