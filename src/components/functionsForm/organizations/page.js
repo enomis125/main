@@ -66,7 +66,7 @@ export function organizationEdit(idOrganization) {
     useEffect(() => {
         axios.get('/api/hotel/organizations/' + idOrganization)
             .then(res => {
-                const organizationData = res.data.response;
+                const organizationData = res.data.response[0];
                 setValuesOrganization({ ...valuesOrganization,
                     idOrganization: valuesOrganization.organizationID,
                     Name: organizationData.name,

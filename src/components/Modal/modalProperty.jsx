@@ -742,7 +742,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>
                                         </ModalHeader>
-                                        <ModalBody className="flex flex-col mx-5 my-5 space-y-2">
+                                        <ModalBody className="flex flex-col mx-5 my-5">
                                             <div className="flex justify-end gap-2">
                                                 <Switch
                                                     className="mr-auto"
@@ -1137,6 +1137,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                 defaultItems={items}
                                                                 defaultSelectedKey={valuesProperty.OrganizationID}
                                                                 className="w-1/4"
+                                                                defaultInputValue={OrganizationName}
                                                                 onSelectionChange={handleOrganizationEdit} 
                                                             >
                                                                 {items.map((item) => (
