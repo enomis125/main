@@ -45,7 +45,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const [isLoading, setIsLoading] = useState(true);
 
     const { handleInputProperty, handleSubmitProperty, handleOrganizationSelect } = propertyInsert();
-    const { handleUpdateProperty, setValuesProperty, valuesProperty } = propertyEdit(idProperty);
+    const { handleUpdateProperty, setValuesProperty, handleOrganizationEdit, valuesProperty } = propertyEdit(idProperty);
 
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -337,25 +337,25 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                 ))}
                                             </div>
                                             <div className="w-full flex flex-col gap-1">
-                                            {variants.map((variant) => (
-                                                <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2">
-                                                    {isAdmin() && (
-                                                        <Autocomplete
-                                                            variant={variant}
-                                                            label="Select Organization"
-                                                            defaultItems={items}
-                                                            defaultSelectedKey=""
-                                                            className="max-1/4"
-                                                            onSelectionChange={handleOrganizationSelect}
-                                                        >
-                                                            {items.map((item) => (
-                                                                <AutocompleteItem key={item.value} value={item.value}>{item.OrganizationName}</AutocompleteItem>
-                                                            ))}
-                                                        </Autocomplete>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
+                                                {variants.map((variant) => (
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2">
+                                                        {isAdmin() && (
+                                                            <Autocomplete
+                                                                variant={variant}
+                                                                label="Select Organization"
+                                                                defaultItems={items}
+                                                                defaultSelectedKey=""
+                                                                className="w-1/4"
+                                                                onSelectionChange={handleOrganizationSelect}
+                                                            >
+                                                                {items.map((item) => (
+                                                                    <AutocompleteItem key={item.value} value={item.value}>{item.OrganizationName}</AutocompleteItem>
+                                                                ))}
+                                                            </Autocomplete>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </ModalBody>
                                     </form>
                                 </>
@@ -742,7 +742,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>
                                         </ModalHeader>
-                                        <ModalBody className="flex flex-col mx-5 my-5 space-y-4">
+                                        <ModalBody className="flex flex-col mx-5 my-5 space-y-2">
                                             <div className="flex justify-end gap-2">
                                                 <Switch
                                                     className="mr-auto"
@@ -1040,15 +1040,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                     idApplication={application.id}
                                                                                                     idProperty={idProperty}
                                                                                                 />
-                                                                                                {/* <FormUsersApplications
-                                                                                                    buttonName={<GrUserSettings />}
-                                                                                                    buttonColor={"transparent"}
-                                                                                                    modalHeader={"Associar Utilizador à Aplicação -"}
-                                                                                                    formTypeModal={10}
-                                                                                                    modalEdit={` ID: ${idProperty}`}
-                                                                                                    idApplication={application.id}
-                                                                                                    idProperty={idProperty}
-                                                                                                ></FormUsersApplications> */}
                                                                                             </TableCell>
                                                                                         </TableRow>
                                                                                     ))
@@ -1062,7 +1053,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1073,7 +1064,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1083,7 +1074,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="max-w-xs flex flex-col gap-4">
+                                            <div className="max-w-xs flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1093,7 +1084,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1103,7 +1094,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1115,7 +1106,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1125,7 +1116,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-full flex flex-col gap-1">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
@@ -1133,6 +1124,26 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                     >
                                                         <Input type="text" name="Abbreviation" value={valuesProperty.Abbreviation} onChange={e => setValuesProperty({ ...valuesProperty, Abbreviation: e.target.value })} variant={variant} label={t("organization.properties.shortnameLabel")} />
                                                         <Input type="text" name="Designation" value={valuesProperty.Designation} onChange={e => setValuesProperty({ ...valuesProperty, Designation: e.target.value })} variant={variant} label={t("organization.properties.designationLabel")} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="w-full flex flex-col gap-1">
+                                                {variants.map((variant) => (
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-2">
+                                                        {isAdmin() && (
+                                                            <Autocomplete
+                                                                variant={variant}
+                                                                label={t("organization.properties.changeOrganizationLabel")}
+                                                                defaultItems={items}
+                                                                defaultSelectedKey={valuesProperty.OrganizationID}
+                                                                className="w-1/4"
+                                                                onSelectionChange={handleOrganizationEdit} 
+                                                            >
+                                                                {items.map((item) => (
+                                                                    <AutocompleteItem key={item.value} value={item.value}>{item.OrganizationName}</AutocompleteItem>
+                                                                ))}
+                                                            </Autocomplete>
+                                                        )}
                                                     </div>
                                                 ))}
                                             </div>

@@ -58,8 +58,7 @@ export default function PropertyInsert() {
 
 
 export function propertyEdit(idProperty) {
-
-    //edição na tabela USER
+    const { data: session } = useSession();
     const [valuesProperty, setValuesProperty] = useState({
         Name: '',
         Email: '',
@@ -72,13 +71,14 @@ export function propertyEdit(idProperty) {
         Description: '',
         Abbreviation: '',
         Designation: '',
-        active: 0
-    })
+        active: 0,
+        OrganizationID: ''
+    });
 
     useEffect(() => {
         axios.get('/api/hotel/properties/' + idProperty)
             .then(res => {
-                const property = res.data.response
+                const property = res.data.response;
                 setValuesProperty({
                     ...valuesProperty,
                     idProperty: property.propertyID,
@@ -93,16 +93,24 @@ export function propertyEdit(idProperty) {
                     Description: property.description,
                     Abbreviation: property.abbreviation,
                     Designation: property.designation,
-                    active: property.del
-                })
+                    active: property.del,
+                    OrganizationID: property.organizationID || session.user.organization // Ensure organizationID is set
+                });
             })
-            .catch(err => console.log(err))
-    }, [])
+            .catch(err => console.log(err));
+    }, [idProperty]);
 
+    const handleOrganizationEdit = (selectedOrganization) => {
+        setValuesProperty(prevValues => ({
+            ...prevValues,
+            OrganizationID: selectedOrganization // Update OrganizationID
+        }));
+    };
 
     function handleUpdateProperty(e) {
-        e.preventDefault()
+        e.preventDefault();
 
+        const organizationID = valuesProperty.OrganizationID || session.user.organization;
 
         axios.patch('/api/hotel/properties/' + idProperty, {
             data: {
@@ -117,13 +125,21 @@ export function propertyEdit(idProperty) {
                 Description: valuesProperty.Description,
                 Abbreviation: valuesProperty.Abbreviation,
                 Designation: valuesProperty.Designation,
+                OrganizationID: organizationID,
                 active: valuesProperty.active ? 1 : 0
             }
         })
-            .catch(err => console.log(err))
+        .then(response => {
+            console.log(response);
+            window.location.reload();
+        })
+        .catch(err => console.log(err));
     }
 
     return {
-        handleUpdateProperty, setValuesProperty, valuesProperty
+        handleUpdateProperty,
+        setValuesProperty,
+        handleOrganizationEdit,
+        valuesProperty
     };
 }

@@ -1,0 +1,333 @@
+{
+    "Index": {
+        "general": {
+            "search": "Buscar...",
+            "newRecord": "Nuevo",
+            "editRecord": "Editar",
+            "removeRecord": "Eliminar",
+            "viewRecord": "Ver",
+            "loadingStatus": "Cargando..."
+        },
+        "pagination": {
+            "noRecords": "0 Resultados",
+            "pageRecords": "Registros por página:",
+            "of": "of"
+        },
+        "login": {
+            "emailLabel": "Email",
+            "emailPlaceholder": "Ingrese su email",
+            "passwordLabel": "Contraseña",
+            "passwordPlaceholder": "Ingrese su contraseña",
+            "buttonLabel": "Login"
+        },
+        "propertySelect": {
+            "label": "Seleccione la propiedad en la que desea trabajar:"
+        },
+        "applicationSelect": {
+            "label": "Seleccione la aplicación en la que desea trabajar:"
+        },
+        "sidebar": {
+            "settings": {
+                "label": "Ajustes",
+                "changePasswordLabel": "Cambiar contraseña",
+                "securitySettingsLabel": "Ajustes de seguridad"
+            },
+            "organization": {
+                "label": "Organización",
+                "accountLabel": "Cuenta",
+                "propertiesLabel": "Propiedades",
+                "allOrganizationsLabel": "Todas las Organizaciones",
+                "allPropertiesLabel": "Todas las Propiedades"
+            },
+            "profiles": {
+                "label": "Perfiles",
+                "manageProfilesLabel": "Administrar Perfiles",
+                "manageUsersLabel": "Administrar Usuarios",
+                "manageAllUsersLabel": "Administrar Todos los Usuarios"
+            }
+        },
+        "organization": {
+            "account": {
+                "companyNameLabel": "Nombre de la empresa",
+                "fiscalNumberLabel": "Número de identificación fiscal",
+                "emailLabel": "Email",
+                "phoneNumberLabel": "Número de teléfono",
+                "mainAddressLabel": "Dirección",
+                "secondAddressLabel": "Segunda dirección",
+                "countryLabel": "País",
+                "districtLabel": "Distrito",
+                "zipcodeLabel": "Código Postal",
+                "edit": {
+                    "modalHeader": "Editar Organización",
+                    "statusActive": "Organización Activa",
+                    "statusInactive": "Organización Inactiva"
+                },
+                "propertyLicenses": {
+                    "modalHeader": "Todas las licencias de propiedades",
+                    "datatable": {
+                        "id": "ID",
+                        "shortname": "ABREVIATURA",
+                        "bedrooms": "HABITACIONES",
+                        "workstations": "PUESTOS DE TRABAJO"
+                    }
+                },
+                "applications": {
+                    "modalHeader": "Aplicaciones de la Organización",
+                    "datatable": {
+                        "applicationName": "APLICACIÓN",
+                        "details": "DETALLES",
+                        "properties": "PROPIEDADES"
+                    }
+                }
+            },
+            "properties": {
+                "label": "Propiedades",
+                "nameLabel": "Nombre",
+                "fiscalNumberLabel": "Número de identificación fiscal",
+                "emailLabel": "Email",
+                "phoneNumberLabel": "Número de teléfono",
+                "mainAddressLabel": "Dirección",
+                "countryLabel": "País",
+                "districtLabel": "Distrito",
+                "zipcodeLabel": "Código Postal",
+                "descriptionLabel": "Descripción",
+                "shortnameLabel": "Abreviatura",
+                "designationLabel": "Designación",
+                "changeOrganizationLabel" : "Cambiar Organización",
+                "datatable": {
+                    "id": "ID",
+                    "name": "NOMBRE",
+                    "address": "DIRECCIÓN",
+                    "description": "DESCRIPCIÓN",
+                    "shortname": "ABREVIATURA",
+                    "designation": "DESIGNACIÓN"
+                },
+                "edit": {
+                    "modalHeader": "Editar Propiedad",
+                    "statusActive": "Propiedad Activa",
+                    "statusInactive": "Propiedad Inactiva"
+                },
+                "new": {
+                    "modalHeader": "Nueva Propiedad"
+                },
+                "view": {
+                    "modalHeader": "Ver Propiedad"
+                },
+                "users": {
+                    "label": "Usuarios",
+                    "datatable": {
+                        "id": "ID",
+                        "name": "NOMBRE",
+                        "lastName": "APELLIDO",
+                        "email": "EMAIL",
+                        "role": "ROL",
+                        "add": "AGREGAR"
+                    },
+                    "assign": {
+                        "modalHeader": "Asignar Usuario"
+                    }
+                },
+                "applications": {
+                    "label": "Aplicaciones",
+                    "datatable": {
+                        "system": "SISTEMA",
+                        "available": "DISPONIBLE",
+                        "license": "LICENCIA",
+                        "features": "CARACTERÍSTICAS",
+                        "users": "USUARIOS"
+                    },
+                    "assign": {
+                        "modalHeader": "Asignar Usuario a Aplicación",
+                        "datatable": {
+                            "id": "ID",
+                            "name": "NOMBRE",
+                            "lastName": "APELLIDO",
+                            "email": "EMAIL",
+                            "add": "AGREGAR"
+                        }
+                    },
+                    "features": {
+                        "modalHeader": "Property Features",
+                        "datatable": {
+                            "ip": "IP",
+                            "port": "PUERTO",
+                            "prefix": "PREFIJO",
+                            "actions": "ACCIONES"
+                        }
+                    },
+                    "licenses": {
+                        "modalHeader": "Licencias de Propiedad",
+                        "datatable": {
+                            "id": "ID",
+                            "abreviature": "ABREVIATURA",
+                            "bedrooms": "HABITACIONES",
+                            "workstations": "PUESTOS DE TRABAJO"
+                        }
+                    }
+                }
+            }
+        },
+        "profiles": {
+            "roles": {
+                "label": "Perfiles",
+                "confirmDelete": "¿Estás seguro de que quieres eliminar este perfil?",
+                "modalHeader": "Perfil Nuevo",
+                "nameLabel": "Nombre",
+                "descriptionLabel": "Descripción"
+            },
+            "users": {
+                "label": "Usuarios",
+                "nameLabel": "Nombre",
+                "lastNameLabel": "Apellido",
+                "emailLabel": "Email",
+                "fiscalNumberLabel": "Número de identificación fiscal",
+                "phoneNumberLabel": "Número de teléfono",
+                "mainAddressLabel": "Dirección",
+                "secondAddressLabel": "Segunda dirección",
+                "countryLabel": "País",
+                "districtLabel": "Distrito",
+                "zipcodeLabel": "Código Postal",
+                "passwordLabel": "Contraseña",
+                "organizationLabel": "Organización",
+                "propertiesLabel": "Propiedades",
+                "roleLabel": "Rol",
+                "datatable": {
+                    "name": "NAME",
+                    "email": "EMAIL",
+                    "role": "ROL",
+                    "properties": "PROPIEDADES"
+                },
+                "new": {
+                    "modalHeader": "Nuevo Usuario"
+                },
+                "edit": {
+                    "modalHeader": "Editar Usuario"
+                },
+                "view": {
+                    "modalHeader": "Ver Usuario"
+                },
+                "properties": {
+                    "modalHeader": "Agregar Propiedad",
+                    "datatable": {
+                        "id": "ID",
+                        "name": "NOMBRE",
+                        "add": "AGREGAR"
+                    }
+                }
+            }
+        },
+        "allOrganizations": {
+            "label": "Todas las Organizaciones",
+            "companyNameLabel": "Nombre de la empresa",
+            "fiscalNumberLabel": "Número de identificación fiscal",
+            "emailLabel": "Email",
+            "phoneNumberLabel": "Número de teléfono",
+            "mainAddressLabel": "Dirección",
+            "secondAddressLabel": "Segunda dirección",
+            "countryLabel": "País",
+            "districtLabel": "Distrito",
+            "zipcodeLabel": "Código Postal",
+            "edit": {
+                "modalHeader": "Editar Organización",
+                "statusActive": "Organización Activa",
+                "statusInactive": "Organización Inactiva"
+            },
+            "view": {
+                "modalHeader": "Ver Organización"
+            },
+            "new": {
+                "modalHeader": "Nueva Organización"
+            },
+            "datatable": {
+                "id": "ID",
+                "name": "NOMBRE",
+                "address": "DIRECCIÓN",
+                "country": "PAÍS",
+                "properties": "PROPIEDADES",
+                "users": "USUARIOS"
+            },
+            "applications": {
+                "modalHeader": "Aplicaciones para Organizaciones",
+                "datatable": {
+                    "applicationName": "APPLICACIÓN",
+                    "details": "DETALLES",
+                    "properties": "PROPIEDADES"
+                },
+                "connectionString": {
+                    "modalHeader": "Editar Conexión String",
+                    "connectionStringLabel": "Conexión String"
+                }
+            },
+            "properties": {
+                "label": "Todas las Propiedades de",
+                "datatable": {
+                    "id": "ID",
+                    "name": "NOMBRE",
+                    "address": "DIRECCIÓN",
+                    "country": "PAÍS",
+                    "email": "EMAIL"
+                },
+                "edit": {
+                    "modalHeader": "Editar Propiedad"
+                },
+                "view": {
+                    "modalHeader": "Ver Propiedad"
+                }
+            },
+            "users": {
+                "label": "Todos los Usuarios de",
+                "datatable": {
+                    "id": "ID",
+                    "name": "NOMBRE",
+                    "email": "EMAIL",
+                    "properties": "PROPIEDADES"
+                },
+                "edit": {
+                    "modalHeader": "Editar Usuario"
+                },
+                "view": {
+                    "modalHeader": "Ver Usuario"
+                }
+            }
+        },
+        "allProperties": {
+            "label": "Todas las Propiedades",
+            "datatable": {
+                "id": "ID",
+                "name": "NOMBRE",
+                "address": "DIRECCIÓN",
+                "description": "DESCRIPCIÓN",
+                "shortname": "APELLIDO",
+                "designation": "DESIGNACIÓN",
+                "organization": "ORGANIZACIÓN"
+            },
+            "new": {
+                "modalHeader": "Nueva Propiedad"
+            },
+            "edit": {
+                "modalHeader": "Editar Propiedad"
+            },
+            "view": {
+                "modalHeader": "Ver Propiedad"
+            }
+        },
+        "allUsers": {
+            "label": "Todos los Usuarios",
+            "datatable": {
+                "name": "NOMBRE",
+                "email": "EMAIL",
+                "organization": "ORGANIZACIÓN",
+                "properties": "PROPIEDADES"
+            },
+            "new": {
+                "modalHeader": "Nuevo Usuario"
+            },
+            "edit": {
+                "modalHeader": "Editar Usuario"
+            },
+            "view": {
+                "modalHeader": "Ver Usuario"
+            }
+        }
+    }
+}

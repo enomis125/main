@@ -45,6 +45,7 @@ export async function PATCH(request, context) {
                 description: data.Description,
                 abbreviation: data.Abbreviation,
                 designation: data.Designation,
+                organizationID: parseInt(data.OrganizationID),
                 del: data.active
             }
         })
@@ -57,19 +58,40 @@ export async function PATCH(request, context) {
     }
 
 }
-export async function DELETE(request, context) {
 
+export async function DELETE(request, context) {
     try {
         const { id } = context.params;
 
+        const propertyId = parseInt(id);
+        if (isNaN(propertyId)) {
+            return new NextResponse(JSON.stringify({ error: 'Invalid ID format' }), { status: 400 });
+        }
+
+        const property = await prisma.properties.findUnique({
+            where: {
+                propertyID: propertyId,
+            },
+        });
+
+        if (!property) {
+            return new NextResponse(JSON.stringify({ error: 'Property not found' }), { status: 404 });
+        }
+
         const response = await prisma.properties.delete({
             where: {
-                propertyID: parseInt(id),
-            }
-        })
-        return new NextResponse(JSON.stringify({ status: 200 }));
+                propertyID: propertyId,
+            },
+        });
+
+        return new NextResponse(JSON.stringify({ status: 200, data: response }));
 
     } catch (error) {
+
+        if (error.code === 'P2003') {
+            return new NextResponse(JSON.stringify({ error: 'Cannot delete property. It is associated with other records.' }), { status: 409 });
+        }
+
         return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
     } finally {
         await prisma.$disconnect();

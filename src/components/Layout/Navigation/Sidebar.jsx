@@ -13,6 +13,8 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from
 import { RadioGroup, Radio } from "@nextui-org/react";
 import { LuLogOut } from 'react-icons/lu';
 
+import axios from 'axios';
+
 const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
 
 
@@ -45,11 +47,20 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
         setIsOpen(false);
     };
 
-    const handleLanguageSelect = () => {
+    const handleLanguageSelect = async () => {
         const selectedLang = languages.find(lang => lang.label === selected);
         setSelectedLanguage(selectedLang ? selectedLang.value : '');
         console.log('Selected language:', selectedLang ? selectedLang.value : '');
+
+        const setCookie = await axios.post(`/api/languageCookies`, {
+            data: {
+                language: selectedLang.value
+            }
+        })
+
         handleClose();
+
+        window.location.reload(true);
     };
 
 

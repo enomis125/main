@@ -30,10 +30,18 @@ export async function PATCH(request, context) {
             }
         })
 
-        if (activeProperties.length > 0) {
-            return new NextResponse(JSON.stringify({ error: "You can't archive this organization. There are active properties!" }));
-        }
+        const organization = await prisma.organizations.findUnique({
+            where: {
+                organizationID: parseInt(id)
+            }
+        })
 
+        if (organization.del != parseInt(data.active)) {
+            if (activeProperties.length > 0 && parseInt(data.active) == 1) {
+                return new NextResponse(JSON.stringify({ error: "You can't archive this organization. There are active properties!" }));
+            }
+        }
+        console.log("DATA", data);
         const response = await prisma.organizations.update({
             where: {
                 organizationID: parseInt(id),

@@ -30,6 +30,7 @@ export default function roleEdit(id){
                 description: valuesRole.description
             }
         })
+        .then(response => {console.log(response); window.location.reload();})
         .catch(err => console.log(err))
     }
 

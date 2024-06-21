@@ -78,12 +78,23 @@ export default function AllProperties() {
         const confirmDelete = window.confirm("Tem certeza de que deseja excluir esta propriedade?");
         if (confirmDelete) {
             try {
-                const res = await axios.delete(`/api/hotel/properties/` + propertyID);
-                console.log(res.data);
+                const res = await axios.delete(`/api/hotel/properties/${propertyID}`);
+
                 alert("Propriedade removida com sucesso!");
                 window.location.reload();
             } catch (error) {
-                console.error("Erro ao remover Propriedade:", error.message);
+                if (error.response) {
+                    if (error.response.status === 409) {
+                        alert('Cannot delete property. It is associated with other records.');
+                    } else {
+                        alert(`Erro: ${error.response.data.error}`);
+                    }
+                } else if (error.request) {
+                    alert('Erro: Sem resposta do servidor.');
+                } else {
+                    alert(`Erro: ${error.message}`);
+                }
+                console.error("Erro ao remover Propriedade:", error);
             }
         }
     };

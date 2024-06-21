@@ -230,7 +230,7 @@ const modaluser = ({
                         <ModalContent>
                             {(onClose) => (
                                 <>
-                                    <form onSubmit={(e) => handleUpdateOrganization(e)}>
+                                    <form onSubmit={handleUpdateOrganization}>
                                         <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                             <div className="flex flex-row justify-start gap-4">
                                                 {editIcon} {modalHeader} {modalEditArrow} {modalEdit}
@@ -323,6 +323,7 @@ const modaluser = ({
                 </>
             )
             }
+            
             {formTypeModal === 13 && (
                 <>
                     <Button onPress={toggleSecondModal} color={buttonColor} className="w-fit">
@@ -524,7 +525,6 @@ const modaluser = ({
                                                                                     buttonColor={"transparent"}
                                                                                     modalHeader={t("allOrganizations.users.view.modalHeader")}
                                                                                     formTypeModal={11}
-                                                                                    // modalEdit={`ID: ${organizationProperties.propertyID}`}
                                                                                     idUser = {organizationUsers.id}
                                                                                 ></ModalUser>
                                                                             </DropdownItem>

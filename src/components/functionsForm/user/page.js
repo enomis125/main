@@ -131,6 +131,7 @@ export function userEdit(idUser){
                 roleID: valuesUser.RoleID
             }
         })
+        .then(response => {console.log(response); window.location.reload();})
         .catch(err => console.log(err))
     }
 
