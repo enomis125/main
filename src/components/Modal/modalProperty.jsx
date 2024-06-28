@@ -342,7 +342,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                         {isAdmin() && (
                                                             <Autocomplete
                                                                 variant={variant}
-                                                                label="Select Organization"
+                                                                label={t("organization.properties.selectOrganization")}
                                                                 defaultItems={items}
                                                                 defaultSelectedKey=""
                                                                 className="w-1/4"

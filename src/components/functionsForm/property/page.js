@@ -58,8 +58,11 @@ export default function PropertyInsert() {
 
 
 export function propertyEdit(idProperty) {
+
     const { data: session } = useSession();
+    
     const [valuesProperty, setValuesProperty] = useState({
+
         Name: '',
         Email: '',
         FiscalNumber: '',
@@ -94,7 +97,7 @@ export function propertyEdit(idProperty) {
                     Abbreviation: property.abbreviation,
                     Designation: property.designation,
                     active: property.del,
-                    OrganizationID: property.organizationID || session.user.organization // Ensure organizationID is set
+                    OrganizationID: property.organizationID || session.user.organization 
                 });
             })
             .catch(err => console.log(err));
@@ -103,7 +106,7 @@ export function propertyEdit(idProperty) {
     const handleOrganizationEdit = (selectedOrganization) => {
         setValuesProperty(prevValues => ({
             ...prevValues,
-            OrganizationID: selectedOrganization // Update OrganizationID
+            OrganizationID: selectedOrganization 
         }));
     };
 

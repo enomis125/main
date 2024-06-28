@@ -94,6 +94,7 @@
         "shortnameLabel": "Short Name",
         "designationLabel": "Designation",
         "changeOrganizationLabel" : "Change Organization",
+        "selectOrganization" : "Select Organization",
         "datatable": {
           "id": "ID",
           "name": "NAME",

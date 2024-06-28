@@ -168,7 +168,7 @@ export default function AllUsers() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions">
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
                                                 <DropdownItem key="edit">
                                                     <Modaluser
                                                         buttonName={t("general.editRecord")}
@@ -178,9 +178,9 @@ export default function AllUsers() {
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${user.userID}`}
                                                         formTypeModal={11}
-                                                        idUser={user.userID}
+                                                        userID={user.userID}
                                                         NameUser={user.name}
-                                                        OrganizationUserName={user.organization}
+                                                        OrganizationName={user.organization}
                                                         PropertiesUserName={user.properties}
                                                     />
                                                 </DropdownItem>
@@ -194,9 +194,9 @@ export default function AllUsers() {
                                                         modalHeader={t("allUsers.view.modalHeader")}
                                                         modalEdit={`ID: ${user.userID}`}
                                                         formTypeModal={11}
-                                                        idUser={user.userID}
+                                                        userID={user.userID}
                                                         NameUser={user.name}
-                                                        OrganizationUserName={user.organization}
+                                                        OrganizationName={user.organization}
                                                         PropertiesUserName={user.properties}
                                                     />
                                                 </DropdownItem>
