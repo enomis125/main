@@ -8,9 +8,9 @@ export async function GET(request, context) {
 
     const { id } = context.params;
 
-    const response = await prisma.applications.findMany({
+    const response = await prisma.applications.findUnique({
         where: {
-            applicationID: parseInt(id)
+            id: parseInt(id)
         }
     })
 
@@ -23,49 +23,52 @@ export async function GET(request, context) {
     return new NextResponse(JSON.stringify({ response, status: 200 }));
 }
 
-// export async function PATCH(request, context) {
+export async function PATCH(request, context) {
 
-//     try {
-//         const { id } = context.params;
+    try {
+        const { id } = context.params;
 
-//         const response = await prisma.properties_applications.update({
-//             where: {
-//                 propertyApplicationID: parseInt(id),
-//             },
-//             data: {
-//                 ip: data.ip,
-//                 port: data.port,
-//                 prefix: parseInt(data.prefix),
-//             }
-//         })
-//         return new NextResponse(JSON.stringify({ status: 200 }));
+        const { data } = await request.json();
 
-//     } catch (error) {
-//         return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
-//     } finally {
-//         await prisma.$disconnect();
-//     }
+        const response = await prisma.applications.update({
+            where: {
+                id: parseInt(id),
+            },
+            data: {
+                description: data.description,
+                abbreviation: data.abbreviation,
+                categoryID: parseInt(data.categoryID),
+                partnerID: parseInt(data.partnerID)
+            }
+        })
+        return new NextResponse(JSON.stringify({ status: 200 }));
 
-// }
+    } catch (error) {
+        return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
 
-// export async function DELETE(request, context) {
+}
 
-//     try {
-//         const { id } = context.params;
+export async function DELETE(request, context) {
 
-//         const response = await prisma.properties_applications.delete({
-//             where: {
-//                 propertyApplicationID: parseInt(id),
-//             }
-//         })
-//         return new NextResponse(JSON.stringify({ status: 200 }));
+    try {
+        const { id } = context.params;
 
-//     } catch (error) {
-//         return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
-//     } finally {
-//         await prisma.$disconnect();
-//     }
-// }
+        const response = await prisma.applications.delete({
+            where: {
+                id: parseInt(id),
+            }
+        })
+        return new NextResponse(JSON.stringify({ status: 200 }));
+
+    } catch (error) {
+        return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
+}
 
 
 

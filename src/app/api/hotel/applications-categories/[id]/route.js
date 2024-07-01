@@ -1,16 +1,16 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import prisma from "@/lib/prisma"
-import organization from "@/app/homepage/organization/page";
 
 
 export async function GET(request, context) {
 
     const { id } = context.params;
 
-    const response = await prisma.users.findMany({
+    const response = await prisma.application_categories.findMany({
         where: {
-            userID: parseInt(id)
+            applicationCategoryID: parseInt(id)
         }
     })
 
@@ -24,37 +24,28 @@ export async function GET(request, context) {
 }
 
 export async function PATCH(request, context) {
+
     try {
         const { id } = context.params;
+
         const { data } = await request.json();
 
-        const updateRecord = await prisma.users.update({
+        const response = await prisma.application_categories.update({
             where: {
-                userID: parseInt(id),
+                applicationCategoryID: parseInt(id),
             },
             data: {
-                name: data.Name,
-                lastName: data.LastName,
-                email: data.Email,
-                fiscalNumber: parseInt(data.FiscalNumber),
-                phoneNumber: parseInt(data.PhoneNumber),
-                address1: data.Address1,
-                address2: data.Address2,
-                country: data.Country,
-                district: data.District,
-                zipCode: data.ZipCode,
-                password: data.Password,
-                roleID: parseInt(data.RoleID),
-                organizationID: parseInt(data.OrganizationID)
+                name: data.Name
             }
         })
-        return new NextResponse(JSON.stringify({ updateRecord, status: 200 }));
+        return new NextResponse(JSON.stringify({ status: 200 }));
 
     } catch (error) {
         return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
     } finally {
         await prisma.$disconnect();
     }
+
 }
 
 export async function DELETE(request, context) {
@@ -62,9 +53,9 @@ export async function DELETE(request, context) {
     try {
         const { id } = context.params;
 
-        const response = await prisma.users.delete({
+        const response = await prisma.application_categories.delete({
             where: {
-                userID: parseInt(id),
+                applicationCategoryID: parseInt(id),
             }
         })
         return new NextResponse(JSON.stringify({ status: 200 }));

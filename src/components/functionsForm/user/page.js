@@ -84,6 +84,7 @@ export function userEdit(userID) {
                 const userData = res.data.response[0];
                 setValuesUser({
                     ...valuesUser,
+                    userID: userData.userID,
                     Name: userData.name,
                     LastName: userData.lastName,
                     Email: userData.email,
@@ -117,7 +118,6 @@ export function userEdit(userID) {
 
         axios.patch('/api/hotel/users/' + userID, {
             data: {
-                
                 Name: valuesUser.Name,
                 LastName: valuesUser.LastName,
                 Email: valuesUser.Email,

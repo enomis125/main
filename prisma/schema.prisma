@@ -12,9 +12,16 @@ model applications {
   id                         Int                          @id @default(autoincrement())
   description                String                       @default("") @db.VarChar(100)
   abbreviation               String                       @default("") @db.VarChar(10)
+  categoryID                 Int?
+  partnerID                  Int?
+  partners                   partners?                    @relation(fields: [partnerID], references: [partnerID], onDelete: NoAction, onUpdate: NoAction, map: "applications_partners")
+  application_categories     application_categories?      @relation(fields: [categoryID], references: [applicationCategoryID], onDelete: NoAction, onUpdate: NoAction, map: "applicatios_categories")
   organizations_applications organizations_applications[]
   plugins                    plugins[]
   properties_applications    properties_applications[]
+
+  @@index([partnerID], map: "applications_partners_idx")
+  @@index([categoryID], map: "applicatios_categories_idx")
 }
 
 model organizations {
@@ -230,4 +237,16 @@ model organizations_applications {
 
   @@unique([organizationID, applicationID], map: "organizationID_applicationID")
   @@index([applicationID], map: "organizationsApplications_applications")
+}
+
+model application_categories {
+  applicationCategoryID Int            @id @default(autoincrement())
+  name                  String         @db.VarChar(45)
+  applications          applications[]
+}
+
+model partners {
+  partnerID    Int            @id @default(autoincrement())
+  name         String         @db.VarChar(45)
+  applications applications[]
 }

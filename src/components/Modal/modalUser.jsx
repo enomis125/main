@@ -17,7 +17,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import userInsert, { userEdit } from "../functionsForm/user/page";
 import ModalUserProperty from "../Modal/modals/modalUsersProperties"
 
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 
 const modaluser = ({
@@ -52,8 +52,8 @@ const modaluser = ({
         setIsExpanded(!isExpanded);
     };
 
-    
-    const { handleInputUser, handleSubmitUser , handleOrganizationSelect} = userInsert();
+
+    const { handleInputUser, handleSubmitUser, handleOrganizationSelect } = userInsert();
     const { handleUpdateUser, setValuesUser, handleOrganizationEdit, valuesUser } = userEdit(userID);
 
     const [items, setItems] = useState([]);
@@ -100,7 +100,7 @@ const modaluser = ({
                                         <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                             {modalHeader}
                                             <div className='flex flex-row items-center mr-5'>
-                                                <Button color="transparent"  type="submit"><TfiSave size={25} /></Button>
+                                                <Button color="transparent" type="submit"><TfiSave size={25} /></Button>
                                                 <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                                 <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                             </div>
@@ -167,7 +167,7 @@ const modaluser = ({
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="password"className="w-1/4" name="Password" onChange={handleInputUser} variant={variant} label={t("profiles.users.passwordLabel")} />
+                                                        <Input type="password" className="w-1/4" name="Password" onChange={handleInputUser} variant={variant} label={t("profiles.users.passwordLabel")} />
                                                         <Input type="number" className="w-1/4" name="RoleID" onChange={handleInputUser} variant={variant} label={t("profiles.users.roleLabel")} />
                                                         {isAdmin() && (
                                                             <Autocomplete
@@ -184,7 +184,7 @@ const modaluser = ({
                                                             </Autocomplete>
                                                         )}
                                                     </div>
-                                                
+
                                                 ))}
                                             </div>
                                         </ModalBody>
@@ -208,8 +208,7 @@ const modaluser = ({
                             base: "max-h-screen",
                             wrapper: isExpanded ? "w-full h-screen " : "lg:pl-72 h-screen w-full",
                             body: "h-full ",
-                        }
-                        }
+                        }}
                         size="full"
                         isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
                         <ModalContent>
@@ -227,18 +226,14 @@ const modaluser = ({
                                             </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-4">
-                                            <div className="w-1/2 flex flex-col gap-2">
+                                            <div className="w-full flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex w-1/2flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                                    >
+                                                    <div key={variant} className="flex w-1/2 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="text" name="Organization" value={OrganizationName} variant={variant} label={t("profiles.users.organizationLabel")} />
 
                                                         <Input type="text" name="Properties" value={PropertiesUserName} variant={variant} label={t("profiles.users.propertiesLabel")} />
 
-                                                        <Button  color="transparent" ><PiInfo size={30} /></Button>
-
+                                                        <Button color="transparent"><PiInfo size={30} /></Button>
 
                                                         <ModalUserProperty
                                                             buttonName={<CiCirclePlus size={30} />}
@@ -251,17 +246,14 @@ const modaluser = ({
                                                             NameUser={NameUser}
                                                             OrganizationUserName={OrganizationName}
                                                             PropertiesUserName={PropertiesUserName}
-                                                        ></ModalUserProperty>
+                                                        />
                                                     </div>
                                                 ))}
                                             </div>
 
                                             <div className="w-full flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                                    >
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="text" name="Name" value={valuesUser.Name} onChange={e => setValuesUser({ ...valuesUser, Name: e.target.value })} variant={variant} label={t("profiles.users.nameLabel")} />
                                                         <Input type="text" name="LastName" value={valuesUser.LastName} onChange={e => setValuesUser({ ...valuesUser, LastName: e.target.value })} variant={variant} label={t("profiles.users.lastNameLabel")} />
                                                     </div>
@@ -269,10 +261,7 @@ const modaluser = ({
                                             </div>
                                             <div className="w-full flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                                    >
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="text" name="Email" value={valuesUser.Email} onChange={e => setValuesUser({ ...valuesUser, Email: e.target.value })} variant={variant} label={t("profiles.users.emailLabel")} />
                                                         <Input type="text" name="FiscalNumber" value={valuesUser.FiscalNumber} onChange={e => setValuesUser({ ...valuesUser, FiscalNumber: e.target.value })} variant={variant} label={t("profiles.users.fiscalNumberLabel")} />
                                                     </div>
@@ -280,20 +269,14 @@ const modaluser = ({
                                             </div>
                                             <div className="max-w-xs flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 "
-                                                    >
+                                                    <div key={variant} className="flex max-w-xs flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="text" name="PhoneNumber" value={valuesUser.PhoneNumber} onChange={e => setValuesUser({ ...valuesUser, PhoneNumber: e.target.value })} variant={variant} label={t("profiles.users.phoneNumberLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="w-full flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                                    >
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="text" name="Address1" value={valuesUser.Address1} onChange={e => setValuesUser({ ...valuesUser, Address1: e.target.value })} variant={variant} label={t("profiles.users.mainAddressLabel")} />
                                                         <Input type="text" name="Address2" value={valuesUser.Address2} onChange={e => setValuesUser({ ...valuesUser, Address2: e.target.value })} variant={variant} label={t("profiles.users.secondAddressLabel")} />
                                                     </div>
@@ -301,10 +284,7 @@ const modaluser = ({
                                             </div>
                                             <div className="w-full flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                                    >
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="text" name="Country" value={valuesUser.Country} onChange={e => setValuesUser({ ...valuesUser, Country: e.target.value })} variant={variant} label={t("profiles.users.countryLabel")} />
                                                         <Input type="text" name="District" value={valuesUser.District} onChange={e => setValuesUser({ ...valuesUser, District: e.target.value })} variant={variant} label={t("profiles.users.districtLabel")} />
                                                         <Input type="text" name="ZipCode" value={valuesUser.ZipCode} onChange={e => setValuesUser({ ...valuesUser, ZipCode: e.target.value })} variant={variant} label={t("profiles.users.zipcodeLabel")} />
@@ -313,12 +293,8 @@ const modaluser = ({
                                             </div>
                                             <div className="w-full flex flex-col gap-2">
                                                 {variants.map((variant) => (
-                                                    <div
-                                                        key={variant}
-                                                        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                                    >
+                                                    <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="password" className="w-1/4" name="Password" value={valuesUser.Password} onChange={e => setValuesUser({ ...valuesUser, Password: e.target.value })} variant={variant} label={t("profiles.users.passwordLabel")} />
-
                                                         <Input type="number" className="w-1/4" name="RoleID" value={valuesUser.RoleID} onChange={e => setValuesUser({ ...valuesUser, RoleID: e.target.value })} variant={variant} label={t("profiles.users.roleLabel")} />
 
                                                         {isAdmin() && (
@@ -328,7 +304,7 @@ const modaluser = ({
                                                                 defaultItems={items}
                                                                 defaultSelectedKey={valuesUser.OrganizationID}
                                                                 className="w-1/4"
-                                                                efaultInputValue={OrganizationName}
+                                                                defaultInputValue={OrganizationName}
                                                                 onSelectionChange={handleOrganizationEdit}
                                                             >
                                                                 {items.map((item) => (
@@ -339,8 +315,6 @@ const modaluser = ({
                                                     </div>
                                                 ))}
                                             </div>
-
-
                                         </ModalBody>
                                     </form>
                                 </>
@@ -348,8 +322,7 @@ const modaluser = ({
                         </ModalContent>
                     </Modal>
                 </>
-            )
-            }
+            )}
         </>
     );
 };

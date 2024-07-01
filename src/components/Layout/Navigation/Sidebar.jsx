@@ -72,6 +72,9 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
             items: [
                 { ref: "/homepage/changePassword", label: t('sidebar.settings.changePasswordLabel'), active: true },
                 { ref: "/homepage/securitySettings", label: t('sidebar.settings.securitySettingsLabel'), active: true },
+                { ref: "/homepage/partners", label: t('sidebar.settings.partners'), active: true },
+                { ref: "/homepage/applications", label: t('sidebar.settings.applications'), active: true },
+                { ref: "/homepage/applicationsCategories", label: t('sidebar.settings.applicationsCategories'), active: true },
             ]
         },
         organization: {

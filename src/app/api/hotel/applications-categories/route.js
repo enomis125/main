@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma"
 
 export async function GET(request) {
 
-    const response = await prisma.applications.findMany()
+    const response = await prisma.application_categories.findMany()
 
     prisma.$disconnect()
 
@@ -18,12 +18,9 @@ export async function PUT(request) {
 
     try {
         const { data } = await request.json();
-        const response = await prisma.applications.create({
+        const response = await prisma.application_categories.create({
             data: {
-                description: data.Description,
-                abbreviation: data.Abbreviation,
-                categoryID: parseInt(data.CategoryID),
-                partnerID: parseInt(data.PartnerID)
+                name: data.Name,
             }
         });
 

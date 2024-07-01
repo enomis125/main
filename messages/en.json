@@ -30,7 +30,10 @@
       "settings": {
         "label": "Settings",
         "changePasswordLabel": "Change Password",
-        "securitySettingsLabel": "Security Settings"
+        "securitySettingsLabel": "Security Settings",
+        "partners": "Partners",
+        "applications": "Applications",
+        "applicationsCategories": "Applications Categories"
       },
       "organization": {
         "label": "Organization",
@@ -86,15 +89,15 @@
         "fiscalNumberLabel": "Fiscal Number",
         "emailLabel": "Email",
         "phoneNumberLabel": "Phone Number",
-        "mainAddressLabel":"Main Address",
+        "mainAddressLabel": "Main Address",
         "countryLabel": "Country",
         "districtLabel": "District",
         "zipcodeLabel": "ZIP Code",
         "descriptionLabel": "Description",
         "shortnameLabel": "Short Name",
         "designationLabel": "Designation",
-        "changeOrganizationLabel" : "Change Organization",
-        "selectOrganization" : "Select Organization",
+        "changeOrganizationLabel": "Change Organization",
+        "selectOrganization": "Select Organization",
         "datatable": {
           "id": "ID",
           "name": "NAME",
@@ -142,7 +145,7 @@
             "datatable": {
               "id": "ID",
               "name": "NAME",
-              "lastName":"LAST NAME",
+              "lastName": "LAST NAME",
               "email": "EMAIL",
               "add": "ADD"
             }
@@ -328,6 +331,41 @@
       },
       "view": {
         "modalHeader": "View User"
+      }
+    },
+    "partners": {
+      "label": "Partners",
+      "datatable": {
+        "name": "NAME",
+        "id": "ID"
+      },
+      "new": {
+        "modalHeader": "New Partner"
+      },
+      "edit": {
+        "modalHeader": "Edit Partner"
+      }
+    },
+    "applicationsCategories": {
+      "label": "Applications Categories"
+    },
+    "applications": {
+      "label": "Applications",
+      "description": " Description",
+      "abbreviation": "Abbreviation",
+      "selectCategory": " Select Category",
+      "selectPartner": " Select Partner",
+      "datatable": {
+        "description": "description",
+        "abbreviation": "abbreviation",
+        "category": "category",
+        "partner": "partner"
+      },
+      "new": {
+        "modalHeader": "New Application"
+      },
+      "edit": {
+        "modalHeader": "Edit Application"
       }
     }
   }

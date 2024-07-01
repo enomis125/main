@@ -30,7 +30,10 @@
             "settings": {
                 "label": "Ajustes",
                 "changePasswordLabel": "Cambiar contraseña",
-                "securitySettingsLabel": "Ajustes de seguridad"
+                "securitySettingsLabel": "Ajustes de seguridad",
+                "partners": "Socios",
+                "applications": "Aplicaciones",
+                "applicationsCategories": "Categorías de aplicaciones"
             },
             "organization": {
                 "label": "Organización",
@@ -93,8 +96,8 @@
                 "descriptionLabel": "Descripción",
                 "shortnameLabel": "Abreviatura",
                 "designationLabel": "Designación",
-                "changeOrganizationLabel" : "Cambiar Organización",
-                "selectOrganization" : "Seleccionar Organización",
+                "changeOrganizationLabel": "Cambiar Organización",
+                "selectOrganization": "Seleccionar Organización",
                 "datatable": {
                     "id": "ID",
                     "name": "NOMBRE",
@@ -328,6 +331,41 @@
             },
             "view": {
                 "modalHeader": "Ver Usuario"
+            }
+        },
+        "partners": {
+            "label": "Pareja",
+            "datatable": {
+                "name": "NOMBRE",
+                "id": "ID"
+            },
+            "new": {
+                "modalHeader": "Nuevo Pareja"
+            },
+            "edit": {
+                "modalHeader": "Editar Pareja"
+            }
+        },
+        "applicationsCategories": {
+            "label": "Categorías de aplicaciones"
+        },
+        "applications": {
+            "label": "Aplicaciones",
+            "description": " Descripción",
+            "abbreviation": "Abreviatura",
+            "selectCategory": " Seleccionar categoría",
+            "selectPartner": " Seleccionar socio",
+            "datatable": {
+                "description": "descripción",
+                "abbreviation": "Abreviatura",
+                "category": "categoría",
+                "partner": "socio"
+            },
+            "new": {
+                "modalHeader": "Nueva aplicación"
+            },
+            "edit": {
+                "modalHeader": "Editar aplicación"
             }
         }
     }
