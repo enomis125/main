@@ -111,6 +111,7 @@ export default function users() {
         }
     };
 
+    console.log("apagar depois");
     return (
         <>
             <main>
