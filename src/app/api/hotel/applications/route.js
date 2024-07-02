@@ -6,7 +6,20 @@ import prisma from "@/lib/prisma"
 
 export async function GET(request) {
 
-    const response = await prisma.applications.findMany()
+    const response = await prisma.applications.findMany({
+        include: {
+            application_categories: {
+                select: {
+                    name: true
+                }
+            },
+            partners: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    })
 
     prisma.$disconnect()
 

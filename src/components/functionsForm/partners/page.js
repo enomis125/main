@@ -27,17 +27,20 @@ export default function PartnerInsert() {
                 ...partner,
             }
         })
-            .then(response => {console.log(response); window.location.reload();})
+            .then(response => {
+                console.log(response);
+                window.location.reload();
+            })
             .catch(err => console.log(err));
     };
 
-    return { 
-        handleInputPartner, 
-        handleSubmitPartner, 
+    return {
+        handleInputPartner,
+        handleSubmitPartner,
     };
 }
 
-export function partnerEdit(partnerID) {
+export function PartnerEdit(partnerID) {
 
     const { data: session } = useSession();
 
@@ -50,21 +53,24 @@ export function partnerEdit(partnerID) {
             axios.get('/api/hotel/partners/' + partnerID)
                 .then(res => {
                     const partnerData = res.data.response[0];
+                    
                     setValuesPartner({
                         ...valuesPartner,
-                        partnerID: partnerData.partnerID,
-                        Name: partnerData.Name,
+                        Name: partnerData.name,
                     });
                 })
                 .catch(err => console.log(err));
         }
     }, [partnerID]);
 
+    
+
     function handleUpdatePartner(e) {
         e.preventDefault();
-
         axios.patch('/api/hotel/partners/' + partnerID, {
-            Name: valuesPartner.Name,
+            data: {
+                Name: valuesPartner.Name,
+            }
         })
             .then(response => {
                 console.log(response);

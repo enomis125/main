@@ -136,7 +136,7 @@ export default function ApplicationsCategories() {
                             buttonName={t("general.newRecord")}
                             buttonIcon={<FiPlus size={15} />}
                             buttonColor={"primary"}
-                            modalHeader={t("partners.new.modalHeader")}
+                            modalHeader={t("applicationsCategories.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
                         ></FormModal>
@@ -185,7 +185,7 @@ export default function ApplicationsCategories() {
                                                         buttonName={t("general.editRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
                                                         buttonColor={"transparent"}
-                                                        modalHeader={t("partners.edit.modalHeader")}
+                                                        modalHeader={t("applicationsCategories.edit.modalHeader")}
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${AppCategories.applicationCategoryID}`}
                                                         formTypeModal={11}

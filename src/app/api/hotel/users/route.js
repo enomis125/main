@@ -67,15 +67,15 @@ export async function PUT(request) {
         const response = await prisma.users.create({
             data: {
                 name: data.Name,
-                lastName: data.LastName,
+                lastName: data.LastName || "",
                 email: data.Email,
-                fiscalNumber: parseInt(data.FiscalNumber),
-                phoneNumber: parseInt(data.PhoneNumber),
-                address1: data.Address1,
-                address2: data.Address2,
-                country: data.Country,
-                district: data.District,
-                zipCode: data.ZipCode,
+                fiscalNumber: parseInt(data.FiscalNumber) || 0,
+                phoneNumber: parseInt(data.PhoneNumber) || 0,
+                address1: data.Address1 || "",
+                address2: data.Address2 || "",
+                country: data.Country || "",
+                district: data.District || "",
+                zipCode: data.ZipCode || "",
                 password: data.Password,
                 roleID: parseInt(data.RoleID),
                 organizationID: parseInt(data.OrganizationID)

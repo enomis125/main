@@ -29,17 +29,18 @@ export async function PATCH(request, context) {
         const { id } = context.params;
 
         const { data } = await request.json();
-
+        
         const response = await prisma.applications.update({
             where: {
                 id: parseInt(id),
             },
             data: {
-                description: data.description,
-                abbreviation: data.abbreviation,
-                categoryID: parseInt(data.categoryID),
-                partnerID: parseInt(data.partnerID)
+                description: data.Description,
+                abbreviation: data.Abbreviation,
+                categoryID: parseInt(data.CategoryID),
+                partnerID: parseInt(data.PartnerID)
             }
+
         })
         return new NextResponse(JSON.stringify({ status: 200 }));
 

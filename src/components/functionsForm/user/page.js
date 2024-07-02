@@ -34,7 +34,7 @@ export default function UserInsert() {
     const handleSubmitUser = (event) => {
         event.preventDefault();
 
-        if (!user.Name || !user.LastName || !user.Email || !user.FiscalNumber || !user.PhoneNumber || !user.Address1 || !user.Address2 || !user.Country || !user.District || !user.ZipCode || !user.Password || !user.OrganizationID || !user.RoleID) {
+        if (!user.Name || !user.Email || !user.Password || !user.OrganizationID || !user.RoleID) {
             alert("Preencha os campos corretamente");
             return;
         }
@@ -47,14 +47,14 @@ export default function UserInsert() {
                 OrganizationID: organizationID
             }
         })
-            .then(response => {console.log(response); window.location.reload();})
+            .then(response => { console.log(response); window.location.reload(); })
             .catch(err => console.log(err));
     };
 
-    return { 
-        handleInputUser, 
-        handleSubmitUser, 
-        handleOrganizationSelect 
+    return {
+        handleInputUser,
+        handleSubmitUser,
+        handleOrganizationSelect
     };
 }
 

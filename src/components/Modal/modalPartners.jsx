@@ -10,7 +10,7 @@ import { TfiSave } from "react-icons/tfi";
 import { LiaExpandSolid } from "react-icons/lia";
 import { MdClose } from "react-icons/md";
 
-import PartnerInsert, { partnerEdit } from "../functionsForm/partners/page";
+import PartnerInsert, { PartnerEdit } from "../functionsForm/partners/page";
 
 import { useTranslations } from 'next-intl';
 
@@ -25,7 +25,6 @@ const modalpartner = ({
     editIcon,
     modalEditArrow,
     modalEdit,
-    NamePartner
 }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -38,7 +37,7 @@ const modalpartner = ({
     };
 
     const { handleInputPartner, handleSubmitPartner } = PartnerInsert();
-    const { handleUpdatePartner, setValuesPartner, valuesPartner } = partnerEdit(partnerID);
+    const { handleUpdatePartner, setValuesPartner, valuesPartner } = PartnerEdit(partnerID);
 
     return (
         <>

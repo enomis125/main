@@ -347,7 +347,13 @@
             }
         },
         "applicationsCategories": {
-            "label": "Categorias das Aplicações "
+            "label": "Categorias das Aplicações ",
+            "new": {
+                "modalHeader": "Nova Categoria de Aplicação"
+            },
+            "edit": {
+                "modalHeader": "Editar Categoria de Aplicação"
+            }
         },
         "applications": {
             "label": "Applicações",

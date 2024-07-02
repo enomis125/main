@@ -47,11 +47,11 @@ export function AppCategoriesEdit(AppCategoryID) {
     useEffect(() => {
         axios.get('/api/hotel/applications-categories/' + AppCategoryID)
             .then(res => {
-                const appCategoriesData = res.data.response;
+                const appCategoriesData = res.data.response[0];
                 setValuesAppCategory({
                     ...valuesAppCategory,
-                    AppCategoryID: appCategoriesData.AppCategoryID,
-                    Name: appCategoriesData.Name,
+                    AppCategoryID: appCategoriesData.applicationCategoryID,
+                    Name: appCategoriesData.name,
                 });
             })
             .catch(err => console.log(err));

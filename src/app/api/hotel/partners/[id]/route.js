@@ -29,6 +29,7 @@ export async function PATCH(request, context) {
         const { id } = context.params;
 
         const { data } = await request.json();
+        console.log("13123" + data.Name)
 
         const response = await prisma.partners.update({
             where: {

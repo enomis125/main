@@ -68,6 +68,7 @@ export default function users() {
     useEffect(() => {
         const getDataApplications = async () => {
             const response = await axios.get("/api/hotel/applications");
+            console.log(response)
             setApplications(response.data.response);
         };
         getDataApplications();
@@ -173,8 +174,8 @@ export default function users() {
                                 <TableRow key={index}>
                                     <TableCell>{Applications.description}</TableCell>
                                     <TableCell>{Applications.abbreviation}</TableCell>
-                                    <TableCell>{Applications.categoryID}</TableCell>
-                                    <TableCell>{Applications.partnerID}</TableCell>
+                                    <TableCell>{Applications.application_categories.name}</TableCell>
+                                    <TableCell>{Applications.partners.name}</TableCell>
                                     <TableCell className="flex justify-center">
                                         <Dropdown>
                                             <DropdownTrigger>
