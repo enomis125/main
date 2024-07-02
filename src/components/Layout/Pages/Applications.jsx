@@ -3,9 +3,10 @@ import React from "react";
 
 //import de axios para BD
 import axios from "axios";
-import { useSession } from "next-auth/react"
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react"
+
 import {
     Input,
     Button,
@@ -111,7 +112,6 @@ export default function users() {
         }
     };
 
-    console.log("apagar depois");
     return (
         <>
             <main>
