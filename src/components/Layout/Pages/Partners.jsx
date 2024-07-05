@@ -72,7 +72,7 @@ export default function partner() {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1); 
+        setPage(1);
     };
 
     const handleSearchChange = (value) => {
@@ -103,11 +103,20 @@ export default function partner() {
         if (confirmDelete) {
             try {
                 const response = await axios.delete(`/api/hotel/partners/` + partnerID);
-                console.log(response.data);
                 alert("Parceiro removido com sucesso!");
                 window.location.reload();
             } catch (error) {
-                console.error("Erro ao remover Parceiro:", error.message);
+                if (error.response) {
+                    if (error.response.status === 409) {
+                        alert("Cannot delete partner. It is associated with other records.");
+                    } else {
+                        alert(`Erro: ${error.response.data.error}`);
+                    }
+                } else if (error.request) {
+                    alert('Erro: Sem resposta do servidor.');
+                } else {
+                    alert(`Erro: ${error.message}`);
+                }
             }
         }
     };

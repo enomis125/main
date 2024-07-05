@@ -134,13 +134,10 @@ export default function AllUsers() {
                         className="h-full overflow-auto"
                     >
                         <TableHeader>
-                        {/* <TableColumn className="bg-primary-600 text-white font-bold">
-                                ID
-                        </TableColumn> */}
                             <TableColumn className="bg-primary-600 text-white font-bold">
                                 {t("allUsers.datatable.name")}
                             </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
+                            <TableColumn className="bg-primary-600 text-white font-bold w-1/3">
                                 {t("allUsers.datatable.email")}
                             </TableColumn>
                             <TableColumn className="bg-primary-600 text-white font-bold">
@@ -156,7 +153,6 @@ export default function AllUsers() {
                         <TableBody>
                             {items.map((user, index) => (
                                 <TableRow key={index}>
-                                    {/* <TableCell>{user.userID}</TableCell> */}
                                     <TableCell>{user.name}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.organization}</TableCell>

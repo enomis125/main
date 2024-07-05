@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import { useSession } from "next-auth/react";
 
 export default function ApplicationInsert() {
     const [application, setApplication] = useState({
@@ -55,8 +54,6 @@ export default function ApplicationInsert() {
 
 export function ApplicationEdit(applicationID) {
 
-    const { data: session } = useSession();
-    
     const [valuesApplication, setValuesApplication] = useState({
         Description: '',
         Abbreviation: '',

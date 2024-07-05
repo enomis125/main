@@ -61,6 +61,11 @@ export async function DELETE(request, context) {
         return new NextResponse(JSON.stringify({ status: 200 }));
 
     } catch (error) {
+
+        if (error.code === 'P2003') {
+            return new NextResponse(JSON.stringify({ error: 'Cannot delete category. It is associated with other records.' }), { status: 409 });
+        }
+
         return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
     } finally {
         await prisma.$disconnect();
