@@ -56,6 +56,7 @@ const modalAppCategory = ({
                         hideCloseButton="true"
                         isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
                         <ModalContent>
+                            
                             {(onClose) => (
                                 <>
                                     <form onSubmit={handleSubmitAppCategory}>

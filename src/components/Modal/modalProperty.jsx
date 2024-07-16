@@ -135,7 +135,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         }
     };
 
-    const handleModalOpenChange = async () => {
+    const handleModalOpenChange = () => {
         setIsModalOpen(!isModalOpen);
     };
 
@@ -143,63 +143,76 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
     const handleSwitchToggle = async (applicationID, active) => {
         try {
-            const requestData = {
-                propertyID: parseInt(idProperty),
-                applicationID: parseInt(applicationID)
-            };
-
-            var response
             console.log("Switch active state:", active);
             setSwitchState(active);
-            console.log(active)
 
             if (active) {
+                const property = await axios.get(`/api/hotel/properties/${idProperty}`);
+                const organizationID = property.data.response.organizationID;
 
-                const property = await axios.get("/api/hotel/properties/" + idProperty)
+                const application = await axios.get(`/api/hotel/applications/${applicationID}`);
+                const applicationName = application.data.response.description;
 
-                const organizationID = property.data.response.organizationID
+                if (applicationName === "SysPMS") {
 
-                const organizationApplication = await axios.get("/api/hotel/organizations-applications?organization=" + organizationID + "&application=" + applicationID)
-
-
-                if (organizationApplication.data.response == null) {
-
-                    console.log("Organization application is null, opening modal");
                     handleModalOpenChange();
-
-                    const newOrganizationApplication = await axios.put("/api/hotel/organizations-applications", {
-                        data: {
-                            organizationID: organizationID,
-                            applicationID: applicationID,
-                            connectionString: connectionString
-                        }
-                    })
+                    return;
                 }
-
-                response = await axios.put("/api/hotel/properties-applications", {
-                    data: {
-                        propertyID: idProperty,
-                        applicationID: applicationID
-                    }
+                const response = await axios.put("/api/hotel/properties-applications", {
+                    propertyID: idProperty,
+                    applicationID: applicationID
                 });
 
+                if (response.status === 200) {
+                    console.log("Aplicação ativada com sucesso na propriedade.");
+                } else {
+                    console.error("Falha ao ativar a aplicação na propriedade.");
+                }
             } else {
-                const propertyApplication = await axios.get("/api/hotel/properties-applications?propertyID=" + idProperty + "&applicationID=" + applicationID);
+                const propertyApplication = await axios.get(`/api/hotel/properties-applications?propertyID=${idProperty}&applicationID=${applicationID}`);
+                const response = await axios.delete(`/api/hotel/properties-applications/${propertyApplication.data.response.propertyApplicationID}`);
 
-                response = await axios.delete("/api/hotel/properties-applications/" + propertyApplication.data.response.propertyApplicationID)
-            }
-
-            if (response.status === 200) {
-                console.log("Aplicação ativada com sucesso na propriedade.");
-            } else {
-                console.error("Falha ao ativar a aplicação na propriedade.");
+                if (response.status === 200) {
+                    console.log("Aplicação desativada com sucesso na propriedade.");
+                } else {
+                    console.error("Falha ao desativar a aplicação na propriedade.");
+                }
             }
         } catch (error) {
-            console.error("Erro ao enviar solicitação PUT:", error);
+            console.error("Erro ao enviar solicitação HTTP:", error);
         }
     };
 
+    const handleInputChange = (e) => {
+        setConnectionString(e.target.value);
+    };
+    const [connectionString, setConnectionString] = useState('');
 
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('/api/hotel/organizations-applications', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    organizationID: idProperty,
+                    applicationID: idApplication,
+                    connectionString: connectionString
+                })
+            });
+
+            if (response.ok) {
+                alert('Connection string added successfully');
+                handleCloseModal();
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.error}`);
+            }
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    };
 
     useEffect(() => {
         async function fetchUserCount() {
@@ -926,22 +939,23 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                     isKeyboardDismissDisabled={true}
                                                                                                 >
                                                                                                     <ModalContent>
-                                                                                                        {(onClose) => (
-                                                                                                            <>
-                                                                                                                <ModalHeader className="flex flex-col gap-1">New Connection String</ModalHeader>
-                                                                                                                <ModalBody>
-                                                                                                                    <Input />
-                                                                                                                </ModalBody>
-                                                                                                                <ModalFooter>
-                                                                                                                    <Button color="danger" variant="light" onPress={onClose}>
-                                                                                                                        X
-                                                                                                                    </Button>
-                                                                                                                    <Button color="primary" onPress={onClose}>
-                                                                                                                        ADD
-                                                                                                                    </Button>
-                                                                                                                </ModalFooter>
-                                                                                                            </>
-                                                                                                        )}
+                                                                                                        <ModalHeader className="flex flex-col gap-1">New Connection String</ModalHeader>
+                                                                                                        <ModalBody>
+                                                                                                            <Input
+                                                                                                                type="text"
+                                                                                                                placeholder="Enter connection string"
+                                                                                                                value={connectionString}
+                                                                                                                onChange={handleInputChange}
+                                                                                                            />
+                                                                                                        </ModalBody>
+                                                                                                        <ModalFooter>
+                                                                                                            <Button color="danger" variant="light" onClick={handleModalOpenChange}>
+                                                                                                                Cancel
+                                                                                                            </Button>
+                                                                                                            <Button color="primary" onClick={handleSubmit}>
+                                                                                                                Add
+                                                                                                            </Button>
+                                                                                                        </ModalFooter>
                                                                                                     </ModalContent>
                                                                                                 </Modal>
                                                                                             </TableCell>
@@ -1138,7 +1152,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                 defaultSelectedKey={valuesProperty.OrganizationID}
                                                                 className="w-1/4"
                                                                 defaultInputValue={OrganizationName}
-                                                                onSelectionChange={handleOrganizationEdit} 
+                                                                onSelectionChange={handleOrganizationEdit}
                                                             >
                                                                 {items.map((item) => (
                                                                     <AutocompleteItem key={item.value} value={item.value}>{item.OrganizationName}</AutocompleteItem>
