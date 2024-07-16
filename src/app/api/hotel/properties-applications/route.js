@@ -37,9 +37,9 @@ export async function PUT(request) {
         const { data } = await request.json();
         const newPropertyApplication = await prisma.properties_applications.create({
             data: {
+                
                 propertyID: parseInt(data.propertyID),
                 applicationID: parseInt(data.applicationID),
-
             }
         });
 

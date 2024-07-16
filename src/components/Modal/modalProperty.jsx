@@ -143,24 +143,44 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
     const handleSwitchToggle = async (applicationID, active) => {
         try {
+            const requestData = {
+                propertyID: parseInt(idProperty),
+                applicationID: parseInt(applicationID)
+            };
             console.log("Switch active state:", active);
             setSwitchState(active);
 
             if (active) {
-                const property = await axios.get(`/api/hotel/properties/${idProperty}`);
+                const property = await axios.get("/api/hotel/properties/" + idProperty)
+
                 const organizationID = property.data.response.organizationID;
 
                 const application = await axios.get(`/api/hotel/applications/${applicationID}`);
                 const applicationName = application.data.response.description;
+                const organizationApplication = await axios.get("/api/hotel/organizations-applications?organization=" + organizationID + "&application=" + applicationID)
 
                 if (applicationName === "SysPMS") {
+                    if (organizationApplication.data.response == null) {
 
-                    handleModalOpenChange();
-                    return;
+                        console.log("Organization application is null, opening modal");
+                        
+                        handleModalOpenChange();
+
+                        const newOrganizationApplication = await axios.put("/api/hotel/organizations-applications", {
+                            data: {
+                                organizationID: organizationID,
+                                applicationID: applicationID,
+                                connectionString: connectionString
+                            }
+                        })
+                    }
                 }
+                
                 const response = await axios.put("/api/hotel/properties-applications", {
-                    propertyID: idProperty,
-                    applicationID: applicationID
+                    data:{
+                        propertyID: idProperty,
+                        applicationID: applicationID
+                    }
                 });
 
                 if (response.status === 200) {
@@ -169,17 +189,13 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                     console.error("Falha ao ativar a aplicação na propriedade.");
                 }
             } else {
-                const propertyApplication = await axios.get(`/api/hotel/properties-applications?propertyID=${idProperty}&applicationID=${applicationID}`);
-                const response = await axios.delete(`/api/hotel/properties-applications/${propertyApplication.data.response.propertyApplicationID}`);
+                const propertyApplication = await axios.get("/api/hotel/properties-applications?propertyID=" + idProperty + "&applicationID=" + applicationID);
 
-                if (response.status === 200) {
-                    console.log("Aplicação desativada com sucesso na propriedade.");
-                } else {
-                    console.error("Falha ao desativar a aplicação na propriedade.");
-                }
+                const response = await axios.delete("/api/hotel/properties-applications/" + propertyApplication.data.response.propertyApplicationID)
             }
+            
         } catch (error) {
-            console.error("Erro ao enviar solicitação HTTP:", error);
+            console.error("Erro ao enviar solicitação PUT:", error);
         }
     };
 
@@ -189,17 +205,19 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const [connectionString, setConnectionString] = useState('');
 
     const handleSubmit = async () => {
+
+        const property = await axios.get("/api/hotel/properties/" + idProperty)
+        const organizationID = property.data.response.organizationID;
+        const applications = await axios.get(`/api/hotel/applications`);
+        const applicationID = applications.data.response.id
+
         try {
-            const response = await fetch('/api/hotel/organizations-applications', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    organizationID: idProperty,
-                    applicationID: idApplication,
+            const response = await axios.put('/api/hotel/organizations-applications', { 
+                data:{
+                    organizationID: organizationID,
+                    applicationID: applicationID,
                     connectionString: connectionString
-                })
+                }
             });
 
             if (response.ok) {
