@@ -30,6 +30,10 @@ export default function UserInsert() {
     const handleOrganizationSelect = (selectedOrganization) => {
         setUser({ ...user, OrganizationID: selectedOrganization });
     };
+    
+    const handleRoleSelect = (selectedRole) => {
+        setUser({ ...user, RoleID: selectedRole });
+    }
 
     const handleSubmitUser = (event) => {
         event.preventDefault();
@@ -54,7 +58,8 @@ export default function UserInsert() {
     return {
         handleInputUser,
         handleSubmitUser,
-        handleOrganizationSelect
+        handleOrganizationSelect,
+        handleRoleSelect
     };
 }
 
@@ -111,10 +116,18 @@ export function userEdit(userID) {
         }));
     };
 
+    const handleRoleEdit = (selectedRole) => {
+        setValuesUser(prevValues => ({
+            ...prevValues,
+            RoleID: selectedRole
+        }));
+    };
+
     function handleUpdateUser(e) {
         e.preventDefault();
 
         const organizationID = valuesUser.OrganizationID || session.user.organization;
+        const roleID = valuesUser.RoleID
 
         axios.patch('/api/hotel/users/' + userID, {
             data: {
@@ -129,7 +142,7 @@ export function userEdit(userID) {
                 District: valuesUser.District,
                 ZipCode: valuesUser.ZipCode,
                 Password: valuesUser.Password,
-                RoleID: valuesUser.RoleID,
+                RoleID: roleID,
                 OrganizationID: organizationID
             }
         })
@@ -144,6 +157,7 @@ export function userEdit(userID) {
         handleUpdateUser,
         setValuesUser,
         handleOrganizationEdit,
+        handleRoleEdit,
         valuesUser
     };
 }

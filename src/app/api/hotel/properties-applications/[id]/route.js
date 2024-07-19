@@ -53,6 +53,12 @@ export async function DELETE(request, context) {
     try {
         const { id } = context.params;
 
+        const users = await prisma.users_properties_applications.deleteMany({
+            where: {
+                propertyApplicationID: parseInt(id),
+            }
+        })
+
         const propertyApplication = await prisma.properties_applications.delete({
             where: {
                 propertyApplicationID: parseInt(id),

@@ -176,6 +176,7 @@ export default function AllUsers() {
                                                         formTypeModal={11}
                                                         userID={user.userID}
                                                         NameUser={user.name}
+                                                        RoleName={user.role}
                                                         OrganizationName={user.organization}
                                                         PropertiesUserName={user.properties}
                                                     />
@@ -193,6 +194,7 @@ export default function AllUsers() {
                                                         userID={user.userID}
                                                         NameUser={user.name}
                                                         OrganizationName={user.organization}
+                                                        RoleName={user.role}
                                                         PropertiesUserName={user.properties}
                                                     />
                                                 </DropdownItem>

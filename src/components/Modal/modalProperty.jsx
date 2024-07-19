@@ -115,18 +115,24 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
     const toggleThirdModal = async () => {
         setIsThirdModalOpen(!isThirdModalOpen);
-        if (!applicationFetched) {
+
+        if (!applicationFetched && isThirdModalOpen) {
             setIsLoading(true);
             try {
                 let response;
-                if (isAdmin()) { // Se for um administrador
+                if (isAdmin()) {
                     response = await axios.get(`/api/hotel/applications`);
-                } else { // Se não for um administrador
+                } else {
                     response = await axios.get(`/api/hotel/properties/${idProperty}/applications`);
                 }
+
                 setPropertyApplications(response.data.response);
                 console.log(response.data.response)
                 setApplicationFetched(true);
+
+                // Agora você chama fetchAndSetSwitchStates apenas quando os dados são buscados pela primeira vez
+                fetchAndSetSwitchStates(idProperty);
+
             } catch (error) {
                 console.error("Erro ao encontrar as aplicações:", error.message);
             } finally {
@@ -139,7 +145,43 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         setIsModalOpen(!isModalOpen);
     };
 
-    const [switchState, setSwitchState] = useState(false);
+    const [switchStates, setSwitchStates] = useState({});
+
+    const fetchAndSetSwitchStates = async (idProperty) => {
+        try {
+            const response = await axios.get(`/api/hotel/properties-applications?propertyID=${idProperty}`);
+            const allApplications = await axios.get(`/api/hotel/applications`);
+
+            const propertyApps = response.data.response || [];
+            const allapplications = allApplications.data.response || [];
+
+            console.log("Property Applications:", propertyApps);
+            console.log("ID Property:", idProperty);
+
+            const initialSwitchStates = {};
+
+            allapplications.forEach(app => {
+                propertyApps.forEach(propertyApp => {
+                    if (app.id === propertyApp.applicationID) {
+                        initialSwitchStates[app.id] = true;
+                    }
+
+                });
+            });
+            console.log(initialSwitchStates)
+
+            setSwitchStates(initialSwitchStates);
+        } catch (error) {
+            console.error("Erro ao buscar propriedades-aplicações:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAndSetSwitchStates(idProperty);
+    }, [idProperty]);
+
+    const [appID, setAppID] = useState(null);
+    const [connectionString, setConnectionString] = useState('');
 
     const handleSwitchToggle = async (applicationID, active) => {
         try {
@@ -148,87 +190,78 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                 applicationID: parseInt(applicationID)
             };
             console.log("Switch active state:", active);
-            setSwitchState(active);
-
+            setSwitchStates(prevStates => ({
+                ...prevStates,
+                [applicationID]: active
+            }));
+    
             if (active) {
-                const property = await axios.get("/api/hotel/properties/" + idProperty)
-
+                const property = await axios.get(`/api/hotel/properties/${idProperty}`);
                 const organizationID = property.data.response.organizationID;
-
+    
                 const application = await axios.get(`/api/hotel/applications/${applicationID}`);
                 const applicationName = application.data.response.description;
-                const organizationApplication = await axios.get("/api/hotel/organizations-applications?organization=" + organizationID + "&application=" + applicationID)
-
-                if (applicationName === "SysPMS") {
-                    if (organizationApplication.data.response == null) {
-
-                        console.log("Organization application is null, opening modal");
-                        
-                        handleModalOpenChange();
-
-                        const newOrganizationApplication = await axios.put("/api/hotel/organizations-applications", {
-                            data: {
-                                organizationID: organizationID,
-                                applicationID: applicationID,
-                                connectionString: connectionString
-                            }
-                        })
-                    }
-                }
-                
-                const response = await axios.put("/api/hotel/properties-applications", {
-                    data:{
-                        propertyID: idProperty,
-                        applicationID: applicationID
-                    }
-                });
-
-                if (response.status === 200) {
-                    console.log("Aplicação ativada com sucesso na propriedade.");
+                const organizationApplication = await axios.get(`/api/hotel/organizations-applications?organization=${organizationID}&application=${applicationID}`);
+                console.log("Organization Application Response:", organizationApplication);
+    
+                if (applicationName === "SysPMS" && organizationApplication.data.response == null) {
+                    console.log("Organization application is null, opening modal");
+                    setAppID(applicationID);  // Guarde o applicationID no estado
+                    setIsModalOpen(true);  // Abra o modal
                 } else {
-                    console.error("Falha ao ativar a aplicação na propriedade.");
+                    const response = await axios.put("/api/hotel/properties-applications", {
+                        data: requestData
+                    });
+    
+                    if (response.status === 200) {
+                        console.log("Aplicação ativada com sucesso na propriedade.");
+                    } else {
+                        console.error("Falha ao ativar a aplicação na propriedade.");
+                    }
                 }
             } else {
-                const propertyApplication = await axios.get("/api/hotel/properties-applications?propertyID=" + idProperty + "&applicationID=" + applicationID);
-
-                const response = await axios.delete("/api/hotel/properties-applications/" + propertyApplication.data.response.propertyApplicationID)
+                const propertyApplication = await axios.get(`/api/hotel/properties-applications?propertyID=${idProperty}&applicationID=${applicationID}`);
+                const response = await axios.delete(`/api/hotel/properties-applications/${propertyApplication.data.response.propertyApplicationID}`);
+    
+                if (response.status === 200) {
+                    console.log("Aplicação desativada com sucesso na propriedade.");
+                } else {
+                    console.error("Falha ao desativar a aplicação na propriedade.");
+                }
             }
-            
         } catch (error) {
             console.error("Erro ao enviar solicitação PUT:", error);
         }
     };
-
+    
     const handleInputChange = (e) => {
         setConnectionString(e.target.value);
     };
-    const [connectionString, setConnectionString] = useState('');
-
+    
     const handleSubmit = async () => {
-
-        const property = await axios.get("/api/hotel/properties/" + idProperty)
-        const organizationID = property.data.response.organizationID;
-        const applications = await axios.get(`/api/hotel/applications`);
-        const applicationID = applications.data.response.id
-
         try {
-            const response = await axios.put('/api/hotel/organizations-applications', { 
-                data:{
+            const property = await axios.get(`/api/hotel/properties/${idProperty}`);
+            const organizationID = property.data.response.organizationID;
+            console.log("OrganizationID:", organizationID);
+            console.log("ApplicationID:", appID);  // Usa appID do estado
+            console.log("ConnectionString:", connectionString);
+    
+            const response = await axios.put('/api/hotel/organizations-applications', {
+                data: {
                     organizationID: organizationID,
-                    applicationID: applicationID,
+                    applicationID: appID,  // Usa appID do estado
                     connectionString: connectionString
                 }
             });
-
-            if (response.ok) {
+    
+            if (response.status === 200) { // Verifica se o status da resposta é 200
                 alert('Connection string added successfully');
-                handleCloseModal();
+                setIsModalOpen(false);  // Fecha o modal após o sucesso
             } else {
-                const errorData = await response.json();
-                alert(`Error: ${errorData.error}`);
+                console.log("Erro", response.data.error);
             }
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            console.log(`Error: ${error.message}`);
         }
     };
 
@@ -264,7 +297,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         fetchOrganizations();
     }, []);
 
-
+    console.log(switchStates[2])
     return (
         <>
             {formTypeModal === 10 && ( //Properties
@@ -572,6 +605,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 <Switch
                                                                                                     className="mr-auto"
                                                                                                     size="sm"
+                                                                                                    defaultSelected={switchStates[application.id] || false}
+                                                                                                    isSelected={switchStates[application.id] || false}
                                                                                                     onChange={(e) => handleSwitchToggle(application.id, e.target.checked)}
                                                                                                 />
                                                                                             </TableCell>
@@ -947,7 +982,8 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 <Switch
                                                                                                     className="mr-auto"
                                                                                                     size="sm"
-                                                                                                    checked={switchState}
+                                                                                                    defaultSelected={switchStates[application.id] || false}
+                                                                                                    isSelected={switchStates[application.id] || false}
                                                                                                     onChange={(e) => handleSwitchToggle(application.id, e.target.checked)}
                                                                                                 />
                                                                                                 <Modal
@@ -955,6 +991,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                     onOpenChange={handleModalOpenChange}
                                                                                                     isDismissable={false}
                                                                                                     isKeyboardDismissDisabled={true}
+                                                                                                    hideCloseButton={true}
                                                                                                 >
                                                                                                     <ModalContent>
                                                                                                         <ModalHeader className="flex flex-col gap-1">New Connection String</ModalHeader>

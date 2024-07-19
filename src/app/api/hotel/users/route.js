@@ -13,6 +13,11 @@ export async function GET(request) {
                     name: true
                 }
             },
+            roles:{
+                select: {
+                    name: true
+                }
+            },
             properties_users: true
         }
     });
@@ -30,6 +35,7 @@ export async function GET(request) {
             country: user.country,
             district: user.district,
             zipCode: user.zipCode,
+            role: user.roles.name,
             organization: user.organizations.name,
             properties: []
         };

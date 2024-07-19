@@ -32,7 +32,8 @@ const modaluser = ({
     modalEdit,
     OrganizationName,
     PropertiesUserName,
-    NameUser
+    NameUser,
+    RoleName
 }) => {
 
     console.log(userID)
@@ -53,8 +54,8 @@ const modaluser = ({
     };
 
 
-    const { handleInputUser, handleSubmitUser, handleOrganizationSelect } = userInsert();
-    const { handleUpdateUser, setValuesUser, handleOrganizationEdit, valuesUser } = userEdit(userID);
+    const { handleInputUser, handleSubmitUser, handleOrganizationSelect, handleRoleSelect } = userInsert();
+    const { handleUpdateUser, setValuesUser, handleOrganizationEdit, handleRoleEdit, valuesUser } = userEdit(userID);
 
     const [items, setItems] = useState([]);
 
@@ -74,6 +75,26 @@ const modaluser = ({
         };
 
         fetchOrganizations();
+    }, []);
+
+    const [itemsRoles, setItemRoles] = useState([]);
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const res = await axios.get("/api/hotel/roles");
+                console.log("aaaa", res.data);
+
+                if (res.status === 200) {
+                    setItemRoles(res.data.response.map(role => ({ value: role.roleID, RoleName: role.name })));
+                } else {
+                    console.error('Failed to fetch roles:', res.data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching roles:', error);
+            }
+        };
+        fetchRoles();
     }, []);
 
 
@@ -168,7 +189,18 @@ const modaluser = ({
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
                                                         <Input type="password" className="w-1/4" name="Password" onChange={handleInputUser} variant={variant} label={t("profiles.users.passwordLabel")} />
-                                                        <Input type="number" className="w-1/4" name="RoleID" onChange={handleInputUser} variant={variant} label={t("profiles.users.roleLabel")} />
+                                                        <Autocomplete
+                                                            variant={variant}
+                                                            label={t("profiles.users.roleLabel")}
+                                                            defaultItems={itemsRoles}
+                                                            defaultSelectedKey=""
+                                                            className="w-1/4"
+                                                            onSelectionChange={handleRoleSelect}
+                                                        >
+                                                            {itemsRoles.map((item) => (
+                                                                <AutocompleteItem key={item.value} value={item.value}>{item.RoleName}</AutocompleteItem>
+                                                            ))}
+                                                        </Autocomplete>
                                                         {isAdmin() && (
                                                             <Autocomplete
                                                                 variant={variant}
@@ -295,8 +327,19 @@ const modaluser = ({
                                                 {variants.map((variant) => (
                                                     <div key={variant} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                                         <Input type="password" className="w-1/4" name="Password" value={valuesUser.Password} onChange={e => setValuesUser({ ...valuesUser, Password: e.target.value })} variant={variant} label={t("profiles.users.passwordLabel")} />
-                                                        <Input type="number" className="w-1/4" name="RoleID" value={valuesUser.RoleID} onChange={e => setValuesUser({ ...valuesUser, RoleID: e.target.value })} variant={variant} label={t("profiles.users.roleLabel")} />
-
+                                                        <Autocomplete
+                                                                variant={variant}
+                                                                label={t("profiles.users.roleLabel")}
+                                                                defaultItems={items}
+                                                                defaultSelectedKey={valuesUser.RoleName}
+                                                                className="w-1/4"
+                                                                defaultInputValue={RoleName}
+                                                                onSelectionChange={handleRoleEdit}
+                                                            >
+                                                                {itemsRoles.map((item) => (
+                                                                    <AutocompleteItem key={item.value} value={item.value}>{item.RoleName}</AutocompleteItem>
+                                                                ))}
+                                                            </Autocomplete>
                                                         {isAdmin() && (
                                                             <Autocomplete
                                                                 variant={variant}
