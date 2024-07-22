@@ -197,7 +197,6 @@ export default function Contact() {
                                                 <Button
                                                     variant="light"
                                                     className="flex flex-row justify-center"
-
                                                 >
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
@@ -229,15 +228,6 @@ export default function Contact() {
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
-                                        {/* <FormModals
-                                                        buttonName={<BiSpreadsheet  size={20} className="text-gray-400"/>}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={"Licença"}
-                                                        variant="light"
-                                                        className="flex flex-row justify-center"
-                                                        formTypeModal={13}
-                                                        idProperty={property.propertyID}
-                                                    ></FormModals> */}
                                     </TableCell>
                                 </TableRow>
                             ))}

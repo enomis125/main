@@ -116,7 +116,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
     const toggleThirdModal = async () => {
         setIsThirdModalOpen(!isThirdModalOpen);
 
-        if (!applicationFetched && isThirdModalOpen) {
+        if (!applicationFetched) {
             setIsLoading(true);
             try {
                 let response;
@@ -141,10 +141,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
         }
     };
 
-    const handleModalOpenChange = () => {
-        setIsModalOpen(!isModalOpen);
-    };
-
     const [switchStates, setSwitchStates] = useState({});
 
     const fetchAndSetSwitchStates = async (idProperty) => {
@@ -154,9 +150,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
             const propertyApps = response.data.response || [];
             const allapplications = allApplications.data.response || [];
-
-            console.log("Property Applications:", propertyApps);
-            console.log("ID Property:", idProperty);
 
             const initialSwitchStates = {};
 
@@ -168,7 +161,6 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
                 });
             });
-            console.log(initialSwitchStates)
 
             setSwitchStates(initialSwitchStates);
         } catch (error) {
@@ -182,8 +174,9 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
     const [appID, setAppID] = useState(null);
     const [connectionString, setConnectionString] = useState('');
+    const [modalStates, setModalStates] = useState({});
 
-    const handleSwitchToggle = async (applicationID, active) => {
+    const handleSwitchToggle = async (applicationID, active, rowID) => {
         try {
             const requestData = {
                 propertyID: parseInt(idProperty),
@@ -194,25 +187,29 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                 ...prevStates,
                 [applicationID]: active
             }));
-    
+
             if (active) {
                 const property = await axios.get(`/api/hotel/properties/${idProperty}`);
                 const organizationID = property.data.response.organizationID;
-    
+
                 const application = await axios.get(`/api/hotel/applications/${applicationID}`);
                 const applicationName = application.data.response.description;
                 const organizationApplication = await axios.get(`/api/hotel/organizations-applications?organization=${organizationID}&application=${applicationID}`);
                 console.log("Organization Application Response:", organizationApplication);
-    
+
                 if (applicationName === "SysPMS" && organizationApplication.data.response == null) {
                     console.log("Organization application is null, opening modal");
-                    setAppID(applicationID);  // Guarde o applicationID no estado
-                    setIsModalOpen(true);  // Abra o modal
+                    setAppID(applicationID);
+                    setModalStates(prevStates => ({
+                        ...prevStates,
+                        [rowID]: true
+                    }));
                 } else {
+                    alert("A aplicação já está associada a essa propriedade.");
                     const response = await axios.put("/api/hotel/properties-applications", {
                         data: requestData
                     });
-    
+
                     if (response.status === 200) {
                         console.log("Aplicação ativada com sucesso na propriedade.");
                     } else {
@@ -222,7 +219,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             } else {
                 const propertyApplication = await axios.get(`/api/hotel/properties-applications?propertyID=${idProperty}&applicationID=${applicationID}`);
                 const response = await axios.delete(`/api/hotel/properties-applications/${propertyApplication.data.response.propertyApplicationID}`);
-    
+
                 if (response.status === 200) {
                     console.log("Aplicação desativada com sucesso na propriedade.");
                 } else {
@@ -233,36 +230,46 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
             console.error("Erro ao enviar solicitação PUT:", error);
         }
     };
-    
+
     const handleInputChange = (e) => {
         setConnectionString(e.target.value);
     };
-    
+
     const handleSubmit = async () => {
         try {
             const property = await axios.get(`/api/hotel/properties/${idProperty}`);
             const organizationID = property.data.response.organizationID;
             console.log("OrganizationID:", organizationID);
-            console.log("ApplicationID:", appID);  // Usa appID do estado
+            console.log("ApplicationID:", appID);
             console.log("ConnectionString:", connectionString);
-    
+
             const response = await axios.put('/api/hotel/organizations-applications', {
                 data: {
                     organizationID: organizationID,
-                    applicationID: appID,  // Usa appID do estado
+                    applicationID: appID,
                     connectionString: connectionString
                 }
             });
-    
-            if (response.status === 200) { // Verifica se o status da resposta é 200
+
+            if (response.status === 200) {
                 alert('Connection string added successfully');
-                setIsModalOpen(false);  // Fecha o modal após o sucesso
+                setModalStates(prevStates => ({
+                    ...prevStates,
+                    [appID]: false
+                }));
             } else {
                 console.log("Erro", response.data.error);
             }
         } catch (error) {
             console.log(`Error: ${error.message}`);
         }
+    };
+
+    const handleModalClose = (rowID) => {
+        setModalStates(prevStates => ({
+            ...prevStates,
+            [rowID]: false
+        }));
     };
 
     useEffect(() => {
@@ -296,8 +303,10 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
 
         fetchOrganizations();
     }, []);
+    useEffect(() => {
+        console.log('Modal state changed:', isModalOpen);
+    }, [isModalOpen]);
 
-    console.log(switchStates[2])
     return (
         <>
             {formTypeModal === 10 && ( //Properties
@@ -984,35 +993,37 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                     size="sm"
                                                                                                     defaultSelected={switchStates[application.id] || false}
                                                                                                     isSelected={switchStates[application.id] || false}
-                                                                                                    onChange={(e) => handleSwitchToggle(application.id, e.target.checked)}
+                                                                                                    onChange={(e) => handleSwitchToggle(application.id, e.target.checked, application.id)}
                                                                                                 />
-                                                                                                <Modal
-                                                                                                    isOpen={isModalOpen}
-                                                                                                    onOpenChange={handleModalOpenChange}
-                                                                                                    isDismissable={false}
-                                                                                                    isKeyboardDismissDisabled={true}
-                                                                                                    hideCloseButton={true}
-                                                                                                >
-                                                                                                    <ModalContent>
-                                                                                                        <ModalHeader className="flex flex-col gap-1">New Connection String</ModalHeader>
-                                                                                                        <ModalBody>
-                                                                                                            <Input
-                                                                                                                type="text"
-                                                                                                                placeholder="Enter connection string"
-                                                                                                                value={connectionString}
-                                                                                                                onChange={handleInputChange}
-                                                                                                            />
-                                                                                                        </ModalBody>
-                                                                                                        <ModalFooter>
-                                                                                                            <Button color="danger" variant="light" onClick={handleModalOpenChange}>
-                                                                                                                Cancel
-                                                                                                            </Button>
-                                                                                                            <Button color="primary" onClick={handleSubmit}>
-                                                                                                                Add
-                                                                                                            </Button>
-                                                                                                        </ModalFooter>
-                                                                                                    </ModalContent>
-                                                                                                </Modal>
+                                                                                                {modalStates[application.id] && (
+                                                                                                    <Modal
+                                                                                                        isOpen={modalStates[application.id]}
+                                                                                                        onOpenChange={() => handleModalClose(application.id)}
+                                                                                                        isDismissable={false}
+                                                                                                        isKeyboardDismissDisabled={true}
+                                                                                                        hideCloseButton={true}
+                                                                                                    >
+                                                                                                        <ModalContent>
+                                                                                                            <ModalHeader className="flex flex-col gap-1">New Connection String</ModalHeader>
+                                                                                                            <ModalBody>
+                                                                                                                <Input
+                                                                                                                    type="text"
+                                                                                                                    placeholder="Enter connection string"
+                                                                                                                    value={connectionString}
+                                                                                                                    onChange={handleInputChange}
+                                                                                                                />
+                                                                                                            </ModalBody>
+                                                                                                            <ModalFooter>
+                                                                                                                <Button color="danger" variant="light" onClick={() => handleModalClose(application.id)}>
+                                                                                                                    Cancel
+                                                                                                                </Button>
+                                                                                                                <Button color="primary" onClick={handleSubmit}>
+                                                                                                                    Add
+                                                                                                                </Button>
+                                                                                                            </ModalFooter>
+                                                                                                        </ModalContent>
+                                                                                                    </Modal>
+                                                                                                )}
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
                                                                                                 {application.description === "OnPremPMS" ? (

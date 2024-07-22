@@ -87,7 +87,7 @@ export default function users() {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1); // Reset page to 1 when changing rows per page
+        setPage(1); 
     };
 
     const handleSearchChange = (value) => {
@@ -152,9 +152,6 @@ export default function users() {
                         className="h-full overflow-auto"
                     >
                         <TableHeader>
-                        {/*<TableColumn className="bg-primary-600 text-white font-bold">
-                                ID
-                    </TableColumn>`*/}
                             <TableColumn className="bg-primary-600 text-white font-bold">
                                 {t("profiles.users.datatable.name")}
                             </TableColumn>
@@ -174,7 +171,6 @@ export default function users() {
                         <TableBody>
                             {items.map((user, index) => (
                                 <TableRow key={index}>
-                                    {/*<TableCell>{user.id}</TableCell>*/}
                                     <TableCell>{user.name}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.role}</TableCell>
@@ -199,7 +195,7 @@ export default function users() {
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
-                                                        idUser={user.id}
+                                                        userID={user.id}
                                                         PropertiesUserName={user.properties}
                                                         NameUser={user.name}
                                                     ></Modaluser>
@@ -213,7 +209,7 @@ export default function users() {
                                                         modalEditArrow={<BsArrowRight size={25} />}
                                                         modalEdit={`ID: ${user.id}`}
                                                         formTypeModal={11}
-                                                        idUser={user.id}
+                                                        userID={user.id}
                                                         PropertiesUserName={user.properties}
                                                         NameUser={user.name}
                                                     ></Modaluser>
