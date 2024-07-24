@@ -5,6 +5,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
+    ModalFooter,
     Button,
     useDisclosure,
     Table,
@@ -13,17 +14,15 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    Input
 } from "@nextui-org/react";
 
 import axios from "axios";
 
-
 //icons
 import { MdClose } from "react-icons/md";
 import { LiaExpandSolid } from "react-icons/lia";
-import { GoGear } from "react-icons/go";
-import { FiEdit3, FiCheck } from "react-icons/fi";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 const modalfeatures = ({
     buttonName,
@@ -36,12 +35,16 @@ const modalfeatures = ({
     modalEdit
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [featuresFetch, setFeaturesFetched] = useState(false);
     const [features, setFeatures] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
+    const [selectedFeature, setSelectedFeature] = useState(null);
+    const [editIp, setEditIp] = useState("");
+    const [editPort, setEditPort] = useState("");
+    const [editPrefix, setEditPrefix] = useState("");
+
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const t = useTranslations('Index');
 
     const toggleExpand = () => {
@@ -53,12 +56,10 @@ const modalfeatures = ({
         if (!featuresFetch) {
             setIsLoading(true);
             try {
-                const response = await axios.get(`/api/hotel/properties/` + idProperty + `/applications/` + idApplication)
-                console.log(response)
+                const response = await axios.get(`/api/hotel/properties/` + idProperty + `/applications/` + idApplication);
                 const res = await axios.get(`/api/hotel/properties-applications/` + response.data.response.propertyApplicationID);
                 setFeatures(res.data.response);
                 setFeaturesFetched(true);
-                console.log(res.data.response)
             } catch (error) {
                 console.error("Erro ao encontrar a propriedades da aplicação:", error.message);
             } finally {
@@ -67,20 +68,36 @@ const modalfeatures = ({
         }
     };
 
-    const toggleEdit = () => {
-        setIsEditing(!isEditing);
+    const handleEdit = (feature) => {
+        setSelectedFeature(feature);
+        setEditIp(feature.ip);
+        setEditPort(feature.port);
+        setEditPrefix(feature.prefix);
+        onOpen();
     };
 
-    const saveChanges = () => {
-        // axios.patch(`/api/hotel/properties-applications/` + response.data.response.propertyApplicationID, {
-        //     data: {
-        //         ip: valuesFeature.Ip,
-        //         port: valuesFeature.Port,
-        //         prefix: valuesFeature.Prefix,
-        //     }
-        // })
-        // .catch(err => console.log(err))
-        setIsEditing(false);
+    const handleSave = async () => {
+        try {
+
+            const updatedFeature = {
+                    ip: editIp,
+                    port: editPort,
+                    prefix: editPrefix
+            };
+
+            console.log("aaa", selectedFeature)
+
+            await axios.patch(`/api/hotel/properties-applications/${selectedFeature.propertyApplicationID}`, {
+                data: updatedFeature
+            });
+
+            setFeatures(features.map(feature => feature.propertyApplicationID === selectedFeature.propertyApplicationID ? { ...feature, ...updatedFeature } : feature));
+            
+
+            onOpenChange(false);
+        } catch (error) {
+            console.error("Erro ao atualizar a propriedade da aplicação:", error.message);
+        }
     };
 
     return (
@@ -114,15 +131,17 @@ const modalfeatures = ({
                                 <>
                                     <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">
                                         <div className="flex flex-row justify-start gap-4">
-                                        {modalHeader}{modalEdit}
+                                            {modalHeader}{modalEdit}
                                         </div>
                                         <div className="flex flex-row items-center mr-5">
+                                            
                                             <Button color="transparent" onClick={toggleExpand}>
                                                 <LiaExpandSolid size={30} />
                                             </Button>
                                             <Button color="transparent" onPress={onClose}>
                                                 <MdClose size={30} />
                                             </Button>
+
                                         </div>
                                     </ModalHeader>
                                     <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
@@ -157,66 +176,16 @@ const modalfeatures = ({
                                                         {features.map((feature, index) => (
                                                             <TableRow key={index}>
                                                                 <TableCell>
-                                                                    {isEditing ? (
-                                                                        <input
-                                                                            type="text"
-                                                                            value={feature.ip}
-                                                                            onChange={(e) => {
-                                                                                const newFeatures = [...features];
-                                                                                newFeatures[index].ip = e.target.value;
-                                                                                setFeatures(newFeatures);
-                                                                            }}
-                                                                        />
-                                                                    ) : (
-                                                                        feature.ip
-                                                                    )}
+                                                                    {feature.ip}
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    {isEditing ? (
-                                                                        <input
-                                                                            type="text"
-                                                                            value={feature.port}
-                                                                            onChange={(e) => {
-                                                                                const newFeatures = [...features];
-                                                                                newFeatures[index].port = e.target.value;
-                                                                                setFeatures(newFeatures);
-                                                                            }}
-                                                                        />
-                                                                    ) : (
-                                                                        feature.port
-                                                                    )}
+                                                                    {feature.port}
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    {isEditing ? (
-                                                                        <input
-                                                                            type="text"
-                                                                            value={feature.prefix}
-                                                                            onChange={(e) => {
-                                                                                const newFeatures = [...features];
-                                                                                newFeatures[index].prefix = e.target.value;
-                                                                                setFeatures(newFeatures);
-                                                                            }}
-                                                                        />
-                                                                    ) : (
-                                                                        feature.prefix
-                                                                    )}
+                                                                    {feature.prefix}
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    {isEditing ? (
-                                                                        <Button
-                                                                            color="transparent"
-                                                                            onClick={saveChanges}
-                                                                        >
-                                                                            <FiCheck size={20} />
-                                                                        </Button>
-                                                                    ) : (
-                                                                        <Button
-                                                                            color="transparent"
-                                                                            onClick={toggleEdit}
-                                                                        >
-                                                                            <FiEdit3 size={20} />
-                                                                        </Button>
-                                                                    )}
+                                                                    <Button className="bg-transparent" onPress={() => handleEdit(feature)}>Edit</Button>
                                                                 </TableCell>
                                                             </TableRow>
                                                         ))}
@@ -231,6 +200,50 @@ const modalfeatures = ({
                     </Modal>
                 </>
             )}
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader>Edit Connection String</ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="col-span-2">
+                                        <Input
+                                            label="IP"
+                                            placeholder="IP"
+                                            name="ip"
+                                            value={editIp}
+                                            onChange={(e) => setEditIp(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <Input
+                                            label="Port"
+                                            placeholder="Enter Port"
+                                            name="port"
+                                            value={editPort}
+                                            onChange={(e) => setEditPort(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <Input
+                                            label="Prefix"
+                                            placeholder="Enter Prefix"
+                                            name="prefix"
+                                            value={editPrefix}
+                                            onChange={(e) => setEditPrefix(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button onClick={onClose}>Close</Button>
+                                <Button onClick={handleSave}>Save</Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </>
     );
 };

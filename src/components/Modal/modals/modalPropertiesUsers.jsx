@@ -68,7 +68,7 @@ const modalpropertiesusers = ({
         try {
             const dataToSave = selectedUsersProperties.map(userID => ({
                 propertyID,
-                idUser : userID
+                userID : userID
             }));
             const response = await axios.put(`/api/hotel/properties-users`, {
                 dataToSave

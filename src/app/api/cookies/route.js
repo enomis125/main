@@ -23,7 +23,10 @@ export async function POST(request, context) {
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    cookies().set('jwt', token)
+    cookies().set('jwt', token, {
+        domain: '.mypms.pt',
+        path: '/',
+    });
 
     return new NextResponse(JSON.stringify({ status: 200 }));
 }

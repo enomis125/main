@@ -1041,7 +1041,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                 )}
                                                                                             </TableCell>
                                                                                             <TableCell style={{ textAlign: 'left' }}>
-                                                                                                {application.description === "OnPremPMS" ? (
+                                                                                            
                                                                                                     <FormModalsFeature
                                                                                                         buttonName={<FaPlug size={20} />}
                                                                                                         buttonColor={"transparent"}
@@ -1051,9 +1051,7 @@ const modalpropertie = ({ buttonName, buttonIcon, modalHeader, formTypeModal, bu
                                                                                                         idApplication={application.id}
                                                                                                         idProperty={idProperty}
                                                                                                     ></FormModalsFeature>
-                                                                                                ) : (
-                                                                                                    <Button className={"bg-transparent hover:bg-transparent"}><FaLock size={20} /></Button>
-                                                                                                )}
+                                                                                            
                                                                                             </TableCell>
                                                                                             <TableCell>
                                                                                                 <FormUsersInApplications

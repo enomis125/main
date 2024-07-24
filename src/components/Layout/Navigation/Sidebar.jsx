@@ -70,12 +70,12 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
             icon: <IoSettings size={20} />,
             active: true,
             items: [
-                { ref: "/homepage/changePassword", label: t('sidebar.settings.changePasswordLabel'), active: true },
-                { ref: "/homepage/securitySettings", label: t('sidebar.settings.securitySettingsLabel'), active: true },
-                !isAdmin() && { ref: "/homepage/partners", label: t('sidebar.settings.partners'), active: true },
-                !isAdmin() && { ref: "/homepage/applications", label: t('sidebar.settings.applications'), active: true },
-                !isAdmin() && { ref: "/homepage/applicationsCategories", label: t('sidebar.settings.applicationsCategories'), active: true },
-            ]
+                isAdmin() && { ref: "/homepage/changePassword", label: t('sidebar.settings.changePasswordLabel'), active: true },
+                isAdmin() && { ref: "/homepage/securitySettings", label: t('sidebar.settings.securitySettingsLabel'), active: true },
+                isAdmin() && { ref: "/homepage/partners", label: t('sidebar.settings.partners'), active: true },
+                isAdmin() && { ref: "/homepage/applications", label: t('sidebar.settings.applications'), active: true },
+                isAdmin() && { ref: "/homepage/applicationsCategories", label: t('sidebar.settings.applicationsCategories'), active: true },
+            ].filter(Boolean),
         },
         organization: {
             icon: <FaHotel size={20} />,

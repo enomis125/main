@@ -59,7 +59,7 @@ const modalchooseproperty = ({
             const res = await axios.get(`/api/hotel/organizations-applications?organization=` + session.user.organization + `&application=` + application)
 
             const connectionString = res.data.response.connectionString
-
+            
             const userID = session.user.id
 
             const setCookie = await axios.post(`/api/cookies`, {
@@ -70,7 +70,7 @@ const modalchooseproperty = ({
                 }
             })
 
-            window.location.assign("http://213.146.218.25")
+            window.location.assign("http://app.mypms.pt")
         }
 
     }

@@ -27,7 +27,10 @@ export async function PATCH(request, context) {
 
     try {
         const { id } = context.params;
+        const {data} = await request.json()
 
+        console.log(id)
+        
         const response = await prisma.properties_applications.update({
             where: {
                 propertyApplicationID: parseInt(id),

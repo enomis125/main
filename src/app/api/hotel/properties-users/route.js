@@ -102,7 +102,7 @@ export async function PUT(request) {
 
         const transformedData = dataToSave.map(item => ({
             propertyID: item.propertyID,
-            userID: item.idUser
+            userID: item.userID
         }));
 
         const response = await prisma.properties_users.createMany({

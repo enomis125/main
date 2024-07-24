@@ -20,7 +20,7 @@ const modalusersproperties = ({
     formTypeModal,
     buttonColor,
     modalEditArrow,
-    idUser,
+    userID,
     NameUser
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -39,7 +39,7 @@ const modalusersproperties = ({
             if (!usersFetched) {
                 setIsLoading(true);
                 try {
-                    const response = await axios.get(`/api/hotel/properties-users?user=` + idUser);
+                    const response = await axios.get(`/api/hotel/properties-users?user=` + userID);
                     setUsersProperties(response.data.response);
                     setUsersFetched(true);
                 } catch (error) {
@@ -66,7 +66,7 @@ const modalusersproperties = ({
         try {
             const dataToSave = selectedProperties.map(propertyID => ({
                 propertyID,
-                idUser
+                userID
             }));
 
             const response = await axios.put(`/api/hotel/properties-users`, {
