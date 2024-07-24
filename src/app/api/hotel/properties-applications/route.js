@@ -70,7 +70,7 @@ export async function PUT(request) {
                 }
             })
 
-            const newSysPMSProperty = axios.put("http://localhost:3001/api/v1/sysMain/properties", {
+            const newSysPMSProperty = axios.put(process.env.PMS_IP + "/api/v1/sysMain/properties", {
                 data: {
                     connectionString: organizationApplication.connectionString,
                     property: property

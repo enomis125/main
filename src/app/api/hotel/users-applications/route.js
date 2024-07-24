@@ -129,7 +129,7 @@ export async function PUT(request) {
                 }
             })
 
-            const newSysPMSUsers = axios.put("http://localhost:3001/api/v1/sysMain/users", {
+            const newSysPMSUsers = axios.put(process.env.PMS_IP + "/api/v1/sysMain/users", {
                 data: {
                     connectionString: organizationApplication.connectionString,
                     users: users
