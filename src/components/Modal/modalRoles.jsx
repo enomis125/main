@@ -56,13 +56,7 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
                         {buttonName} {buttonIcon}
                     </Button>
                     <Modal
-                        classNames={{
-                            base: "max-h-screen",
-                            wrapper: isExpanded ? "w-full h-screen" : "lg:pl-72 h-screen w-full",
-                            body: "h-full ",
-
-                        }}
-                        size="full"
+                        size="xl"
                         hideCloseButton="true"
                         isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
                         <ModalContent>
@@ -70,9 +64,8 @@ const modelprofile = ({ buttonName, buttonIcon, modalHeader, formTypeModal, butt
                                 <>
                                 <form onSubmit={handleSubmit}>
                                     <ModalHeader className="flex flex-row justify-between items-center gap-1 bg-primary-600 text-white">{modalHeader}
-                                        <div className='flex flex-row items-center mr-5'>
+                                        <div className='flex flex-row items-center'>
                                             <Button color="transparent" type="submit"><TfiSave size={25} /></Button>
-                                            <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                             <Button color="transparent" variant="light" onPress={onClose}><MdClose size={30} /></Button>
                                         </div>
                                     </ModalHeader>

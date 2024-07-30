@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
 import { FaUser } from 'react-icons/fa';
@@ -12,14 +12,10 @@ import { useTranslations } from 'next-intl';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
 import { RadioGroup, Radio } from "@nextui-org/react";
 import { LuLogOut } from 'react-icons/lu';
-
 import axios from 'axios';
 
 const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
-
-
     const hotelSetup = process.env.NEXT_PUBLIC_HOTEL_SETUP === "true";
-
     const { data: session, status } = useSession();
     const t = useTranslations('Index');
 
@@ -31,13 +27,28 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState('');
 
-
     const languages = [
         { label: 'Português', value: 'pt' },
-        { label: 'Espanhol', value: 'es' },
-        { label: 'Francês', value: 'fr' },
-        { label: 'Inglês', value: 'en' }
+        { label: 'Español', value: 'es' },
+        { label: 'Français', value: 'fr' },
+        { label: 'English', value: 'en' }
     ];
+
+    useEffect(() => {
+        const fetchLanguage = async () => {
+            try {
+                const response = await axios.get('/api/languageCookies');
+                const languageCookie = response.data.language;
+                const defaultLanguage = languages.find(lang => lang.value === languageCookie) || languages[3];
+                setSelected(defaultLanguage.label);
+                setSelectedLanguage(defaultLanguage.value);
+            } catch (error) {
+                console.error('Error fetching language cookie:', error);
+            }
+        };
+
+        fetchLanguage();
+    }, []);
 
     const handleOpen = () => {
         setIsOpen(true);
@@ -52,18 +63,16 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
         setSelectedLanguage(selectedLang ? selectedLang.value : '');
         console.log('Selected language:', selectedLang ? selectedLang.value : '');
 
-        const setCookie = await axios.post(`/api/languageCookies`, {
+        await axios.post(`/api/languageCookies`, {
             data: {
                 language: selectedLang.value
             }
-        })
+        });
 
         handleClose();
 
         window.location.reload(true);
     };
-
-
 
     const listItems = {
         settings: {
@@ -123,10 +132,10 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
 
                     <hr className="border-t border-primary-800 my-4" />
 
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex justify-between gap-x-2">
 
                         <Button size="sm" className="bg-slate-200 uppercase" onClick={handleOpen}>
-                            {selectedLanguage || 'Select Language'}
+                            {selectedLanguage.toUpperCase()}
                         </Button>
                         <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
                             <ModalContent>
@@ -157,14 +166,15 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
                                 )}
                             </ModalContent>
                         </Modal>
-
+                        <div className='flex flex-row gap-2'>
                         <FaUser className="text-2xl text-primary-800 ml-2" />
                         {status === 'authenticated' && session && (
                             <span className="text-md text-primary-800 font-semibold ml-1 mt-0.5">{`${session.user.name} ${session.user.lastname}`}</span>
                         )}
-                        <Button size="sm" className="bg-red-500 ml-2" onClick={() => signOut()}>
+                        </div>
+                        {/*<Button size="sm" className="bg-red-500 ml-2" onClick={() => signOut()}>
                             <LuLogOut className='text-white' size={15} />
-                        </Button>
+                        </Button>*/}
                     </div>
 
                     <br />
@@ -183,11 +193,7 @@ const ProfileDropdown = ({ title, labels, icon, active }) => {
     const pathname = usePathname();
     const router = useRouter();
 
-    const actives = [];
-    labels.forEach((label) => {
-        if (pathname != "/") actives.push(pathname.includes(label.ref));
-    });
-    const isActive = actives.some((val) => val === true);
+    const isActive = labels.some(({ ref }) => pathname === ref);
     const [isOpen, setIsOpen] = useState(isActive);
 
     return (
@@ -205,7 +211,7 @@ const ProfileDropdown = ({ title, labels, icon, active }) => {
 
             <ul title={title} className={isOpen ? "my-2 " : "hidden mb-2 "}>
                 {labels.map(({ ref, label, active }, index) => {
-                    const linkIsActive = pathname.includes(ref);
+                    const linkIsActive = pathname === ref;
                     const disabled = !active && ref !== "/";
 
                     return (
@@ -226,5 +232,6 @@ const ProfileDropdown = ({ title, labels, icon, active }) => {
         </>
     );
 };
+
 
 export default Sidebar;
