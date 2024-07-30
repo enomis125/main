@@ -119,7 +119,7 @@ const modalchooseproperty = ({
                                                 onClick={(e) => {
                                                     e.preventDefault(); // Prevent default link behavior
                                                     handleCookies(idProperty, application.id)
-                                                    onClose(); // Close the modal
+                                                    //onClose(); // Close the modal
                                                 }}
                                             >
                                                 <Card className="w-44 h-44 flex flex-col justify-center items-center border-4 border-green-600 ml-auto mr-auto mt-16">

@@ -9,6 +9,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaExpand } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import Loader from '../../Loader/Loader';
+import {signOut} from 'next-auth/react';
 
 
 export default function Navbar({ toggle, children, breadcrumbs }) {
@@ -41,7 +42,10 @@ export default function Navbar({ toggle, children, breadcrumbs }) {
 
                 <div className="flex items-center space-x-4">
 
-
+                    <a  className="cursor-pointer text-bg-gray-400 hover:text-bold py-2 px-4 flex items-center" onClick={() => signOut()}>
+                        <FaSignOutAlt className="mt-1" /><span className="ml-1 hidden sm:block"></span>
+                    </a>
+                    
                     <a onClick={toggleFullScreen} className="cursor-pointer text-black hover:text-bold py-2 px-4 flex items-center">
                         <FaExpand className="mt-1" /><span className="ml-1 hidden sm:block"></span>
                     </a>

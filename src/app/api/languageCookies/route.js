@@ -4,7 +4,8 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request) {
-    return new NextResponse(JSON.stringify({ response, status: 200 }));
+    const language = cookies().get('language')?.value || 'en';
+    return new NextResponse(JSON.stringify({ language, status: 200 }), { status: 200 });
 }
 
 export async function POST(request, context) {
