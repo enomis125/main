@@ -28,7 +28,7 @@ import PaginationComponent from "@/components/Pagination/Pagination";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 
 export default function AllProperties() {
@@ -39,6 +39,19 @@ export default function AllProperties() {
     const [isOpen, setIsOpen] = useState(false);
     const { data: session, status } = useSession()
     const t = useTranslations('Index');
+
+    const [selectedAllProperty, setSelectedAllProperty] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = (property) => {
+        setSelectedAllProperty(property);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedAllProperty(null);
+        setIsModalOpen(false);
+    };
 
 
     const filteredItems = React.useMemo(() => {
@@ -112,7 +125,7 @@ export default function AllProperties() {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1); 
+        setPage(1);
     };
 
     return (
@@ -132,16 +145,20 @@ export default function AllProperties() {
                                     onChange={(e) => handleSearchChange(e.target.value)}
                                 />
                             </div>
+                            </div>
+                            <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                                {t("general.newRecord")} <FiPlus size={15} />
+                            </Button>
                         </div>
                         <FormModals
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
-                            modalHeader={t("allProperties.new.modalHeader")}
+                            modalHeader={t("organization.properties.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
-                        />
-                    </div>
+                            isOpen={!selectedAllProperty && isModalOpen}
+                            onClose={handleCloseModal}
+                            property={selectedAllProperty}
+                        ></FormModals>
+                    
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -200,29 +217,12 @@ export default function AllProperties() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
-                                                <DropdownItem key="edit">
-                                                    <FormModals
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("allProperties.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${property.propertyID}`}
-                                                        formTypeModal={12}
-                                                        idProperty={property.propertyID}
-                                                        OrganizationName={property.organization}
-                                                    />
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                                <DropdownItem key="edit" onClick={() => handleOpenModal(property)}>
+                                                    {t("general.editRecord")}
                                                 </DropdownItem>
                                                 <DropdownItem onClick={() => handleDelete(property.propertyID)}>{t("general.removeRecord")}</DropdownItem>
-                                                <DropdownItem >
-                                                    <FormModals
-                                                        buttonName={t("general.viewRecord")}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("allProperties.view.modalHeader")}
-                                                        formTypeModal={11}
-                                                        idProperty={property.propertyID}
-                                                    />
+                                                <DropdownItem key="view" onClick={() => handleOpenModal(property)} >{t("general.viewRecord")}
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
@@ -235,6 +235,17 @@ export default function AllProperties() {
                                             className="flex flex-row justify-center"
                                             formTypeModal={13}
                                             idProperty={property.propertyID}
+                                        />
+                                        <FormModals
+                                            modalHeader={t("allProperties.edit.modalHeader")}
+                                            modalEditArrow={<BsArrowRight size={25} />}
+                                            modalEdit={`ID: ${property.propertyID}`}
+                                            formTypeModal={12}
+                                            idProperty={property.propertyID}
+                                            OrganizationName={property.organization}
+                                            isOpen={selectedAllProperty?.propertyID === property.propertyID && isModalOpen}
+                                            onClose={handleCloseModal}
+                                            property={selectedAllProperty}
                                         />
                                     </TableCell>
                                 </TableRow>

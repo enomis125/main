@@ -42,7 +42,20 @@ export default function partner() {
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     const [searchValue, setSearchValue] = React.useState("");
     const { data: session, status } = useSession()
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
     const t = useTranslations('Index');
+
+    const handleOpenModal = (partners) => {
+        setSelectedRoom(partners);
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setSelectedRoom(null);
+        setIsModalOpen(false);
+      };
 
 
     const [partners, setPartners] = useState([]);
@@ -141,15 +154,18 @@ export default function partner() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                            {t("general.newRecord")} <FiPlus size={15} />
+                        </Button>
+                        </div>
                         <FormModals
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("partners.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
+                            isOpen={!selectedRoom && isModalOpen}
+                            onClose={handleCloseModal}
+                            partners={selectedRoom}
                         ></FormModals>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -188,23 +204,25 @@ export default function partner() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" closeOnSelect={false} isOpen={true}>
-                                                <DropdownItem key="edit">
-                                                    <FormModals
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("partners.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${partners.partnerID}`}
-                                                        formTypeModal={11}
-                                                        partnerID={partners.partnerID}
-                                                        NamePartner={partners.name}
-                                                    ></FormModals>
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                                <DropdownItem key="edit" onClick={() => handleOpenModal(partners)}>
+                                                    {t("general.editRecord")}
                                                 </DropdownItem>
                                                 <DropdownItem><button onClick={() => handleDelete(partners.partnerID)}>{t("general.removeRecord")}</button></DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
+                                    <FormModals
+                                        buttonColor={"transparent"}
+                                        modalHeader={t("partners.edit.modalHeader")}
+                                        modalEditArrow={<BsArrowRight size={25} />}
+                                        modalEdit={`ID: ${partners.partnerID}`}
+                                        formTypeModal={11}
+                                        partnerID={partners.partnerID}
+                                        NamePartner={partners.name}
+                                        isOpen={selectedRoom?.partnerID === partners.partnerID && isModalOpen}
+                                        onClose={handleCloseModal}
+                                        partners={selectedRoom}
+                                    ></FormModals>
                                     </TableCell>
                                 </TableRow>
                             ))}

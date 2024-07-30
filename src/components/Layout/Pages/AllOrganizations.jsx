@@ -20,7 +20,8 @@ import { FiSearch, FiPlus, FiEdit3 } from "react-icons/fi";
 import { IoMdDownload } from "react-icons/io";
 import FormModals from "@/components/Modal/modalOrganizations";
 import PaginationComponent from "@/components/Pagination/Pagination";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
+
 
 
 import jsPDF from "jspdf";
@@ -35,6 +36,18 @@ export default function Contact() {
     const [isOpen, setIsOpen] = useState(false);
     const t = useTranslations('Index');
 
+    const [selectedOrganization, setSelectedOrganization] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = (organization) => {
+        setSelectedOrganization(organization);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedOrganization(null);
+        setIsModalOpen(false);
+    };
 
     const filteredItems = React.useMemo(() => {
         return organizations.filter((organization) =>
@@ -118,15 +131,18 @@ export default function Contact() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                                {t("general.newRecord")} <FiPlus size={15} />
+                            </Button>
+                    </div>
                         <FormModals
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("allOrganizations.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
+                            isOpen={!selectedOrganization && isModalOpen}
+                            onClose={handleCloseModal}
+                            organization={selectedOrganization}
                         ></FormModals>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -197,33 +213,26 @@ export default function Contact() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
-                                                <DropdownItem key="edit">
-                                                    <FormModals
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("allOrganizations.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${organization.organizationID}`}
-                                                        formTypeModal={11}
-                                                        idOrganization={organization.organizationID}
-                                                    />
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                                <DropdownItem key="edit" onClick={() => handleOpenModal(organization)}>
+                                                    {t("general.editRecord")}
                                                 </DropdownItem>
+
                                                 <DropdownItem onClick={() => handleDelete(organization.organizationID)}>{t("general.removeRecord")}</DropdownItem>
-                                                <DropdownItem>
-                                                    <FormModals
-                                                        buttonName={t("general.viewRecord")}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("allOrganizations.view.modalHeader")}
-                                                        formTypeModal={11}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${organization.organizationID}`}
-                                                        idOrganization={organization.organizationID}
-                                                    />
+                                                <DropdownItem key="view" onClick={() => handleOpenModal(organization)} >{t("general.viewRecord")}
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
+                                        <FormModals
+                                            modalHeader={t("allOrganizations.edit.modalHeader")}
+                                            modalEditArrow={<BsArrowRight size={25} />}
+                                            modalEdit={`ID: ${organization.organizationID}`}
+                                            formTypeModal={11}
+                                            idOrganization={organization.organizationID}
+                                            isOpen={selectedOrganization?.organizationID === organization.organizationID && isModalOpen}
+                                            onClose={handleCloseModal}
+                                            organization={selectedOrganization}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -235,18 +244,18 @@ export default function Contact() {
                         <Button onClick={exportToPDF}>PDF <IoMdDownload /></Button>
                         <Button>
                             <CSVLink
-                            data={items.map((item) => ({
-                                organizationID: item.organizationID,
-                                Name: item.name,
-                                Address1: item.address1,
-                                Country: item.country,
-                            }))}
-                            filename={"Organizações"}
-                            separator=";"
-                            enclosingCharacter=""
-                        >
-                            CSV
-                        </CSVLink> <IoMdDownload />
+                                data={items.map((item) => ({
+                                    organizationID: item.organizationID,
+                                    Name: item.name,
+                                    Address1: item.address1,
+                                    Country: item.country,
+                                }))}
+                                filename={"Organizações"}
+                                separator=";"
+                                enclosingCharacter=""
+                            >
+                                CSV
+                            </CSVLink> <IoMdDownload />
                         </Button>
                     </div>
                     <PaginationComponent

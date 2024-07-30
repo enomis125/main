@@ -46,10 +46,12 @@ const modaluser = ({
     modalEditArrow,
     modalEdit,
     idUser,
+    isOpen,
+    onOpenChange,
+    onClose,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [isThirdModalOpen, setIsThirdModalOpen] = useState(false);
     const [organizationProperties, setOrganizationProperties] = useState([]);
@@ -119,9 +121,6 @@ const modaluser = ({
         <>
             {formTypeModal === 10 && ( //create organizations
                 <>
-                    <Button onPress={onOpen} color={buttonColor} className="w-fit">
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -130,7 +129,7 @@ const modaluser = ({
                         }}
                         size="full"
                         hideCloseButton="true"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+                        isOpen={isOpen} onOpenChange={onClose} isDismissable={false} isKeyboardDismissDisabled={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>
@@ -153,19 +152,19 @@ const modaluser = ({
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
                                                         <Input type="text" name="Name" onChange={handleInputOrganization} variant={variant} label="Name" />
-                                                        <Input type="text" name="Email" onChange={handleInputOrganization} variant={variant} label="E-Mail" />
                                                         <Input type="text" name="Name" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.companyNameLabel")} />
-                                                        <Input type="text" name="Email" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.emailLabel")} />
+                                                        <Input type="text" name="FiscalNumber" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.fiscalNumberLabel")} />
+                                                        
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="w-full flex flex-col gap-4">
+                                            <div className="w-1/2 flex flex-col gap-4">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
                                                         className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
-                                                        <Input type="text" name="FiscalNumber" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.fiscalNumberLabel")} />
+                                                        <Input type="text" name="Email" onChange={handleInputOrganization} variant={variant} label={t("allOrganizations.emailLabel")} />
                                                     </div>
                                                 ))}
                                             </div>
@@ -215,9 +214,6 @@ const modaluser = ({
 
             {formTypeModal === 11 && ( //edit organizations
                 <>
-                    <Button fullWidth={true} size="md" onPress={onOpen} color={buttonColor} className="-h-3 flex justify-start -p-3">
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -226,7 +222,7 @@ const modaluser = ({
 
                         }}
                         size="full"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
+                        isOpen={isOpen} onOpenChange={onClose} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>

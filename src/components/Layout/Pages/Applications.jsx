@@ -44,9 +44,22 @@ export default function users() {
 
     const { data: session, status } = useSession()
 
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [Applications, setApplications] = useState([]);
 
     const t = useTranslations('Index');
+
+    const handleOpenModal = (Applications) => {
+        setSelectedRoom(Applications);
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setSelectedRoom(null);
+        setIsModalOpen(false);
+      };
 
     const filteredItems = React.useMemo(() => {
         return Applications.filter((application) =>
@@ -131,15 +144,18 @@ export default function users() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                            {t("general.newRecord")} <FiPlus size={15} />
+                        </Button>
+                        </div>
                         <FormModal
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("applications.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
+                            isOpen={!selectedRoom && isModalOpen}
+                            onClose={handleCloseModal}
+                            Applications={selectedRoom}
                         ></FormModal>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -186,23 +202,24 @@ export default function users() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" closeOnSelect={false} isOpen={true}>
-                                                <DropdownItem key="edit">
-                                                    <FormModal
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("applications.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${Applications.id}`}
-                                                        formTypeModal={11}
-                                                        ApplicationID={Applications.id}
-                                                    ></FormModal>
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                            <DropdownItem key="edit" onClick={() => handleOpenModal(Applications)}>
+                                                    {t("general.editRecord")}
                                                 </DropdownItem>
                                                 <DropdownItem><button onClick={() => handleDelete(Applications.id)}>{t("general.removeRecord")}</button></DropdownItem>
                                                 
                                             </DropdownMenu>
                                         </Dropdown>
+                                                    <FormModal
+                                                        modalHeader={t("applications.edit.modalHeader")}
+                                                        modalEditArrow={<BsArrowRight size={25} />}
+                                                        modalEdit={`ID: ${Applications.id}`}
+                                                        formTypeModal={11}
+                                                        ApplicationID={Applications.id}
+                                                        isOpen={selectedRoom?.id === Applications.id && isModalOpen}
+                                                        onClose={handleCloseModal}
+                                                        Applications={selectedRoom}
+                                                    ></FormModal>
                                     </TableCell>
                                 </TableRow>
                             ))}
