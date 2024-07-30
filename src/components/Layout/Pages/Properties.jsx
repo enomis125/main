@@ -34,7 +34,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
 
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 
 export default function Contact() {
@@ -47,6 +47,20 @@ export default function Contact() {
     const [isLoading, setIsLoading] = useState(true);
     const { data: session, status } = useSession()
     const t = useTranslations('Index');
+
+    const [selectedProperty, setSelectedProperty] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = (property) => {
+        setSelectedProperty(property);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProperty(null);
+        setIsModalOpen(false);
+    };
+
 
     const filteredItems = React.useMemo(() => {
         return property.filter((property) =>
@@ -73,7 +87,7 @@ export default function Contact() {
                     setProperty(res.data.response);
                 } catch (error) {
                     console.error("Erro ao obter as propriedades:", error.message);
-                }finally{
+                } finally {
                     setIsLoading(false);
                 }
             };
@@ -136,87 +150,81 @@ export default function Contact() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                            {t("general.newRecord")} <FiPlus size={15} />
+                        </Button>
+                    </div>
                         <FormModals
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("organization.properties.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
+                            isOpen={!selectedProperty && isModalOpen}
+                            onClose={handleCloseModal}
+                            property={selectedProperty}
                         ></FormModals>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
-                <LoadingBackdrop open={isLoading} />
-                        {!isLoading && (
-                    <Table
-                        id="TableToPDF"
-                        isHeaderSticky={"true"}
-                        layout={"fixed"}
-                        removeWrapper
-                        classNames={{
-                            wrapper: "min-h-[222px]",
-                        }}
-                        className="h-full overflow-auto"
-                    >
-                        <TableHeader>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                {t("organization.properties.datatable.id")}
-                            </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                {t("organization.properties.datatable.name")}
-                            </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                {t("organization.properties.datatable.address")}
-                            </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                {t("organization.properties.datatable.description")}
-                            </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                {t("organization.properties.datatable.shortname")}
-                            </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white font-bold">
-                                {t("organization.properties.datatable.designation")}
-                            </TableColumn>
-                            <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
-                                <GoGear size={20} />
-                            </TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                            {items.map((property, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{property.propertyID}</TableCell>
-                                    <TableCell>{property.name}</TableCell>
-                                    <TableCell>{property.address1}</TableCell>
-                                    <TableCell>{property.description}</TableCell>
-                                    <TableCell>{property.abbreviation}</TableCell>
-                                    <TableCell>{property.designation}</TableCell>
-                                    <TableCell className="flex justify-center">
-                                        <Dropdown>
-                                            <DropdownTrigger>
-                                                <Button
-                                                    variant="light"
-                                                    className="flex flex-row justify-center"
-                                                >
-                                                    <BsThreeDotsVertical size={20} className="text-gray-400" />
-                                                </Button>
-                                            </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
-                                                <DropdownItem key="edit">
-                                                    <FormModals
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("organization.properties.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${property.propertyID}`}
-                                                        formTypeModal={12}
-                                                        idProperty={property.propertyID}
-                                                    ></FormModals>
-                                                </DropdownItem>
-                                                <DropdownItem onClick={() => handleDelete(property.propertyID)}>{t("general.removeRecord")}</DropdownItem>
-                                                <DropdownItem >
-                                                    <FormModals
+                    <LoadingBackdrop open={isLoading} />
+                    {!isLoading && (
+                        <Table
+                            id="TableToPDF"
+                            isHeaderSticky={"true"}
+                            layout={"fixed"}
+                            removeWrapper
+                            classNames={{
+                                wrapper: "min-h-[222px]",
+                            }}
+                            className="h-full overflow-auto"
+                        >
+                            <TableHeader>
+                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                    {t("organization.properties.datatable.id")}
+                                </TableColumn>
+                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                    {t("organization.properties.datatable.name")}
+                                </TableColumn>
+                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                    {t("organization.properties.datatable.address")}
+                                </TableColumn>
+                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                    {t("organization.properties.datatable.description")}
+                                </TableColumn>
+                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                    {t("organization.properties.datatable.shortname")}
+                                </TableColumn>
+                                <TableColumn className="bg-primary-600 text-white font-bold">
+                                    {t("organization.properties.datatable.designation")}
+                                </TableColumn>
+                                <TableColumn className="bg-primary-600 text-white flex justify-center items-center">
+                                    <GoGear size={20} />
+                                </TableColumn>
+                            </TableHeader>
+                            <TableBody>
+                                {items.map((property, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{property.propertyID}</TableCell>
+                                        <TableCell>{property.name}</TableCell>
+                                        <TableCell>{property.address1}</TableCell>
+                                        <TableCell>{property.description}</TableCell>
+                                        <TableCell>{property.abbreviation}</TableCell>
+                                        <TableCell>{property.designation}</TableCell>
+                                        <TableCell className="flex justify-center">
+                                            <Dropdown>
+                                                <DropdownTrigger>
+                                                    <Button
+                                                        variant="light"
+                                                        className="flex flex-row justify-center"
+                                                    >
+                                                        <BsThreeDotsVertical size={20} className="text-gray-400" />
+                                                    </Button>
+                                                </DropdownTrigger>
+                                                <DropdownMenu aria-label="Static Actions" isOpen={true} >
+                                                    <DropdownItem key="edit" onClick={() => handleOpenModal(property)}>
+                                                    {t("general.editRecord")}
+                                                    </DropdownItem>
+                                                    <DropdownItem onClick={() => handleDelete(property.propertyID)}>{t("general.removeRecord")}</DropdownItem>
+                                                    <DropdownItem key="view" onClick={() => handleOpenModal(property)} >
+                                                        {/* <FormModals
                                                         buttonName={t("general.viewRecord")}
                                                         buttonColor={"transparent"}
                                                         modalHeader={t("organization.properties.view.modalHeader")}
@@ -224,36 +232,46 @@ export default function Contact() {
                                                         modalEdit={`ID: ${property.propertyID}`}
                                                         formTypeModal={11}
                                                         idProperty={property.propertyID}
-                                                    ></FormModals>
-                                                </DropdownItem>
-                                            </DropdownMenu>
-                                        </Dropdown>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                        )}
+                                                    ></FormModals> */}
+                                                    </DropdownItem>
+                                                </DropdownMenu>
+                                            </Dropdown>
+                                            <FormModals
+                                                modalHeader={t("organization.properties.edit.modalHeader")}
+                                                modalEditArrow={<BsArrowRight size={25} />}
+                                                modalEdit={`ID: ${property.propertyID}`}
+                                                formTypeModal={12}
+                                                idProperty={property.propertyID}
+                                                isOpen={selectedProperty?.propertyID === property.propertyID && isModalOpen}
+                                                onClose={handleCloseModal}
+                                                property={selectedProperty}
+                                            ></FormModals>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
                 </div>
                 <div className="bg-tableFooter border border-tableFooterBorder flex justify-end items-center lg:pl-72 w-full min-h-10vh fixed bottom-0 right-0 z-20 text-sm text-default-400 py-3">
                     <div className="space-x-4">
-                    <Button onClick={exportToPDF}>PDF <IoMdDownload /></Button>
-                    <Button>                    <CSVLink
-                        data={items.map((item) => ({
-                            propertyID: item.propertyID,
-                            Name: item.name,
-                            Address1: item.address1,
-                            Description: item.description ,
-                            Abbreviation: item.abbreviation ,
-                            Designation: item.designation
-                        }))}
-                        filename={"Propriedades"}
-                        separator=";"
-                        enclosingCharacter=""
-                    >
-                        CSV
-                    </CSVLink><IoMdDownload />
-                    </Button>
+                        <Button onClick={exportToPDF}>PDF <IoMdDownload /></Button>
+                        <Button>                    <CSVLink
+                            data={items.map((item) => ({
+                                propertyID: item.propertyID,
+                                Name: item.name,
+                                Address1: item.address1,
+                                Description: item.description,
+                                Abbreviation: item.abbreviation,
+                                Designation: item.designation
+                            }))}
+                            filename={"Propriedades"}
+                            separator=";"
+                            enclosingCharacter=""
+                        >
+                            CSV
+                        </CSVLink><IoMdDownload />
+                        </Button>
                     </div>
                     <PaginationComponent
                         page={page}
@@ -262,7 +280,7 @@ export default function Contact() {
                         onChangePage={handleChangePage}
                         onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
-                    
+
                 </div>
             </main >
         </>

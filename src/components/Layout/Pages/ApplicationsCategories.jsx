@@ -42,8 +42,20 @@ export default function ApplicationsCategories() {
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     const [searchValue, setSearchValue] = React.useState("");
     const { data: session, status } = useSession()
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const t = useTranslations('Index');
 
+    const handleOpenModal = (AppCategories) => {
+        setSelectedRoom(AppCategories);
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setSelectedRoom(null);
+        setIsModalOpen(false);
+      };
 
     const [AppCategories, setAppCategories] = useState([]);
 
@@ -141,15 +153,18 @@ export default function ApplicationsCategories() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                            {t("general.newRecord")} <FiPlus size={15} />
+                        </Button>
+                    </div>
                         <FormModal
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("applicationsCategories.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
+                            isOpen={!selectedRoom && isModalOpen}
+                            onClose={handleCloseModal}
+                            AppCategories={selectedRoom}
                         ></FormModal>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -188,8 +203,13 @@ export default function ApplicationsCategories() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" closeOnSelect={false} isOpen={true}>
-                                                <DropdownItem key="edit">
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                            <DropdownItem key="edit" onClick={() => handleOpenModal(AppCategories)}>
+                                                    {t("general.editRecord")}
+                                                </DropdownItem>
+                                                <DropdownItem><button onClick={() => handleDelete(AppCategories.applicationCategoryID)}>{t("general.removeRecord")}</button></DropdownItem>
+                                            </DropdownMenu>
+                                        </Dropdown>
                                                     <FormModal
                                                         buttonName={t("general.editRecord")}
                                                         editIcon={<FiEdit3 size={25} />}
@@ -200,11 +220,10 @@ export default function ApplicationsCategories() {
                                                         formTypeModal={11}
                                                         AppCategoryID={AppCategories.applicationCategoryID}
                                                         NameCategory={AppCategories.name}
+                                                        isOpen={selectedRoom?.applicationCategoryID === AppCategories.applicationCategoryID && isModalOpen}
+                                                        onClose={handleCloseModal}
+                                                        AppCategories={selectedRoom}
                                                     ></FormModal>
-                                                </DropdownItem>
-                                                <DropdownItem><button onClick={() => handleDelete(AppCategories.applicationCategoryID)}>{t("general.removeRecord")}</button></DropdownItem>
-                                            </DropdownMenu>
-                                        </Dropdown>
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -37,7 +37,20 @@ export default function AllUsers() {
     const [searchValue, setSearchValue] = useState("");
     const [users, setUsers] = useState([]);
     const { data: session, status } = useSession();
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const t = useTranslations('Index');
+
+    const handleOpenModal = (user) => {
+        setSelectedRoom(user);
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setSelectedRoom(null);
+        setIsModalOpen(false);
+      };
 
     const filteredItems = React.useMemo(() => {
         return users.filter(user =>
@@ -113,16 +126,18 @@ export default function AllUsers() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                            {t("general.newRecord")} <FiPlus size={15} />
+                        </Button>
+                        </div>
                         <Modaluser
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("allUsers.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
-
+                            isOpen={!selectedRoom && isModalOpen}
+                            onClose={handleCloseModal}
+                            user={selectedRoom}
                         ></Modaluser>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -164,42 +179,30 @@ export default function AllUsers() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" isOpen={true} closeOnSelect={false}>
-                                                <DropdownItem key="edit">
-                                                    <Modaluser
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("allUsers.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${user.userID}`}
-                                                        formTypeModal={11}
-                                                        userID={user.userID}
-                                                        NameUser={user.name}
-                                                        RoleName={user.role}
-                                                        OrganizationName={user.organization}
-                                                        PropertiesUserName={user.properties}
-                                                    />
-                                                </DropdownItem>
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                            <DropdownItem key="edit" onClick={() => handleOpenModal(user)}>
+                                                {t("general.editRecord")}
+                                            </DropdownItem>
                                                 <DropdownItem><button onClick={() => handleDelete(user.userID)}>{t("general.removeRecord")}</button></DropdownItem>
-                                                <DropdownItem key="view">
-                                                <Modaluser
-                                                        buttonName={t("general.viewRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("allUsers.view.modalHeader")}
-                                                        modalEdit={`ID: ${user.userID}`}
-                                                        formTypeModal={11}
-                                                        userID={user.userID}
-                                                        NameUser={user.name}
-                                                        OrganizationName={user.organization}
-                                                        RoleName={user.role}
-                                                        PropertiesUserName={user.properties}
-                                                    />
+                                                <DropdownItem key="view" onClick={() => handleOpenModal(user)}>
+                                                View
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
+                                                        <Modaluser
+                                                            modalHeader={t("allUsers.edit.modalHeader")}
+                                                            modalEditArrow={<BsArrowRight size={25} />}
+                                                            modalEdit={`ID: ${user.userID}`}
+                                                            formTypeModal={11}
+                                                            userID={user.userID}
+                                                            NameUser={user.name}
+                                                            RoleName={user.role}
+                                                            OrganizationName={user.organization}
+                                                            PropertiesUserName={user.properties}
+                                                            isOpen={selectedRoom?.userID === user.userID && isModalOpen}
+                                                            onClose={handleCloseModal}
+                                                            user={selectedRoom}
+                                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}

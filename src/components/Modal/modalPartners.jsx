@@ -25,11 +25,15 @@ const modalpartner = ({
     editIcon,
     modalEditArrow,
     modalEdit,
+    isOpen,
+    onOpen,
+    onOpenChange,
+    onClose,
 }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
     const t = useTranslations('Index');
 
     const toggleExpand = () => {
@@ -43,9 +47,6 @@ const modalpartner = ({
         <>
             {formTypeModal === 10 && ( //Users
                 <>
-                    <Button onPress={onOpen} color={buttonColor} className="w-fit">
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -53,8 +54,11 @@ const modalpartner = ({
                             body: "h-full ",
                         }}
                         size="full"
-                        hideCloseButton="true"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+                        isOpen={isOpen}
+                        hideCloseButton={true}
+                        onOpenChange={onClose}
+                        isDismissable={false}
+                        isKeyboardDismissDisabled={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>
@@ -68,11 +72,11 @@ const modalpartner = ({
                                             </div>
                                         </ModalHeader>
                                         <ModalBody className="flex flex-col mx-5 my-5 space-y-8">
-                                            <div className="w-1/2 flex flex-col gap-4">
+                                            <div className=" flex flex-col gap-4">
                                                 {variants.map((variant) => (
                                                     <div
                                                         key={variant}
-                                                        className="flex w-1/2 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                                                        className="flex  flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
                                                     >
                                                         <Input type="text" name="Name" onChange={handleInputPartner} variant={variant} label={t("profiles.users.nameLabel")} />
                                                     </div>
@@ -91,9 +95,6 @@ const modalpartner = ({
 
             {formTypeModal === 11 && ( // edit
                 <>
-                    <Button fullWidth={true} size="md" onPress={onOpen} color={buttonColor} className="-h-3 flex justify-start -p-3" >
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -101,7 +102,7 @@ const modalpartner = ({
                             body: "h-full ",
                         }}
                         size="full"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
+                        isOpen={isOpen} onOpenChange={onClose} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>

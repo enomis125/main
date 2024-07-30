@@ -25,12 +25,15 @@ const modalApplication = ({
     editIcon,
     modalEditArrow,
     modalEdit,
-    NamePartner
+    NamePartner,
+    isOpen,
+    onOpen,
+    onOpenChange,
+    onClose,
 }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const t = useTranslations('Index');
 
     const toggleExpand = () => {
@@ -84,9 +87,6 @@ const modalApplication = ({
         <>
             {formTypeModal === 10 && (
                 <>
-                    <Button onClick={onOpen} color="primary">
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -94,11 +94,11 @@ const modalApplication = ({
                             body: "h-full",
                         }}
                         size="full"
-                        hideCloseButton
                         isOpen={isOpen}
-                        onOpenChange={onOpenChange}
+                        hideCloseButton={true}
+                        onOpenChange={onClose}
                         isDismissable={false}
-                        isKeyboardDismissDisabled
+                        isKeyboardDismissDisabled={true}
                     >
                         <ModalContent>
                             {(onClose) => (
@@ -159,9 +159,6 @@ const modalApplication = ({
 
             {formTypeModal === 11 && (
                 <>
-                    <Button fullWidth size="md" onPress={onOpen} color="transparent" className="-h-3 flex justify-start -p-3">
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -169,7 +166,7 @@ const modalApplication = ({
                             body: "h-full",
                         }}
                         size="full"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
+                        isOpen={isOpen} onOpenChange={onClose} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>

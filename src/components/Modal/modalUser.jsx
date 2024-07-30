@@ -33,13 +33,17 @@ const modaluser = ({
     OrganizationName,
     PropertiesUserName,
     NameUser,
-    RoleName
+    RoleName,
+    isOpen,
+  onOpen,
+  onOpenChange,
+  onClose,
 }) => {
 
     console.log(userID)
     const [isExpanded, setIsExpanded] = useState(false);
     const variants = ["underlined"];
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
     const t = useTranslations('Index');
 
     const { data: session, status } = useSession()
@@ -102,18 +106,17 @@ const modaluser = ({
         <>
             {formTypeModal === 10 && ( //Users
                 <>
-                    <Button onPress={onOpen} color={buttonColor} className="w-fit">
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
                             wrapper: isExpanded ? "w-full h-screen" : "lg:pl-72 h-screen w-full",
                             body: "h-full ",
                         }}
-                        size="full"
-                        hideCloseButton="true"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+                        isOpen={isOpen}
+                        hideCloseButton={true}
+                        onOpenChange={onClose}
+                        isDismissable={false}
+                        isKeyboardDismissDisabled={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>
@@ -232,9 +235,6 @@ const modaluser = ({
 
             {formTypeModal === 11 && ( //Users edit
                 <>
-                    <Button fullWidth={true} size="md" onPress={onOpen} color={buttonColor} className="-h-3 flex justify-start -p-3" >
-                        {buttonName} {buttonIcon}
-                    </Button>
                     <Modal
                         classNames={{
                             base: "max-h-screen",
@@ -242,7 +242,7 @@ const modaluser = ({
                             body: "h-full ",
                         }}
                         size="full"
-                        isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
+                        isOpen={isOpen} onOpenChange={onClose} isDismissable={false} isKeyboardDismissDisabled={true} hideCloseButton={true}>
                         <ModalContent>
                             {(onClose) => (
                                 <>

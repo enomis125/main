@@ -43,7 +43,21 @@ export default function users() {
     const [searchValue, setSearchValue] = React.useState("");
     const [user, setUser] = useState([]);
     const { data: session, status } = useSession()
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+
     const t = useTranslations('Index');
+
+    const handleOpenModal = (user) => {
+        setSelectedRoom(user);
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setSelectedRoom(null);
+        setIsModalOpen(false);
+      };
 
     const filteredItems = React.useMemo(() => {
         return user.filter((user) =>
@@ -72,7 +86,7 @@ export default function users() {
         };
         getData();
     }, []);
-
+    
 
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
@@ -130,15 +144,18 @@ export default function users() {
                                 />
                             </div>
                         </div>
+                        <Button onClick={() => handleOpenModal()} color={"primary"} className="w-fit">
+                            {t("general.newRecord")} <FiPlus size={15} />
+                        </Button>
+                        </div>
                         <Modaluser
-                            buttonName={t("general.newRecord")}
-                            buttonIcon={<FiPlus size={15} />}
-                            buttonColor={"primary"}
                             modalHeader={t("profiles.users.new.modalHeader")}
                             modalIcons={"bg-red"}
                             formTypeModal={10}
+                            isOpen={!selectedRoom && isModalOpen}
+                            onClose={handleCloseModal}
+                            user={selectedRoom}
                         ></Modaluser>
-                    </div>
                 </div>
                 <div className="mx-5 h-[65vh] min-h-full">
                     <Table
@@ -185,37 +202,29 @@ export default function users() {
                                                     <BsThreeDotsVertical size={20} className="text-gray-400" />
                                                 </Button>
                                             </DropdownTrigger>
-                                            <DropdownMenu aria-label="Static Actions" closeOnSelect={false} isOpen={true}>
-                                                <DropdownItem key="edit">
-                                                    <Modaluser
-                                                        buttonName={t("general.editRecord")}
-                                                        editIcon={<FiEdit3 size={25} />}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("profiles.users.edit.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${user.id}`}
-                                                        formTypeModal={11}
-                                                        userID={user.id}
-                                                        PropertiesUserName={user.properties}
-                                                        NameUser={user.name}
-                                                    ></Modaluser>
-                                                </DropdownItem>
-                                                <DropdownItem><button onClick={() => handleDelete(user.id)}>{t("general.removeRecord")}</button></DropdownItem>
-                                                <DropdownItem>
-                                                <Modaluser
-                                                        buttonName={t("general.viewRecord")}
-                                                        buttonColor={"transparent"}
-                                                        modalHeader={t("profiles.users.view.modalHeader")}
-                                                        modalEditArrow={<BsArrowRight size={25} />}
-                                                        modalEdit={`ID: ${user.id}`}
-                                                        formTypeModal={11}
-                                                        userID={user.id}
-                                                        PropertiesUserName={user.properties}
-                                                        NameUser={user.name}
-                                                    ></Modaluser>
+                                            <DropdownMenu aria-label="Static Actions" isOpen={true}>
+                                            <DropdownItem key="edit" onClick={() => handleOpenModal(user)}>
+                                                {t("general.editRecord")}
+                                            </DropdownItem>
+                                                <DropdownItem><button onClick={() => handleDelete(user.userID)}>{t("general.removeRecord")}</button></DropdownItem>
+                                                <DropdownItem key="view" onClick={() => handleOpenModal(user)}>
+                                                View
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
+                                    <Modaluser
+                                        buttonColor={"transparent"}
+                                        modalHeader={t("profiles.users.view.modalHeader")}
+                                        modalEditArrow={<BsArrowRight size={25} />}
+                                        modalEdit={`ID: ${user.id}`}
+                                        formTypeModal={11}
+                                        userID={user.id}
+                                        PropertiesUserName={user.properties}
+                                        NameUser={user.name}
+                                        isOpen={selectedRoom?.id === user.id && isModalOpen}
+                                        onClose={handleCloseModal}
+                                        user={selectedRoom}
+                                    ></Modaluser>
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -74,7 +74,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
                 isAdmin() && { ref: "/homepage/securitySettings", label: t('sidebar.settings.securitySettingsLabel'), active: true },
                 isAdmin() && { ref: "/homepage/partners", label: t('sidebar.settings.partners'), active: true },
                 isAdmin() && { ref: "/homepage/applications", label: t('sidebar.settings.applications'), active: true },
-                isAdmin() && { ref: "/homepage/applicationsCategories", label: t('sidebar.settings.applicationsCategories'), active: true },
+                isAdmin() && { ref: "/homepage/applications_categories", label: t('sidebar.settings.applicationsCategories'), active: true },
             ].filter(Boolean),
         },
         organization: {
@@ -84,7 +84,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
                 !isAdmin() && { ref: "/homepage/organization", label: t('sidebar.organization.accountLabel'), active: true },
                 !isAdmin() && { ref: "/homepage/properties", label: t('sidebar.organization.propertiesLabel'), active: true },
                 isAdmin() && { ref: "/homepage/organizations", label: t('sidebar.organization.allOrganizationsLabel'), active: true },
-                isAdmin() && { ref: "/homepage/allproperties", label: t('sidebar.organization.allPropertiesLabel'), active: true },
+                isAdmin() && { ref: "/homepage/all_properties", label: t('sidebar.organization.allPropertiesLabel'), active: true },
             ].filter(Boolean),
         },
         profiles: {
@@ -93,7 +93,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, children, name }) => {
             items: [
                 { ref: "/homepage/profile", label: t('sidebar.profiles.manageProfilesLabel'), active: true },
                 !isAdmin() && { ref: "/homepage/users", label: t('sidebar.profiles.manageUsersLabel'), active: true },
-                isAdmin() && { ref: "/homepage/allusers", label: t('sidebar.profiles.manageAllUsersLabel'), active: true },
+                isAdmin() && { ref: "/homepage/all_users", label: t('sidebar.profiles.manageAllUsersLabel'), active: true },
             ].filter(Boolean)
         }
     };

@@ -93,17 +93,15 @@ const users_applications = ({ idProperty, idApplication, formTypeModal, buttonNa
                                             {modalHeader}{modalEdit}
                                         </div>
                                         <div className='flex flex-row items-center mr-5'>
-                                        <Button>
                                             <FormUsersApplications
                                                 buttonName={t("general.newRecord")}
-                                                buttonColor={"transparent"}
+                                                buttonColor={"default"}
                                                 modalHeader={t("organization.properties.applications.assign.modalHeader")}
                                                 formTypeModal={11}
                                                 modalEdit={` ID: ${idProperty}`}
                                                 idApplication={idApplication}
                                                 idProperty={idProperty}
                                             ></FormUsersApplications>
-                                            </Button>
                                             <Button color="transparent" onPress={onClose} type="submit"><TfiSave size={25} /></Button>
                                             <Button color="transparent" onClick={toggleExpand}><LiaExpandSolid size={30} /></Button>
                                             <Button color="transparent" onPress={onClose}><MdClose size={30} /></Button>
